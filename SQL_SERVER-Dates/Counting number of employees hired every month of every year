@@ -2,12 +2,11 @@ Exercise #1: Count the number of employees hired every month of every year, and 
 
 
 Solution #1: Count the number of employees hired every month of every year using functions GENERATE_SERIES, DATEADD, DATEDIFF, DAY, MONTH, DATEPART, MIN, MAX, CAST.
-
 Table used: [AdventureWorks2022].[HumanResources].[Employee]
 
 	Query #1: 
 	---------
-SELECT W.GeneratedDates							-- CountHireDatesLevel3 / CountHireDatesLevel2
+SELECT W.GeneratedDates																			-- CountHireDatesLevel3 / CountHireDatesLevel2
 , SUM(CASE	WHEN Employee.FirstDayOfMonthOfHireDate IS NOT NULL 
 		THEN 1
 		ELSE 0
@@ -15,52 +14,52 @@ SELECT W.GeneratedDates							-- CountHireDatesLevel3 / CountHireDatesLevel2
 	) AS CountHireDates
 FROM ( 
 	(
-	SELECT											-- GenerateDatesBetweenFirstAndLastHireDateLevel1
+	SELECT																						-- GenerateDatesBetweenFirstAndLastHireDateLevel1
 	CAST(DATEADD(DAY, value, (SELECT DATEADD(MONTH, DATEDIFF(MONTH, 0, (SELECT MIN(HireDate) FROM [AdventureWorks2022].[HumanResources].[Employee])), 0))) AS DATE) AS GeneratedDates
 	FROM GENERATE_SERIES(0
 				 , DATEDIFF(DAY
 					, (SELECT DATEADD(MONTH, DATEDIFF(MONTH, 0, (SELECT MIN(HireDate) FROM [AdventureWorks2022].[HumanResources].[Employee])), 0))
 					, (SELECT DATEADD(MONTH, DATEDIFF(MONTH, 0, (SELECT MAX(HireDate) FROM [AdventureWorks2022].[HumanResources].[Employee])), 0)))
-				, 1) 								-- GenerateDatesBetweenFirstAndLastHireDateLevel1
+				, 1) 																			-- GenerateDatesBetweenFirstAndLastHireDateLevel1
 	) AS W	
 	LEFT JOIN 
 	(
-	SELECT DATEADD(DAY, -(DAY(HireDate) - 1), HireDate) AS FirstDayOfMonthOfHireDate	-- FirstDayOfMonthForEveryHiredateLevel1
-	FROM [AdventureWorks2022].[HumanResources].[Employee]					-- FirstDayOfMonthForEveryHiredateLevel1
+	SELECT DATEADD(DAY, -(DAY(HireDate) - 1), HireDate) AS FirstDayOfMonthOfHireDate			-- FirstDayOfMonthForEveryHiredateLevel1
+	FROM [AdventureWorks2022].[HumanResources].[Employee]										-- FirstDayOfMonthForEveryHiredateLevel1
 	) AS Employee
 		ON W.GeneratedDates = Employee.FirstDayOfMonthOfHireDate
 )
-WHERE DATEPART(DAY, W.GeneratedDates) = 1							-- CountHireDatesLevel2
+WHERE DATEPART(DAY, W.GeneratedDates) = 1														-- CountHireDatesLevel2
 GROUP BY W.GeneratedDates
-ORDER BY W.GeneratedDates						-- CountHireDatesLevel3
+ORDER BY W.GeneratedDates																		-- CountHireDatesLevel3
 
 
 	-- OUTPUT
-GeneratedDates		CountHireDates
-2006-06-01		1
-2006-07-01		0
-2006-08-01		0
-...................TRUNCATED RESULTS ......
-2007-10-01		0
-2007-11-01		1
-2007-12-01		4
-2008-01-01		5
-2008-02-01		4
-2008-03-01		3
-2008-04-01		0
-...................TRUNCATED RESULTS ......
-2008-12-01		62
-2009-01-01		61
-2009-02-01		58
-2009-03-01		16
-...................TRUNCATED RESULTS ......
-2009-12-01		12
-2010-01-01		15
-2010-02-01		12
-2010-03-01		6
-...................TRUNCATED RESULTS ......
-2013-04-01		0
-2013-05-01		2
+GeneratedDates			CountHireDates
+2006-06-01				1
+2006-07-01				0
+2006-08-01				0
+........................................ TRUNCATED RESULTS .....
+2007-10-01				0
+2007-11-01				1
+2007-12-01				4
+2008-01-01				5
+2008-02-01				4
+2008-03-01				3
+2008-04-01				0
+........................................ TRUNCATED RESULTS .....
+2008-12-01				62
+2009-01-01				61
+2009-02-01				58
+2009-03-01				16
+........................................ TRUNCATED RESULTS .....
+2009-12-01				12
+2010-01-01				15
+2010-02-01				12
+2010-03-01				6
+........................................ TRUNCATED RESULTS .....
+2013-04-01				0
+2013-05-01				2
 (end of results)
 (84 rows affected)
 
@@ -71,10 +70,8 @@ Below are the queries used step-by-step for this solution.
 
 	Query #1.1: We retrieve the first and last employee hired from table [AdventureWorks2022].[HumanResources].[Employee]
 	-----------
-SELECT MIN(HireDate) AS FirstHireDate FROM [AdventureWorks2022].[HumanResources].[Employee]
-
-SELECT MAX(HireDate) AS LastHireDate FROM [AdventureWorks2022].[HumanResources].[Employee]
-
+SELECT MIN(HireDate) AS FirstHireDate FROM [AdventureWorks2022].[HumanResources].[Employee];
+SELECT MAX(HireDate) AS LastHireDate FROM [AdventureWorks2022].[HumanResources].[Employee];
 
 	-- OUTPUT #1:
 FirstHireDate
@@ -93,13 +90,14 @@ LastHireDate
 
 	Query #1.2: We generate the list of dates between the months of first and last hire dates using function GENERATE_SERIES
 	-----------
-SELECT									-- GenerateDatesBetweenFirstAndLastHireDateLevel1
+SELECT																							-- GenerateDatesBetweenFirstAndLastHireDateLevel1
 CAST(DATEADD(DAY, value, (SELECT DATEADD(MONTH, DATEDIFF(MONTH, 0, (SELECT MIN(HireDate) FROM [AdventureWorks2022].[HumanResources].[Employee])), 0))) AS DATE) AS GeneratedDates
 FROM GENERATE_SERIES(0
 		     , DATEDIFF(DAY
 				, (SELECT DATEADD(MONTH, DATEDIFF(MONTH, 0, (SELECT MIN(HireDate) FROM [AdventureWorks2022].[HumanResources].[Employee])), 0))
 				, (SELECT DATEADD(MONTH, DATEDIFF(MONTH, 0, (SELECT MAX(HireDate) FROM [AdventureWorks2022].[HumanResources].[Employee])), 0)))
-		    , 1)						-- GenerateDatesBetweenFirstAndLastHireDateLevel1
+		    , 1)																				-- GenerateDatesBetweenFirstAndLastHireDateLevel1
+
 
 	-- OUTPUT
 GeneratedDates
@@ -109,7 +107,7 @@ GeneratedDates
 2006-06-04
 2006-06-05
 2006-06-06
-...................TRUNCATED RESULTS ......
+.................. TRUNCATED RESULTS ......
 2013-04-26
 2013-04-27
 2013-04-28
@@ -124,7 +122,7 @@ GeneratedDates
 	Query #1.3: We calculate the first day of the month for every Hiredate from table [AdventureWorks2022].[HumanResources].[Employee]
 	-----------
 SELECT DATEADD(DAY, -(DAY(HireDate) - 1), HireDate) AS FirstDayOfMonthOfHireDate
-FROM [AdventureWorks2022].[HumanResources].[Employee]
+	FROM [AdventureWorks2022].[HumanResources].[Employee]
 
 	-- OUTPUT
 FirstDayOfMonthOfHireDate
@@ -136,7 +134,7 @@ FirstDayOfMonthOfHireDate
 2007-12-01
 2007-12-01
 2008-01-01
-...................TRUNCATED RESULTS ......
+..................... TRUNCATED RESULTS ......
 2012-05-01
 2012-05-01
 2012-09-01
@@ -155,7 +153,6 @@ There are 290 employees, each one with a HireDate, therefore, we get 290 rows.
 SELECT CAST(DATEADD(DAY, -(DAY(GETDATE() - 1)),GETDATE()) AS DATE) AS FirstDayofCurrentMonth
 
 
-
 	Query #1.3.2: Below we show step-by-step how we applied the above logic to column HireDate
 	-------------
 SELECT HireDate
@@ -167,22 +164,22 @@ FROM [AdventureWorks2022].[HumanResources].[Employee]
 ORDER BY HireDate
 
 	-- OUTPUT
-HireDate	DayOfHireDate	DayOfHireDateMinus1	DayOfHireDateMinus1MultipliedByMinus1	FirstDayOfMonthOfHireDate
-2006-06-30	30		29			-29					2006-06-01
-2007-01-26	26		25			-25					2007-01-01
-2007-11-11	11		10			-10					2007-11-01
-2007-12-05	5		4			-4					2007-12-01
-2007-12-11	11		10			-10					2007-12-01
-2007-12-20	20		19			-19					2007-12-01
-2007-12-26	26		25			-25					2007-12-01
-.....................................................................................................................TRUNCATED RESULTS ......
-2012-04-16	16		15			-15					2012-04-01
-2012-05-30	30		29			-29					2012-05-01
-2012-05-30	30		29			-29					2012-05-01
-2012-09-30	30		29			-29					2012-09-01
-2013-03-14	14		13			-13					2013-03-01
-2013-05-30	30		29			-29					2013-05-01
-2013-05-30	30		29			-29					2013-05-01
+HireDate		DayOfHireDate		DayOfHireDateMinus1			DayOfHireDateMinus1MultipliedByMinus1		FirstDayOfMonthOfHireDate
+2006-06-30		30					29							-29											2006-06-01
+2007-01-26		26					25							-25											2007-01-01
+2007-11-11		11					10							-10											2007-11-01
+2007-12-05		5					4							-4											2007-12-01
+2007-12-11		11					10							-10											2007-12-01
+2007-12-20		20					19							-19											2007-12-01
+2007-12-26		26					25							-25											2007-12-01
+...................................................................................................................................... TRUNCATED RESULTS .....
+2012-04-16		16					15							-15											2012-04-01
+2012-05-30		30					29							-29											2012-05-01
+2012-05-30		30					29							-29											2012-05-01
+2012-09-30		30					29							-29											2012-09-01
+2013-03-14		14					13							-13											2013-03-01
+2013-05-30		30					29							-29											2013-05-01
+2013-05-30		30					29							-29											2013-05-01
 (end of results)
 (290 rows affected)
 
@@ -192,7 +189,7 @@ HireDate	DayOfHireDate	DayOfHireDateMinus1	DayOfHireDateMinus1MultipliedByMinus1
 
 	Query #1.4: We count the number of employees hired each month by (LEFT) JOINing Query #1.2 (list of dates between the months of first and last hire dates) and Query #1.3 (first day of the month for every Hiredate) and adding a Flag using a CASE statement
 	-----------
-SELECT W.GeneratedDates						-- CountHireDatesLevel2
+SELECT W.GeneratedDates																				-- CountHireDatesLevel2
 , Employee.FirstDayOfMonthOfHireDate
 , CASE	WHEN Employee.FirstDayOfMonthOfHireDate IS NOT NULL 
 		THEN 1
@@ -200,53 +197,53 @@ SELECT W.GeneratedDates						-- CountHireDatesLevel2
 		END AS CountHireDates
 FROM ( 
 	(
-	SELECT											-- GenerateDatesBetweenFirstAndLastHireDateLevel1
+	SELECT																							-- GenerateDatesBetweenFirstAndLastHireDateLevel1
 	CAST(DATEADD(DAY, value, (SELECT DATEADD(MONTH, DATEDIFF(MONTH, 0, (SELECT MIN(HireDate) FROM [AdventureWorks2022].[HumanResources].[Employee])), 0))) AS DATE) AS GeneratedDates
 	FROM GENERATE_SERIES(0
 				 , DATEDIFF(DAY
 					, (SELECT DATEADD(MONTH, DATEDIFF(MONTH, 0, (SELECT MIN(HireDate) FROM [AdventureWorks2022].[HumanResources].[Employee])), 0))
 					, (SELECT DATEADD(MONTH, DATEDIFF(MONTH, 0, (SELECT MAX(HireDate) FROM [AdventureWorks2022].[HumanResources].[Employee])), 0)))
-				, 1) 								-- GenerateDatesBetweenFirstAndLastHireDateLevel1
+				, 1) 																				-- GenerateDatesBetweenFirstAndLastHireDateLevel1
 	) AS W	
 	LEFT JOIN 
 	(
-	SELECT DATEADD(DAY, -(DAY(HireDate) - 1), HireDate) AS FirstDayOfMonthOfHireDate	-- FirstDayOfMonthForEveryHiredateLevel1
-	FROM [AdventureWorks2022].[HumanResources].[Employee]					-- FirstDayOfMonthForEveryHiredateLevel1
+	SELECT DATEADD(DAY, -(DAY(HireDate) - 1), HireDate) AS FirstDayOfMonthOfHireDate				-- FirstDayOfMonthForEveryHiredateLevel1
+	FROM [AdventureWorks2022].[HumanResources].[Employee]											-- FirstDayOfMonthForEveryHiredateLevel1
 	) AS Employee
 		ON W.GeneratedDates = Employee.FirstDayOfMonthOfHireDate
 )
-ORDER BY W.GeneratedDates					-- CountHireDatesLevel2
+ORDER BY W.GeneratedDates																			-- CountHireDatesLevel2
 
 
 	-- OUTPUT
-GeneratedDates	FirstDayOfMonthOfHireDate	CountHireDates
-2006-06-01	2006-06-01			1
-2006-06-02	NULL				0
-2006-06-03	NULL				0
-2006-06-04	NULL				0
-.............................................................TRUNCATED RESULTS ......
-2007-11-30	NULL				0
-2007-12-01	2007-12-01			1
-2007-12-01	2007-12-01			1
-2007-12-01	2007-12-01			1
-2007-12-01	2007-12-01			1
-2007-12-02	NULL				0
-.............................................................TRUNCATED RESULTS ......
-2011-04-30	NULL				0
-2011-05-01	2011-05-01			1
-2011-05-01	2011-05-01			1
-2011-05-01	2011-05-01			1
-2011-05-01	2011-05-01			1
-2011-05-01	2011-05-01			1
-2011-05-01	2011-05-01			1
-2011-05-01	2011-05-01			1
-2011-05-01	2011-05-01			1
-2011-05-01	2011-05-01			1
-2011-05-02	NULL				0
-.............................................................TRUNCATED RESULTS ......
-2013-04-30	NULL				0
-2013-05-01	2013-05-01			1
-2013-05-01	2013-05-01			1
+GeneratedDates		FirstDayOfMonthOfHireDate		CountHireDates
+2006-06-01			2006-06-01						1
+2006-06-02			NULL							0
+2006-06-03			NULL							0
+2006-06-04			NULL							0
+.................................................................... TRUNCATED RESULTS .....
+2007-11-30			NULL							0
+2007-12-01			2007-12-01						1
+2007-12-01			2007-12-01						1
+2007-12-01			2007-12-01						1
+2007-12-01			2007-12-01						1
+2007-12-02			NULL							0
+.................................................................... TRUNCATED RESULTS .....
+2011-04-30			NULL							0
+2011-05-01			2011-05-01						1
+2011-05-01			2011-05-01						1
+2011-05-01			2011-05-01						1
+2011-05-01			2011-05-01						1
+2011-05-01			2011-05-01						1
+2011-05-01			2011-05-01						1
+2011-05-01			2011-05-01						1
+2011-05-01			2011-05-01						1
+2011-05-01			2011-05-01						1
+2011-05-02			NULL							0
+.................................................................... TRUNCATED RESULTS .....
+2013-04-30			NULL							0
+2013-05-01			2013-05-01						1
+2013-05-01			2013-05-01						1
 (end of results)
 (2792 rows affected)
 
@@ -255,7 +252,7 @@ GeneratedDates	FirstDayOfMonthOfHireDate	CountHireDates
 
 	Query #1.5: We filter out all rows for dates on column "GeneratedDates" that have a DAY different than the first day of the month
 	-----------
-SELECT W.GeneratedDates						-- CountHireDatesLevel2
+SELECT W.GeneratedDates																				-- CountHireDatesLevel2
 , Employee.FirstDayOfMonthOfHireDate
 , CASE	WHEN Employee.FirstDayOfMonthOfHireDate IS NOT NULL 
 		THEN 1
@@ -263,57 +260,57 @@ SELECT W.GeneratedDates						-- CountHireDatesLevel2
 		END AS CountHireDates
 FROM ( 
 	(
-	SELECT											-- GenerateDatesBetweenFirstAndLastHireDateLevel1
+	SELECT																							-- GenerateDatesBetweenFirstAndLastHireDateLevel1
 	CAST(DATEADD(DAY, value, (SELECT DATEADD(MONTH, DATEDIFF(MONTH, 0, (SELECT MIN(HireDate) FROM [AdventureWorks2022].[HumanResources].[Employee])), 0))) AS DATE) AS GeneratedDates
 	FROM GENERATE_SERIES(0
 				 , DATEDIFF(DAY
 					, (SELECT DATEADD(MONTH, DATEDIFF(MONTH, 0, (SELECT MIN(HireDate) FROM [AdventureWorks2022].[HumanResources].[Employee])), 0))
 					, (SELECT DATEADD(MONTH, DATEDIFF(MONTH, 0, (SELECT MAX(HireDate) FROM [AdventureWorks2022].[HumanResources].[Employee])), 0)))
-				, 1) 								-- GenerateDatesBetweenFirstAndLastHireDateLevel1
+				, 1) 																				-- GenerateDatesBetweenFirstAndLastHireDateLevel1
 	) AS W	
 	LEFT JOIN 
 	(
-	SELECT DATEADD(DAY, -(DAY(HireDate) - 1), HireDate) AS FirstDayOfMonthOfHireDate	-- FirstDayOfMonthForEveryHiredateLevel1
-	FROM [AdventureWorks2022].[HumanResources].[Employee]					-- FirstDayOfMonthForEveryHiredateLevel1
+	SELECT DATEADD(DAY, -(DAY(HireDate) - 1), HireDate) AS FirstDayOfMonthOfHireDate				-- FirstDayOfMonthForEveryHiredateLevel1
+	FROM [AdventureWorks2022].[HumanResources].[Employee]											-- FirstDayOfMonthForEveryHiredateLevel1
 	) AS Employee
 		ON W.GeneratedDates = Employee.FirstDayOfMonthOfHireDate
 )
-WHERE DATEPART(DAY, W.GeneratedDates) = 1			-- CountHireDatesLevel2
+WHERE DATEPART(DAY, W.GeneratedDates) = 1															-- CountHireDatesLevel2
 ORDER BY W.GeneratedDates
 
 
 	-- OUTPUT
-GeneratedDates	FirstDayOfMonthOfHireDate	CountHireDates
-2006-06-01	2006-06-01			1
-2006-07-01	NULL				0
-2006-08-01	NULL				0
-2006-09-01	NULL				0
-.............................................................TRUNCATED RESULTS ......
-2007-10-01	NULL				0
-2007-11-01	2007-11-01			1
-2007-12-01	2007-12-01			1
-2007-12-01	2007-12-01			1
-2007-12-01	2007-12-01			1
-2007-12-01	2007-12-01			1
-2008-01-01	2008-01-01			1
-2008-01-01	2008-01-01			1
-2008-01-01	2008-01-01			1
-2008-01-01	2008-01-01			1
-2008-01-01	2008-01-01			1
-2008-02-01	2008-02-01			1
-2008-02-01	2008-02-01			1
-2008-02-01	2008-02-01			1
-2008-02-01	2008-02-01			1
-2008-03-01	2008-03-01			1
-2008-03-01	2008-03-01			1
-2008-03-01	2008-03-01			1
-2008-04-01	NULL				0
-.............................................................TRUNCATED RESULTS ......
-2013-02-01	NULL				0
-2013-03-01	2013-03-01			1
-2013-04-01	NULL				0
-2013-05-01	2013-05-01			1
-2013-05-01	2013-05-01			1
+GeneratedDates			FirstDayOfMonthOfHireDate		CountHireDates
+2006-06-01				2006-06-01						1
+2006-07-01				NULL							0
+2006-08-01				NULL							0
+2006-09-01				NULL							0
+....................................................................... TRUNCATED RESULTS .....
+2007-10-01				NULL							0
+2007-11-01				2007-11-01						1
+2007-12-01				2007-12-01						1
+2007-12-01				2007-12-01						1
+2007-12-01				2007-12-01						1
+2007-12-01				2007-12-01						1
+2008-01-01				2008-01-01						1
+2008-01-01				2008-01-01						1
+2008-01-01				2008-01-01						1
+2008-01-01				2008-01-01						1
+2008-01-01				2008-01-01						1
+2008-02-01				2008-02-01						1
+2008-02-01				2008-02-01						1
+2008-02-01				2008-02-01						1
+2008-02-01				2008-02-01						1
+2008-03-01				2008-03-01						1
+2008-03-01				2008-03-01						1
+2008-03-01				2008-03-01						1
+2008-04-01				NULL							0
+....................................................................... TRUNCATED RESULTS .....
+2013-02-01				NULL							0
+2013-03-01				2013-03-01						1
+2013-04-01				NULL							0
+2013-05-01				2013-05-01						1
+2013-05-01				2013-05-01						1
 (end of results)
 (349 rows affected)
 
