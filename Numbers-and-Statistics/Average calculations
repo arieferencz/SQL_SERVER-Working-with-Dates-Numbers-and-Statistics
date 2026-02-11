@@ -2,7 +2,7 @@ Exercise #1: Calculate the historic average sales orders amount for all geograph
 
 
 Solution #1.1, Query #1.1: We calculate the historic average sales orders amount using Function Average
-
+--------------------------
 SELECT ROUND(AVG(TotalDue) ,2, 2) AS HistoricAverageSalesAmount
 FROM [AdventureWorks2022].[Sales].[SalesOrderHeader]
 
@@ -16,7 +16,7 @@ HistoricAverageSalesAmount
 
 
 Solution #1.2, Query #1.2: We calculate the historic average sales orders amount using Functions SUM and COUNT
-
+--------------------------
 SELECT FORMAT(ROUND(SUM(TotalDue) / COUNT(TotalDue), 2, 2), '#,#.##')  AS HistoricAverageSalesAmount
 , FORMAT(SUM(TotalDue), '#,#.##') AS SumTotalSalesAmount
 , FORMAT(COUNT(TotalDue), '#,#') AS CountTotalSales
@@ -24,8 +24,8 @@ FROM [AdventureWorks2022].[Sales].[SalesOrderHeader]
 
 
 	-- OUTPUT
-HistoricAverageSalesAmount	SumTotalSalesAmount	CountTotalSales
-3,915.99			123,216,786.12		31,465
+HistoricAverageSalesAmount		SumTotalSalesAmount		CountTotalSales
+3,915.99						123,216,786.12			31,465
 (1 row affected)
 (end of results)
 
@@ -38,7 +38,7 @@ Exercise #2: Calculate the historic average sales orders amount by (geographical
 
 
 Solution #2.1, Query #2.1: We calculate the historic average sales orders amount by (geographical) Group using Average (Aggregate) Window Function
-
+--------------------------
 SELECT DISTINCT SalesTerritory.[Group]
 , FORMAT(ROUND(AVG(TotalDue) OVER(PARTITION BY SalesTerritory.[Group]), 2), '#,#.##') AS HistoricAverageSalesAmount
 FROM [AdventureWorks2022].[Sales].[SalesOrderHeader] AS SalesOrderHeader
@@ -47,17 +47,17 @@ LEFT JOIN [AdventureWorks2022].[Sales].[SalesTerritory] AS SalesTerritory
 
 
 	-- OUTPUT
-Group		HistoricAverageSalesAmount
-Europe		2,604.37
-North America	5,539.41
-Pacific		1,726.49
+Group				HistoricAverageSalesAmount
+Europe				2,604.37
+North America		5,539.41
+Pacific				1,726.49
 (3 rows affected)
 (end of results)
 
 
 
 Solution #2.2, Query #2.2: We calculate the historic average sales orders amount by (geographical) Group using Functions SUM and COUNT and GROUP BY clause
-
+--------------------------
 SELECT DISTINCT SalesTerritory.[Group]
 , FORMAT(ROUND(SUM(TotalDue) / COUNT(TotalDue), 2, 2), '#,#.##') AS HistoricAverageSalesAmount
 FROM [AdventureWorks2022].[Sales].[SalesOrderHeader] AS SalesOrderHeader
@@ -68,10 +68,10 @@ ORDER BY FORMAT(ROUND(SUM(TotalDue) / COUNT(TotalDue), 2, 2), '#,#.##')
 
 
 	-- OUTPUT
-Group		HistoricAverageSalesAmount
-Pacific		1,726.49
-Europe		2,604.37
-North America	5,539.4
+Group				HistoricAverageSalesAmount
+Pacific				1,726.49
+Europe				2,604.37
+North America		5,539.4
 (3 rows affected)
 (end of results)
 
@@ -79,7 +79,7 @@ North America	5,539.4
 
 
 Solution #2.3, Query #2.3: Calculate the historic average sales orders amount by Country using GROUP BY ROLLUP subclause
-
+--------------------------
 SELECT COALESCE(SalesTerritory.[Group], 'Total') AS CountryCode
 , FORMAT(SUM(SalesOrderHeader.TotalDue), '#,#.##') AS TotalSalesAmount
 , FORMAT(COUNT(TotalDue), '#,#') AS CountTotalSales
@@ -91,11 +91,11 @@ GROUP BY SalesTerritory.[Group] WITH ROLLUP
 
 
 	-- OUTPUT
-CountryCode	TotalSalesAmount	CountTotalSales		AverageSalesAmount
-Europe		22,173,617.63		8,514			2,604.37
-North America	89,228,792.39		16,108			5,539.4
-Pacific		11,814,376.1		6,843			1,726.49
-Total		123,216,786.12		31,465			3,915.99
+CountryCode			TotalSalesAmount		CountTotalSales		AverageSalesAmount
+Europe				22,173,617.63			8,514				2,604.37
+North America		89,228,792.39			16,108				5,539.4
+Pacific				11,814,376.1			6,843				1,726.49
+Total				123,216,786.12			31,465				3,915.99
 (4 rows affected)
 (end of results)
 
@@ -107,7 +107,7 @@ Total		123,216,786.12		31,465			3,915.99
 Exercise #3: Calculate the historic average sales orders amount by Country 
 
 Solution #3.1, Query #3.1: Calculate the historic average sales orders amount by Country using Average (Aggregate) Window Function
-
+--------------------------
 SELECT DISTINCT SalesTerritory.CountryRegionCode
 , FORMAT(ROUND(AVG(TotalDue) OVER(PARTITION BY SalesTerritory.CountryRegionCode), 2), '#,#') AS HistoricAverageSalesAmount
 FROM [AdventureWorks2022].[Sales].[SalesOrderHeader] AS SalesOrderHeader
@@ -116,13 +116,13 @@ LEFT JOIN [AdventureWorks2022].[Sales].[SalesTerritory] AS SalesTerritory
 
 
 	-- OUTPUT
-CountryRegionCode	HistoricAverageSalesAmount
-CA			4,524
-US			5,882
-FR			3,039
-GB			2,664
-AU			1,726
-DE			2,089
+CountryRegionCode		HistoricAverageSalesAmount
+CA						4,524
+US						5,882
+FR						3,039
+GB						2,664
+AU						1,726
+DE						2,089
 (6 rows affected)
 (end of results)
 
@@ -130,7 +130,7 @@ DE			2,089
 
 
 Solution #3.2, Query #3.2: Calculate the historic average sales orders amount by Country using functions SUM/COUNT and GROUP BY clause
-
+--------------------------
 SELECT DISTINCT SalesTerritory.CountryRegionCode
 , FORMAT(ROUND(SUM(TotalDue) / COUNT(TotalDue), 2, 2), '#,#.##') AS HistoricAverageSalesAmount
 FROM [AdventureWorks2022].[Sales].[SalesOrderHeader] AS SalesOrderHeader
@@ -140,13 +140,13 @@ GROUP BY SalesTerritory.CountryRegionCode
 
 
 	-- OUTPUT
-CountryRegionCode	HistoricAverageSalesAmount
-DE			2,089.14
-GB			2,663.57
-AU			1,726.49
-CA			4,523.95
-FR			3,038.82
-US			5,882.39
+CountryRegionCode		HistoricAverageSalesAmount
+DE						2,089.14
+GB						2,663.57
+AU						1,726.49
+CA						4,523.95
+FR						3,038.82
+US						5,882.39
 (6 rows affected)
 (end of results)
 
@@ -154,7 +154,7 @@ US			5,882.39
 
 
 Solution #3.3, Query #3.3: Calculate the historic average sales orders amount by Country using GROUP BY ROLLUP subclause
-
+--------------------------
 SELECT COALESCE(SalesTerritory.CountryRegionCode, 'Total') AS CountryCode
 , FORMAT(SUM(SalesOrderHeader.TotalDue), '#,#.##') AS TotalSalesAmount
 , FORMAT(COUNT(TotalDue), '#,#') AS CountTotalSales
@@ -166,13 +166,13 @@ GROUP BY SalesTerritory.CountryRegionCode WITH ROLLUP
 
 
 	-- OUTPUT
-CountryCode	TotalSalesAmount	CountTotalSales		AverageSalesAmount
-AU		11,814,376.1		6,843			1,726.49
-CA		18,398,929.19		4,067			4,523.95
-DE		5,479,819.58		2,623			2,089.14
-FR		8,119,749.35		2,672			3,038.82
-GB		8,574,048.71		3,219			2,663.57
-US		70,829,863.2		12,041			5,882.39
-Total		123,216,786.12		31,465			3,915.99
+CountryCode		TotalSalesAmount		CountTotalSales			AverageSalesAmount
+AU				11,814,376.1			6,843					1,726.49
+CA				18,398,929.19			4,067					4,523.95
+DE				5,479,819.58			2,623					2,089.14
+FR				8,119,749.35			2,672					3,038.82
+GB				8,574,048.71			3,219					2,663.57
+US				70,829,863.2			12,041					5,882.39
+Total			123,216,786.12			31,465					3,915.99
 (7 rows affected)
 (end of results)
