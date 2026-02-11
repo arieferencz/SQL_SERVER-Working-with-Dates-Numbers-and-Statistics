@@ -2,15 +2,15 @@ Exercise #1: Calculating the salary percentiles for each employee on the company
 
 
 Solution #1.1, Query #1.1: We calculate the salary percentiles for each employee using functions PERCENT_RANK and CUME_DIST.
-
-SELECT DISTINCT Y.SalaryRate						-- PercentRank()_CumeDist()Level3
+--------------------------
+SELECT DISTINCT Y.SalaryRate																				-- PercentRank()_CumeDist()Level3
 , ROUND(PERCENT_RANK() OVER (ORDER BY Y.SalaryRate),2) AS SalaryRatePercentRank
 , ROUND(CUME_DIST() OVER (ORDER BY Y.SalaryRate), 2) AS SalaryRateCummulativeDistribution
 FROM (
-	SELECT X.BusinessEntityID											-- UniqueSalaryRatesLevel2
+	SELECT X.BusinessEntityID																				-- UniqueSalaryRatesLevel2
 	, X.Rate AS SalaryRate
 	FROM (
-		SELECT EmployeeDepartmentHistory.BusinessEntityID							-- OriginalTablesLevel1
+		SELECT EmployeeDepartmentHistory.BusinessEntityID													-- OriginalTablesLevel1
 		, EmployeeDepartmentHistory.DepartmentID
 		, EmployeeDepartmentHistory.ModifiedDate AS EDH_ModifiedDate
 		, Department.[Name] AS DepartmentName
@@ -23,42 +23,42 @@ FROM (
 		INNER JOIN [AdventureWorks2022].[HumanResources].[Employee] AS Employee
 			ON EmployeeDepartmentHistory.BusinessEntityID = Employee.BusinessEntityID				
 		INNER JOIN [AdventureWorks2022].[HumanResources].[EmployeePayHistory] AS EmployeePayHistory
-			ON EmployeeDepartmentHistory.BusinessEntityID = EmployeePayHistory.BusinessEntityID		-- OriginalTablesLevel1
+			ON EmployeeDepartmentHistory.BusinessEntityID = EmployeePayHistory.BusinessEntityID				-- OriginalTablesLevel1
 		) AS X
-	WHERE RowNumber = 1												-- UniqueSalaryRatesLevel2
-	) AS Y								-- PercentRank()_CumeDist()Level3
+	WHERE RowNumber = 1																						-- UniqueSalaryRatesLevel2
+	) AS Y																									-- PercentRank()_CumeDist()Level3
 
 
 	-- OUTPUT
-SalaryRate	SalaryRatePercentRank		SalaryRateCummulativeDistribution
-9		0				0.01
-9.25		0.01				0.02
-9.5		0.02				0.12
-9.75		0.12				0.12
-10		0.12				0.17
-10.25		0.17				0.18
+SalaryRate			SalaryRatePercentRank		SalaryRateCummulativeDistribution
+9					0							0.01
+9.25				0.01						0.02
+9.5					0.02						0.12
+9.75				0.12						0.12
+10					0.12						0.17
+10.25				0.17						0.18
 ................................................................................ TRUNCATED RESULTS ......
-13.45		0.38				0.44
-13.4615		0.44				0.45
-13.9423		0.45				0.46
-14		0.46				0.53
-14.4231		0.54				0.55
-15		0.55				0.64
-16		0.64				0.66
-16.5865		0.66				0.66
+13.45				0.38						0.44
+13.4615				0.44						0.45
+13.9423				0.45						0.46
+14					0.46						0.53
+14.4231				0.54						0.55
+15					0.55						0.64
+16					0.64						0.66
+16.5865				0.66						0.66
 ................................................................................ TRUNCATED RESULTS ......
-24.0385		0.79				0.79
-24.5192		0.79				0.79
-25		0.8				0.87
-26.4423		0.88				0.88
-27.1394		0.88				0.88
+24.0385				0.79						0.79
+24.5192				0.79						0.79
+25					0.8							0.87
+26.4423				0.88						0.88
+27.1394				0.88						0.88
 ................................................................................ TRUNCATED RESULTS ......
-50.4808		0.98				0.98
-60.0962		0.99				0.99
-63.4615		0.99				0.99
-72.1154		0.99				0.99
-84.1346		1				1
-125.5		1				1
+50.4808				0.98						0.98
+60.0962				0.99						0.99
+63.4615				0.99						0.99
+72.1154				0.99						0.99
+84.1346				1							1
+125.5				1							1
 (end of results)
 (53 rows affected)
 
@@ -84,18 +84,18 @@ Exercise #2: Calculating the salary percentiles for each employee for department
 
 
 Solution #2.1, Query #2.1: We calculate the salary percentiles for employees on departments "Information Services" and "Production" using functions PERCENT_RANK and CUME_DIST.
-
-SELECT Y.DepartmentName							-- PercentRank()_CumeDist()Level3
+--------------------------
+SELECT Y.DepartmentName																							-- PercentRank()_CumeDist()Level3
 , Y.BusinessEntityID
 , Y.SalaryRate	
 , ROUND(PERCENT_RANK() OVER (PARTITION BY Y.DepartmentName ORDER BY Y.SalaryRate),2) AS SalaryRatePercentRank
 , ROUND(CUME_DIST() OVER (PARTITION BY Y.DepartmentName ORDER BY Y.SalaryRate), 2) AS SalaryRateCummulativeDistribution
 FROM (
 	SELECT X.DepartmentName
-	, X.BusinessEntityID											-- UniqueSalaryRatesLevel2
+	, X.BusinessEntityID																						-- UniqueSalaryRatesLevel2
 	, X.Rate AS SalaryRate
 	FROM (
-		SELECT EmployeeDepartmentHistory.BusinessEntityID						-- OriginalTablesLevel1
+		SELECT EmployeeDepartmentHistory.BusinessEntityID														-- OriginalTablesLevel1
 		, EmployeeDepartmentHistory.DepartmentID
 		, EmployeeDepartmentHistory.ModifiedDate AS EDH_ModifiedDate
 		, Department.[Name] AS DepartmentName
@@ -108,48 +108,48 @@ FROM (
 		INNER JOIN [AdventureWorks2022].[HumanResources].[Employee] AS Employee
 			ON EmployeeDepartmentHistory.BusinessEntityID = Employee.BusinessEntityID				
 		INNER JOIN [AdventureWorks2022].[HumanResources].[EmployeePayHistory] AS EmployeePayHistory
-			ON EmployeeDepartmentHistory.BusinessEntityID = EmployeePayHistory.BusinessEntityID	-- OriginalTablesLevel1
+			ON EmployeeDepartmentHistory.BusinessEntityID = EmployeePayHistory.BusinessEntityID					-- OriginalTablesLevel1
 		) AS X
-	WHERE RowNumber = 1											-- UniqueSalaryRatesLevel2
+	WHERE RowNumber = 1																							-- UniqueSalaryRatesLevel2
 	) AS Y	
 WHERE Y.DepartmentName IN ('Sales','Production')
-ORDER BY Y.DepartmentName, Y.SalaryRate DESC				-- PercentRank()_CumeDist()Level3
+ORDER BY Y.DepartmentName, Y.SalaryRate DESC																	-- PercentRank()_CumeDist()Level3
 
 
 	-- OUTPUT
-DepartmentName		BusinessEntityID	SalaryRate	SalaryRatePercentRank		SalaryRateCummulativeDistribution
-Information Services	263			50.4808		1				1
-Information Services	264			39.6635		0.89				0.9
-Information Services	270			38.4615		0.67				0.8
-Information Services	271			38.4615		0.67				0.8
-Information Services	265			32.4519		0.44				0.6
-Information Services	266			32.4519		0.44				0.6
-Information Services	267			27.4038		0				0.4
-Information Services	268			27.4038		0				0.4
-Information Services	269			27.4038		0				0.4
-Information Services	272			27.4038		0				0.4
-Production		25			84.1346		1				1
-Production		87			25		0.88				0.99
-Production		93			25		0.88				0.99
-Production		78			25		0.88				0.99
-............................................................................................................................ TRUNCATED RESULTS ......
-Production		85			15		0.74				0.88
-Production		86			15		0.74				0.88
-Production		135			14		0.61				0.73
-Production		136			14		0.61				0.73
-............................................................................................................................ TRUNCATED RESULTS ......
-Production		185			14		0.61				0.73
-Production		48			13.45		0.52				0.61
-............................................................................................................................ TRUNCATED RESULTS ......
-Production		105			13.45		0.52				0.61
-Production		106			13.45		0.52				0.61
-Production		107			13.45		0.52				0.61
-Production		41			12.45		0.37				0.51
-Production		42			12.45		0.37				0.51
-Production		43			12.45		0.37				0.51
-............................................................................................................................ TRUNCATED RESULTS ......
-Production		75			9.5		0				0.14
-Production		76			9.5		0				0.14
-Production		77			9.5		0				0.14
+DepartmentName				BusinessEntityID		SalaryRate			SalaryRatePercentRank			SalaryRateCummulativeDistribution
+Information Services		263						50.4808				1								1
+Information Services		264						39.6635				0.89							0.9
+Information Services		270						38.4615				0.67							0.8
+Information Services		271						38.4615				0.67							0.8
+Information Services		265						32.4519				0.44							0.6
+Information Services		266						32.4519				0.44							0.6
+Information Services		267						27.4038				0								0.4
+Information Services		268						27.4038				0								0.4
+Information Services		269						27.4038				0								0.4
+Information Services		272						27.4038				0								0.4
+Production					25						84.1346				1								1
+Production					87						25					0.88							0.99
+Production					93						25					0.88							0.99
+Production					78						25					0.88							0.99
+.......................................................................................................................................... TRUNCATED RESULTS ......
+Production					85						15					0.74							0.88
+Production					86						15					0.74							0.88
+Production					135						14					0.61							0.73
+Production					136						14					0.61							0.73
+.......................................................................................................................................... TRUNCATED RESULTS ......
+Production					185						14					0.61							0.73
+Production					48						13.45				0.52							0.61
+.......................................................................................................................................... TRUNCATED RESULTS ......
+Production					105						13.45				0.52							0.61
+Production					106						13.45				0.52							0.61
+Production					107						13.45				0.52							0.61
+Production					41						12.45				0.37							0.51
+Production					42						12.45				0.37							0.51
+Production					43						12.45				0.37							0.51
+.......................................................................................................................................... TRUNCATED RESULTS ......
+Production					75						9.5					0								0.14
+Production					76						9.5					0								0.14
+Production					77						9.5					0								0.14
 (end of results)
 (189 rows affected)
