@@ -55,15 +55,15 @@ SELECT DATEADD(YEAR, DATEDIFF(YEAR, 0, GETDATE()), 0) AS BeginningThisYear
 FROM [AdventureWorks2022].[Person].[BusinessEntity]
 
 	-- OUTPUT
-BeginningThisYear		BeginningNextYear
-2024-01-01 00:00:00.000		2025-01-01 00:00:00.000
-2024-01-01 00:00:00.000		2025-01-01 00:00:00.000
-2024-01-01 00:00:00.000		2025-01-01 00:00:00.000
-2024-01-01 00:00:00.000		2025-01-01 00:00:00.000
-..............................................................TRUNCATED RESULTS ......
-2024-01-01 00:00:00.000		2025-01-01 00:00:00.000
-2024-01-01 00:00:00.000		2025-01-01 00:00:00.000
-2024-01-01 00:00:00.000		2025-01-01 00:00:00.000
+BeginningThisYear				BeginningNextYear
+2024-01-01 00:00:00.000			2025-01-01 00:00:00.000
+2024-01-01 00:00:00.000			2025-01-01 00:00:00.000
+2024-01-01 00:00:00.000			2025-01-01 00:00:00.000
+2024-01-01 00:00:00.000			2025-01-01 00:00:00.000
+.......................................................... TRUNCATED RESULTS .....
+2024-01-01 00:00:00.000			2025-01-01 00:00:00.000
+2024-01-01 00:00:00.000			2025-01-01 00:00:00.000
+2024-01-01 00:00:00.000			2025-01-01 00:00:00.000
 (end of results)
 (20777 rows affected)
 
@@ -78,8 +78,8 @@ SELECT DISTINCT DATEADD(YEAR, DATEDIFF(YEAR, 0, GETDATE()), 0) AS BeginningThisY
 FROM [AdventureWorks2022].[Person].[BusinessEntity]
 
 	-- OUTPUT
-BeginningThisYear		BeginningNextYear
-2024-01-01 00:00:00.000		2025-01-01 00:00:00.000
+BeginningThisYear				BeginningNextYear
+2024-01-01 00:00:00.000			2025-01-01 00:00:00.000
 (end of results)
 (1 row affected)
 
