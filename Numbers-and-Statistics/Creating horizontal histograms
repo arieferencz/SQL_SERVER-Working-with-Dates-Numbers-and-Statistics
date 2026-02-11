@@ -1,10 +1,10 @@
 Exercise #1: Create a horizontal histogram for employees by genders.
 
-
 Solution #1: We create a horizontal histogram for column "Gender" using functions COUNT AND REPLICATE.
-
 Table used: [AdventureWorks2022].[HumanResources].[Employee]
 
+	Query #1:
+	---------
 SELECT GENDER
 , COUNT(*) AS EmployeeCount
 , REPLICATE('*', COUNT(*)) AS EmployeeCountHistogram
@@ -12,9 +12,9 @@ FROM [AdventureWorks2022].[HumanResources].[Employee]
 GROUP BY GENDER
 
 	-- OUTPUT
-GENDER	EmployeeCount	EmployeeCountHistogram
-F	84	************************************************************************************
-M	206	**************************************************************************************************************************************************************************************************************
+GENDER		EmployeeCount		EmployeeCountHistogram
+F			84					************************************************************************************
+M			206					**************************************************************************************************************************************************************************************************************
 (end of results)
 (2 rows affected)
 
@@ -24,14 +24,14 @@ M	206	**************************************************************************
 
 Exercise #2: Create a horizontal histogram for employees by department and genders.
 
-
 Solution #2.1: We create a horizontal histogram using columns "DepartmentName" and "Gender" using functions COUNT, REPLICATE and ROW_NUMBER.
-
 Tables used:
 1) [AdventureWorks2022].[HumanResources].[EmployeeDepartmentHistory]
 2) [AdventureWorks2022].[HumanResources].[Department]
 3) [AdventureWorks2022].[HumanResources].[Employee]
 
+	Query #2.1:
+	-----------
 SELECT X.DepartmentName
 , X.Gender
 , REPLICATE('*', COUNT(*)) AS EmployeeCountHistogram 
@@ -53,43 +53,43 @@ GROUP BY X.Gender, X.DepartmentName
 
 
 	-- OUTPUT
-DepartmentName			Gender	EmployeeCountHistogram
-Document Control		F	*
-Document Control		M	****
-Engineering			F	***
-Engineering			M	***
-Executive			F	*
-Executive			M	*
-Facilities and Maintenance	F	**
-Facilities and Maintenance	M	*****
-Finance				F	*****
-Finance				M	*****
-Human Resources			F	**
-Human Resources			M	****
-Information Services		F	****
-Information Services		M	******
-Marketing			F	****
-Marketing			M	*****
-Production			F	**********************************************
-Production			M	*************************************************************************************************************************************
-Production Control		M	******
-Purchasing			F	****
-Purchasing			M	********
-Quality Assurance		M	******
-Research and Development	F	**
-Research and Development	M	**
-Sales				F	*******
-Sales				M	***********
-Shipping and Receiving		F	**
-Shipping and Receiving		M	****
-Tool Design			F	*
-Tool Design			M	***
+DepartmentName					Gender			EmployeeCountHistogram
+Document Control				F				*
+Document Control				M				****
+Engineering						F				***
+Engineering						M				***
+Executive						F				*
+Executive						M				*
+Facilities and Maintenance		F				**
+Facilities and Maintenance		M				*****
+Finance							F				*****
+Finance							M				*****
+Human Resources					F				**
+Human Resources					M				****
+Information Services			F				****
+Information Services			M				******
+Marketing						F				****
+Marketing						M				*****
+Production						F				**********************************************
+Production						M				*************************************************************************************************************************************
+Production Control				M				******
+Purchasing						F				****
+Purchasing						M				********
+Quality Assurance				M				******
+Research and Development		F				**
+Research and Development		M				**
+Sales							F				*******
+Sales							M				***********
+Shipping and Receiving			F				**
+Shipping and Receiving			M				****
+Tool Design						F				*
+Tool Design						M				***
 
 
 	Comment on above results:
 1) Subquery X was created to:
-a) obtain the Department Name by joining together tables [AdventureWorks2022].[HumanResources].[EmployeeDepartmentHistory] and [AdventureWorks2022].[HumanResources].[Department],
-b) remove 5 duplicated BusinessEntityIDs from these 2 tables by using Window Function ROW_NUMBER().
+	a) obtain the Department Name by joining together tables [AdventureWorks2022].[HumanResources].[EmployeeDepartmentHistory] and [AdventureWorks2022].[HumanResources].[Department],
+	b) remove 5 duplicated BusinessEntityIDs from these 2 tables by using Window Function ROW_NUMBER().
 
 2) There are 5 BusinessEntityIDs that appear more than once after we join together tables [AdventureWorks2022].[HumanResources].[EmployeeDepartmentHistory] and [AdventureWorks2022].[HumanResources].[Department].
 
@@ -104,9 +104,9 @@ HAVING COUNT(*) > 1
 ORDER BY EmployeeDeptHistory.BusinessEntityID
 
 	-- OUTPUT
-BusinessEntityID	EmployeeCount	EmployeeCountHistogram
-4			2		**
-16			2		**
-224			2		**
-234			2		**
-250			3		***
+BusinessEntityID		EmployeeCount		EmployeeCountHistogram
+4						2					**
+16						2					**
+224						2					**
+234						2					**
+250						3					***
