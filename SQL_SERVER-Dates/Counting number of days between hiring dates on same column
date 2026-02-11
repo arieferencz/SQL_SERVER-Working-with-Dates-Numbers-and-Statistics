@@ -15,7 +15,7 @@ Tables used:
 WITH 
 OriginalTablesLevel1 AS 
 (
-		SELECT														-- OriginalTablesLevel1
+		SELECT																						-- OriginalTablesLevel1
 		ROW_NUMBER() OVER (PARTITION BY Employee.BusinessEntityID	ORDER BY Employee.BusinessEntityID ASC, EmployeeDepartmentHistory.StartDate DESC) AS RowNumberRemovingDuplicates
 		, Employee.BusinessEntityID	
 		, Department.GroupName
@@ -38,11 +38,11 @@ OriginalTablesLevel1 AS
 			ON Employee.BusinessEntityID = EmployeeDepartmentHistory.BusinessEntityID
 		LEFT JOIN [AdventureWorks2022].[HumanResources].[Department] AS Department
 			ON EmployeeDepartmentHistory.DepartmentID = Department.DepartmentID	
-		WHERE Employee.BusinessEntityID	<> 234										-- OriginalTablesLevel1
+		WHERE Employee.BusinessEntityID	<> 234														-- OriginalTablesLevel1
 ),
 RemovingDuplicatesLevel2 AS
 (
-	SELECT												-- RemovingDuplicatesLevel2
+	SELECT																							-- RemovingDuplicatesLevel2
 		OriginalTablesLevel1.BusinessEntityID
 		, OriginalTablesLevel1.GroupNameCode
 		, OriginalTablesLevel1.GroupName
@@ -52,7 +52,7 @@ RemovingDuplicatesLevel2 AS
 		, OriginalTablesLevel1.OrganizationLevel
 		, OriginalTablesLevel1.StartDate
 	FROM OriginalTablesLevel1
-	WHERE OriginalTablesLevel1.RowNumberRemovingDuplicates = 1					-- RemovingDuplicatesLevel2
+	WHERE OriginalTablesLevel1.RowNumberRemovingDuplicates = 1										-- RemovingDuplicatesLevel2
 )
 SELECT RemovingDuplicatesLevel2.BusinessEntityID
 , RemovingDuplicatesLevel2.DepartmentID
@@ -65,16 +65,16 @@ ORDER BY RemovingDuplicatesLevel2.OrganizationLevel, RemovingDuplicatesLevel2.St
 
 
   -- OUTPUT
-BusinessEntityID	DepartmentID		StartDate		NextHireDate		DateDiffHireDates
-263			11			12/11/2008		12/23/2008		12
-272			11			12/23/2008		1/11/2009		19
-269			11			1/11/2009		1/17/2009		6
-270			11			1/17/2009		1/22/2009		5
-271			11			1/22/2009		2/3/2009		12
-268			11			2/3/2009		2/4/2009		1
-264			11			2/4/2009		2/16/2009		12
-267			11			2/16/2009		2/23/2009		7
-265			11			12/4/2008		12/11/2008		7
-266			11			2/23/2009		NULL			NULL
+BusinessEntityID		DepartmentID		StartDate			NextHireDate		DateDiffHireDates
+263						11					12/11/2008			12/23/2008			12
+272						11					12/23/2008			1/11/2009			19
+269						11					1/11/2009			1/17/2009			6
+270						11					1/17/2009			1/22/2009			5
+271						11					1/22/2009			2/3/2009			12
+268						11					2/3/2009			2/4/2009			1
+264						11					2/4/2009			2/16/2009			12
+267						11					2/16/2009			2/23/2009			7
+265						11					12/4/2008			12/11/2008			7
+266						11					2/23/2009			NULL				NULL
 (end of results)
 (10 rows affected)
