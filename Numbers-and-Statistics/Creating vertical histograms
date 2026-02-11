@@ -2,14 +2,14 @@ Exercise #1: Create a vertical histogram for employees by departments.
 
 
 Solution #1: We create a vertical histogram for employees by department using functions ROW_NUMBER, COALESCE, MAX and CASE statements.
-
 Tables used:
 1) [AdventureWorks2022].[HumanResources].[EmployeeDepartmentHistory]
 2) [AdventureWorks2022].[HumanResources].[Department]
 3) [AdventureWorks2022].[HumanResources].[Employee]
 
-
-SELECT COALESCE(MAX(Z.dept_DocControl),'') AS dept_DocControl			-- VerticalHistogramLevel4
+	Query #1:
+	---------
+SELECT COALESCE(MAX(Z.dept_DocControl),'') AS dept_DocControl													-- VerticalHistogramLevel4
 , COALESCE(MAX(Z.dept_Engin),'') AS dept_Engin
 , COALESCE(MAX(Z.dept_Exec),'') AS dept_Exec
 , COALESCE(MAX(Z.dept_FacILMaint),'') AS dept_FacILMaint
@@ -26,7 +26,7 @@ SELECT COALESCE(MAX(Z.dept_DocControl),'') AS dept_DocControl			-- VerticalHisto
 , COALESCE(MAX(Z.dept_ShipReceiv),'') AS dept_ShipReceiv
 , COALESCE(MAX(Z.dept_ToolDesign),'') AS dept_ToolDesign
 FROM (
-	SELECT ROW_NUMBER() OVER (PARTITION BY Y.DepartmentName ORDER BY Y.BusinessEntityID) AS RN		-- AsterisksNULLsLevel3
+	SELECT ROW_NUMBER() OVER (PARTITION BY Y.DepartmentName ORDER BY Y.BusinessEntityID) AS RN					-- AsterisksNULLsLevel3
 	, CASE WHEN Y.DepartmentName = 'Document Control' THEN '*' ELSE NULL END AS dept_DocControl
 	, CASE WHEN Y.DepartmentName = 'Engineering' THEN '*' ELSE NULL END AS dept_Engin
 	, CASE WHEN Y.DepartmentName = 'Executive' THEN '*' ELSE NULL END AS dept_Exec
@@ -44,10 +44,10 @@ FROM (
 	, CASE WHEN Y.DepartmentName = 'Shipping and Receiving' THEN '*' ELSE NULL END AS dept_ShipReceiv
 	, CASE WHEN Y.DepartmentName = 'Tool Design' THEN '*' ELSE NULL END AS dept_ToolDesign
 	FROM (
-		SELECT X.BusinessEntityID									-- RemoveDuplicatesLevel2
+		SELECT X.BusinessEntityID																				-- RemoveDuplicatesLevel2
 		, X.DepartmentName
 		FROM (
-			SELECT EmployeeDeptHistory.BusinessEntityID						-- OriginalTablesLevel1
+			SELECT EmployeeDeptHistory.BusinessEntityID															-- OriginalTablesLevel1
 			, EmployeeDeptHistory.DepartmentID
 			, EmployeeDeptHistory.ModifiedDate
 			, Department.[Name] AS DepartmentName
@@ -56,40 +56,40 @@ FROM (
 			LEFT JOIN [AdventureWorks2022].[HumanResources].[Department] AS Department
 				ON EmployeeDeptHistory.DepartmentID = Department.DepartmentID
 			INNER JOIN [AdventureWorks2022].[HumanResources].[Employee] AS Employee
-				ON EmployeeDeptHistory.BusinessEntityID = Employee.BusinessEntityID		-- OriginalTablesLevel1
+				ON EmployeeDeptHistory.BusinessEntityID = Employee.BusinessEntityID								-- OriginalTablesLevel1
 			) AS X
 			WHERE RowNumber = 1
-			GROUP BY X.BusinessEntityID, X.DepartmentName						-- RemoveDuplicatesLevel2
-		) AS Y												-- AsterisksNULLsLevel3
+			GROUP BY X.BusinessEntityID, X.DepartmentName														-- RemoveDuplicatesLevel2
+		) AS Y																									-- AsterisksNULLsLevel3
 	) AS Z
-GROUP BY Z.RN									-- VerticalHistogramLevel4
+GROUP BY Z.RN																									-- VerticalHistogramLevel4
 
 
 	-- OUTPUT
-dept_DocControl		dept_Engin	dept_Exec	dept_FaciLMaint	dept_Finance	dept_HR	dept_IT	dept_Marketing	dept_Prod	dept_ProdControl	dept_Purch	dept_QA		dept_R_and_D	dept_Sales	dept_ShipReceiv	dept_ToolDesign
-*			*		*		*		*		*	*	*		*		*			*		*		*		*		*		*
-*			*		*		*		*		*	*	*		*		*			*		*		*		*		*		*
-*			*				*		*		*	*	*		*		*			*		*		*		*		*		*
-*			*				*		*		*	*	*		*		*			*		*		*		*		*		*
-*			*				*		*		*	*	*		*		*			*		*				*		*		
-			*				*		*		*	*	*		*		*			*		*				*		*		
-							*		*			*	*		*					*						*				
-									*			*	*		*					*						*				
-									*			*	*		*					*						*				
-									*			*			*					*						*				
-															*					*						*				
-															*					*						*				
-															*											*				
-															*											*				
-															*											*				
-															*											*				
-															*											*				
-															*											*				
-															*															
+dept_DocControl		dept_Engin		dept_Exec	dept_FaciLMaint		dept_Finance	dept_HR		dept_IT		dept_Marketing		dept_Prod		dept_ProdControl	dept_Purch		dept_QA		dept_R_and_D	dept_Sales		dept_ShipReceiv		dept_ToolDesign
+*					*				*			*					*				*			*			*					*				*					*				*			*				*				*					*
+*					*				*			*					*				*			*			*					*				*					*				*			*				*				*					*
+*					*							*					*				*			*			*					*				*					*				*			*				*				*					*
+*					*							*					*				*			*			*					*				*					*				*			*				*				*					*
+*					*							*					*				*			*			*					*				*					*				*							*				*		
+					*							*					*				*			*			*					*				*					*				*							*				*		
+												*					*							*			*					*									*											*				
+																	*							*			*					*									*											*				
+																	*							*			*					*									*											*				
+																	*							*								*									*											*				
+																																*									*											*				
+																																*									*											*				
+																																*																				*				
+																																*																				*				
+																																*																				*				
+																																*																				*				
+																																*																				*				
+																																*																				*				
+																																*															
 ........................................................................... TRUNCATED RESULTS ........................................................... TRUNCATED RESULTS ..................................................................................
-															*
-															*
-															*
+																																*
+																																*
+																																*
 (end of results)
 (179 rows affected)
 
