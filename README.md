@@ -39,7 +39,7 @@ Each exercise includes a question, one or more solutions, the T-SQL code, the qu
 | Exercise | Description |
 |---|---|
 | [Average calculations](https://github.com/arieferencz/SQL_SERVER-Working-with-Dates-Numbers-and-Statistics/blob/main/Numbers-and-Statistics/Average%20calculations.md) | Calculates averages using AVG, SUM/COUNT, and GROUP BY ROLLUP |
-| [Creating horizontal histograms](https://github.com/arieferencz/SQL_SERVER-Working-with-Dates-Numbers-and-Statistics/blob/main/Numbers-and-Statistics/Creating%20horizontal%20histograms) | Builds text-based horizontal histograms using REPLICATE |
+| [Creating horizontal histograms](https://github.com/arieferencz/SQL_SERVER-Working-with-Dates-Numbers-and-Statistics/blob/main/Numbers-and-Statistics/Creating%20horizontal%20histograms.md) | Builds text-based horizontal histograms using REPLICATE |
 | [Creating vertical histograms](https://github.com/arieferencz/SQL_SERVER-Working-with-Dates-Numbers-and-Statistics/blob/main/Numbers-and-Statistics/Creating%20vertical%20histograms) | Builds text-based vertical histograms using T-SQL |
 | [Highest and lowest dollar value sales orders calculations](https://github.com/arieferencz/SQL_SERVER-Working-with-Dates-Numbers-and-Statistics/blob/main/Numbers-and-Statistics/Highest%20and%20lowest%20dollar%20value%20sales%20orders%20calculations) | Retrieves top and bottom sales orders by total value |
 | [Median calculations using PERCENTILE_DISC and PERCENTILE_CONT](https://github.com/arieferencz/SQL_SERVER-Working-with-Dates-Numbers-and-Statistics/blob/main/Numbers-and-Statistics/Median%20calculations%20using%20PERCENTILE_DISC()%20and%20PERCENTILE_CONT()) | Compares discrete and continuous median calculations |
