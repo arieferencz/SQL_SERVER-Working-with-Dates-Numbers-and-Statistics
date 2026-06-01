@@ -17,7 +17,7 @@ Each exercise includes a question, one or more solutions, the T-SQL code, the qu
 
 | Exercise | Description |
 |---|---|
-| [Adding and subtracting days, months and years to a date](https://github.com/arieferencz/SQL_SERVER-Working-with-Dates-Numbers-and-Statistics/blob/main/SQL_SERVER-Dates/Adding%20and%20Subtracting%20days%2C%20months%20and%20years%20to%20a%20date) | Uses DATEADD to perform arithmetic on date values |
+| [Adding and subtracting days, months and years to a date](https://github.com/arieferencz/SQL_SERVER-Working-with-Dates-Numbers-and-Statistics/blob/main/SQL_SERVER-Dates/Adding%20and%20Subtracting%20days%2C%20months%20and%20years%20to%20a%20date.md) | Uses DATEADD to perform arithmetic on date values |
 | [Calculate first day, last day and second to last day of current month](https://github.com/arieferencz/SQL_SERVER-Working-with-Dates-Numbers-and-Statistics/blob/main/SQL_SERVER-Dates/Calculate%20first%20day%2C%20last%20day%20and%20second%20to%20last%20day%20of%20current%20month) | Derives key boundary dates of the current month dynamically |
 | [Counting the number of business days between 2 dates](https://github.com/arieferencz/SQL_SERVER-Working-with-Dates-Numbers-and-Statistics/blob/main/SQL_SERVER-Dates/Counting%20the%20number%20of%20business%20days%20between%202%20dates) | Calculates working days between two dates excluding weekends |
 | [Counting the number of days between 2 dates](https://github.com/arieferencz/SQL_SERVER-Working-with-Dates-Numbers-and-Statistics/blob/main/SQL_SERVER-Dates/Counting%20the%20number%20of%20days%20between%202%20dates) | Uses DATEDIFF to count calendar days between two dates |
