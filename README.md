@@ -39,6 +39,7 @@ Each exercise includes a question, one or more solutions, the T-SQL code, the qu
 | Exercise | Description |
 |---|---|
 | [Average calculations](https://github.com/arieferencz/SQL_SERVER-Working-with-Dates-Numbers-and-Statistics/blob/main/Numbers-and-Statistics/Average%20calculations.md) | Calculates averages using AVG, SUM/COUNT, and GROUP BY ROLLUP |
+| [Calculate the difference between current row and previous row's sales amount by product](https://github.com/arieferencz/SQL_SERVER-Working-with-Dates-Numbers-and-Statistics/blob/main/Numbers-and-Statistics/Calculate%20the%20difference%20between%20current%20row%20and%20previous%20row's%20sales%20amount%20by%20product.md) | Calculate the difference between current row and previous row's sales amount by product using LAG function |
 | [Calculate total sales by product name](https://github.com/arieferencz/SQL_SERVER-Working-with-Dates-Numbers-and-Statistics/blob/main/Numbers-and-Statistics/Calculate%20total%20sales%20by%20product%20name.md) | Calculates the total sales by product name |
 | [Creating evenly sized groups of vendors](https://github.com/arieferencz/SQL_SERVER-Working-with-Dates-Numbers-and-Statistics/blob/main/Numbers-and-Statistics/Creating%20evenly%20size%20groups%20of%20vendors.md) | Divides vendors into equal groups using NTILE |
 | [Creating horizontal histograms](https://github.com/arieferencz/SQL_SERVER-Working-with-Dates-Numbers-and-Statistics/blob/main/Numbers-and-Statistics/Creating%20horizontal%20histograms.md) | Builds text-based horizontal histograms using REPLICATE |
