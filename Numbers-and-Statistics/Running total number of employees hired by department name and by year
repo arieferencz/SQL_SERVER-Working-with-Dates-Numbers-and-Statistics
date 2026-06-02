@@ -1,0 +1,70 @@
+Exercise: Running total number of employees hired by department name and by year, ordered by year.
+
+Solution: We used an INNER JOIN to connect the Department and EmployeeDepartmentHistory tables, and an INNER JOIN to connect those to the Employee table.
+
+To calculate the running total we used the SUM Window Function. We calculate a cumulative running total, by adding 1 for each row processed for each department and for each year separately, starting from the very first row of your dataset (or partition) up to the current row.
+
+The SUM(1) OVER (PARTITION BY Departments.[Name], YEAR(Employees.[HireDate]) ORDER BY YEAR(Employees.[HireDate]) ROWS UNBOUNDED PRECEDING) is explained here.
+a) SUM(1): Acts as a counter for each row processed.
+
+b) The OVER clause has the following arguments:
+b.1) PARTITION BY: divides the query result set into partitions.
+The window function is applied to each partition separately and computation restarts for each partition.
+If you don't specify PARTITION BY, the function treats all rows of the query result set as a single partition.
+
+b.2) ORDER BY: defines the logical order of the rows within each partition of the result set.
+Meaning, it specifies the logical order in which the window function calculation is performed.
+
+b.3) ROWS or RANGE: limits the rows within the partition by specifying start and end points within the partition. 
+It requires ORDER BY argument and the default value is from the start of partition to the current element if the ORDER BY argument is specified.
+
+For this exercise, the arguments for the OVER clause are as follows:
+b.1) PARTITION BY: department Name and YEAR of the HireDate
+b.2) ORDER BY: YEAR of the HireDate
+b.3) ROWS or RANGE: ROWS UNBOUNDED PRECEDING. Meaning, we tell SQL Server that the window starts at the first row of the partition.
+
+
+Tables used
+[AdventureWorks2022].[HumanResources].[Department]
+[AdventureWorks2022].[HumanResources].[EmployeeDepartmentHistory]
+[AdventureWorks2022].[HumanResources].[Employee]
+
+Functions used
+SUM(1) OVER a window function
+YEAR function
+
+
+USE AdventureWorks2022;
+GO
+
+SELECT Departments.[Name]
+      ,YEAR(Employees.[HireDate]) AS YearHired
+      ,SUM(1) OVER (PARTITION BY Departments.[Name], YEAR(Employees.[HireDate]) ORDER BY YEAR(Employees.[HireDate]) ROWS UNBOUNDED PRECEDING) AS RunningTotalHired
+FROM [AdventureWorks2022].[HumanResources].[Department] AS Departments
+INNER JOIN [AdventureWorks2022].[HumanResources].[EmployeeDepartmentHistory] AS EmployeesHistorical
+ON Departments.[DepartmentID] = EmployeesHistorical.[DepartmentID]
+INNER JOIN [AdventureWorks2022].[HumanResources].[Employee] AS Employees
+ON EmployeesHistorical.[BusinessEntityID] = Employees.[BusinessEntityID]
+
+
+Output
+Name			YearHired	RunningTotalHired
+Document Control	2008		1
+Document Control	2009		1
+Document Control	2009		2
+Document Control	2009		3
+Document Control	2009		4
+Engineering		2007		1
+Engineering		2007		2
+Engineering		2008		1
+Engineering		2008		2
+Engineering		2008		3
+Engineering		2010		1
+Engineering		2011		1
+...
+Tool Design		2007		1
+Tool Design		2007		2
+Tool Design		2010		1
+Tool Design		2010		2
+
+(296 rows affected)
