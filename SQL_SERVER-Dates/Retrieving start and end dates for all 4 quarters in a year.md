@@ -18,7 +18,7 @@ Retrieve the start and end dates for all 4 quarters of the current year — dyna
 ### Approach
 We calculate two anchor dates — the start of Q1 and Dec 31 of the previous year — using `DATEADD(QUARTER, ...)` and `DATEADD(DAY, -1, ...)`. We then use a Cartesian Product with an `Iteration` subquery that generates sequential position numbers. Adding the position to the quarter-based `DATEADD()` calls shifts each anchor forward by that many quarters. A `WHERE` clause limits the iteration to 4 rows — one per quarter.
 
-### T-SQL functions used
+### T-SQL functions and clauses used
 
 | Function | Purpose |
 |---|---|
