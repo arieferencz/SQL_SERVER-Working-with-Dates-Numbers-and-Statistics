@@ -104,9 +104,9 @@ Europe         166,537.08               3.03
 ```sql
 SELECT
     SalesTerritory.[Group]
-  , CountryRegion.[Name]                                                     AS CountryName
-  , FORMAT(ROUND(MAX(SalesOrderHeader.[TotalDue]), 2, 2), '#,#.##')         AS HighestDollarValueSales
-  , FORMAT(ROUND(MIN(SalesOrderHeader.[TotalDue]), 2, 2), '#,#.##')         AS LowestDollarValueSales
+  , CountryRegion.[Name]                                            AS CountryName
+  , FORMAT(ROUND(MAX(SalesOrderHeader.[TotalDue]), 2, 2), '#,#.##') AS HighestDollarValueSales
+  , FORMAT(ROUND(MIN(SalesOrderHeader.[TotalDue]), 2, 2), '#,#.##') AS LowestDollarValueSales
 FROM [AdventureWorks2022].[Sales].[SalesOrderHeader] AS SalesOrderHeader
 LEFT JOIN [AdventureWorks2022].[Sales].[SalesTerritory] AS SalesTerritory
     ON SalesOrderHeader.TerritoryID = SalesTerritory.TerritoryID
