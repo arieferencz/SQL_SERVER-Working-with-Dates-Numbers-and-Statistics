@@ -38,7 +38,7 @@ SELECT
     CAST(GETDATE() AS DATE)                        AS TodayGetDate   -- 2024-12-02
   , -DAY(GETDATE())                                AS Step1          -- -2
   , -DAY(GETDATE()) + 1                            AS Step2          -- -1
-  , CAST(GETDATE() - DAY(GETDATE()) + 1 AS DATE)  AS Step3          -- 2024-12-01
+  , CAST(GETDATE() - DAY(GETDATE()) + 1 AS DATE)   AS Step3          -- 2024-12-01
 ```
 
 ```
@@ -64,7 +64,7 @@ SELECT
   , DAY(GETDATE())                                                 AS Step1         -- 2
   , DAY(GETDATE() - 1)                                             AS Step2         -- 1
   , -(DAY(GETDATE() - 1))                                          AS Step3         -- -1
-  , CAST(DATEADD(DAY, -(DAY(GETDATE() - 1)), GETDATE()) AS DATE)  AS Step4         -- 2024-12-01
+  , CAST(DATEADD(DAY, -(DAY(GETDATE() - 1)), GETDATE()) AS DATE)   AS Step4         -- 2024-12-01
 ```
 
 ```
@@ -89,7 +89,7 @@ SELECT
     CAST(GETDATE() AS DATE)                                       AS TodayGetDate  -- 2024-12-02
   , DAY(GETDATE())                                                AS Step1         -- 2
   , 1 - (DAY(GETDATE()))                                          AS Step2         -- -1
-  , CAST(DATEADD(DAY, 1 - (DAY(GETDATE())), GETDATE()) AS DATE)  AS Step3         -- 2024-12-01
+  , CAST(DATEADD(DAY, 1 - (DAY(GETDATE())), GETDATE()) AS DATE)   AS Step3         -- 2024-12-01
 ```
 
 ```
@@ -160,10 +160,10 @@ SELECT CAST(DATEADD(MONTH, DATEDIFF(MONTH, -1, GETDATE()), -1) AS DATE) AS LastD
 
 ```sql
 SELECT
-    CAST(GETDATE() AS DATE)                                   AS TodayGetDate  -- 2024-12-02
-  , DATEDIFF(MONTH, -1, GETDATE())                            AS Step1         -- 1500
-  , CAST(DATEADD(MONTH, 0, -1) AS DATE)                       AS Step2         -- 1899-12-31
-  , CAST(DATEADD(MONTH, DATEDIFF(MONTH, -1, GETDATE()), -1) AS DATE) AS Step3  -- 2024-12-31
+    CAST(GETDATE() AS DATE)                                           AS TodayGetDate  -- 2024-12-02
+  , DATEDIFF(MONTH, -1, GETDATE())                                    AS Step1         -- 1500
+  , CAST(DATEADD(MONTH, 0, -1) AS DATE)                               AS Step2         -- 1899-12-31
+  , CAST(DATEADD(MONTH, DATEDIFF(MONTH, -1, GETDATE()), -1) AS DATE)  AS Step3         -- 2024-12-31
 ```
 
 ```
@@ -185,11 +185,11 @@ SELECT CAST(DATEADD(DAY, -1, DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()) + 1, 0
 
 ```sql
 SELECT
-    CAST(GETDATE() AS DATE)                                                           AS TodayGetDate  -- 2024-12-02
-  , DATEDIFF(MONTH, 0, GETDATE())                                                     AS Step1         -- 1499
-  , DATEDIFF(MONTH, 0, GETDATE()) + 1                                                 AS Step2         -- 1500
-  , CAST(DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()) + 1, 0) AS DATE)                AS Step3         -- 2025-01-01
-  , CAST(DATEADD(DAY, -1, DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()) + 1, 0)) AS DATE) AS Step4     -- 2024-12-31
+    CAST(GETDATE() AS DATE)                                                               AS TodayGetDate  -- 2024-12-02
+  , DATEDIFF(MONTH, 0, GETDATE())                                                         AS Step1         -- 1499
+  , DATEDIFF(MONTH, 0, GETDATE()) + 1                                                     AS Step2         -- 1500
+  , CAST(DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()) + 1, 0) AS DATE)                    AS Step3         -- 2025-01-01
+  , CAST(DATEADD(DAY, -1, DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()) + 1, 0)) AS DATE)  AS Step4         -- 2024-12-31
 ```
 
 ```
@@ -211,12 +211,12 @@ SELECT CAST(DATEADD(DAY, -1, DATEADD(MONTH, 1, DATEADD(DAY, 1 - (DAY(GETDATE()))
 
 ```sql
 SELECT
-    CAST(GETDATE() AS DATE)                                                                    AS TodayGetDate  -- 2024-12-02
-  , DAY(GETDATE())                                                                             AS Step1         -- 2
-  , 1 - (DAY(GETDATE()))                                                                       AS Step2         -- -1
-  , CAST(DATEADD(DAY, 1 - (DAY(GETDATE())), GETDATE()) AS DATE)                               AS Step3         -- 2024-12-01
-  , CAST(DATEADD(MONTH, 1, DATEADD(DAY, 1 - (DAY(GETDATE())), GETDATE())) AS DATE)            AS Step4         -- 2025-01-01
-  , CAST(DATEADD(DAY, -1, DATEADD(MONTH, 1, DATEADD(DAY, 1 - (DAY(GETDATE())), GETDATE()))) AS DATE) AS Step5 -- 2024-12-31
+    CAST(GETDATE() AS DATE)                                                                          AS TodayGetDate  -- 2024-12-02
+  , DAY(GETDATE())                                                                                   AS Step1         -- 2
+  , 1 - (DAY(GETDATE()))                                                                             AS Step2         -- -1
+  , CAST(DATEADD(DAY, 1 - (DAY(GETDATE())), GETDATE()) AS DATE)                                      AS Step3         -- 2024-12-01
+  , CAST(DATEADD(MONTH, 1, DATEADD(DAY, 1 - (DAY(GETDATE())), GETDATE())) AS DATE)                   AS Step4         -- 2025-01-01
+  , CAST(DATEADD(DAY, -1, DATEADD(MONTH, 1, DATEADD(DAY, 1 - (DAY(GETDATE())), GETDATE()))) AS DATE) AS Step5         -- 2024-12-31
 ```
 
 ```
@@ -240,8 +240,8 @@ SELECT DATEADD(DAY, -1, EOMONTH(GETDATE())) AS SecondtoLastDayofCurrentMonth
 
 ```sql
 SELECT
-    CAST(GETDATE() AS DATE)              AS TodayGetDate  -- 2024-12-02
-  , EOMONTH(GETDATE())                   AS Step1         -- 2024-12-31
+    CAST(GETDATE() AS DATE)              AS TodayGetDate                   -- 2024-12-02
+  , EOMONTH(GETDATE())                   AS Step1                          -- 2024-12-31
   , DATEADD(DAY, -1, EOMONTH(GETDATE())) AS SecondtoLastDayofCurrentMonth  -- 2024-12-30
 ```
 
@@ -264,12 +264,12 @@ SELECT CAST(DATEADD(DAY, -2, DATEADD(MONTH, 1, DATEADD(DAY, 1 - (DAY(GETDATE()))
 
 ```sql
 SELECT
-    CAST(GETDATE() AS DATE)                                                                     AS TodayGetDate  -- 2024-12-02
-  , DAY(GETDATE())                                                                              AS Step1         -- 2
-  , 1 - (DAY(GETDATE()))                                                                        AS Step2         -- -1
-  , CAST(DATEADD(DAY, 1 - (DAY(GETDATE())), GETDATE()) AS DATE)                                AS Step3         -- 2024-12-01
-  , CAST(DATEADD(MONTH, 1, DATEADD(DAY, 1 - (DAY(GETDATE())), GETDATE())) AS DATE)             AS Step4         -- 2025-01-01
-  , CAST(DATEADD(DAY, -2, DATEADD(MONTH, 1, DATEADD(DAY, 1 - (DAY(GETDATE())), GETDATE()))) AS DATE) AS Step5  -- 2024-12-30
+    CAST(GETDATE() AS DATE)                                                                          AS TodayGetDate  -- 2024-12-02
+  , DAY(GETDATE())                                                                                   AS Step1         -- 2
+  , 1 - (DAY(GETDATE()))                                                                             AS Step2         -- -1
+  , CAST(DATEADD(DAY, 1 - (DAY(GETDATE())), GETDATE()) AS DATE)                                      AS Step3         -- 2024-12-01
+  , CAST(DATEADD(MONTH, 1, DATEADD(DAY, 1 - (DAY(GETDATE())), GETDATE())) AS DATE)                   AS Step4         -- 2025-01-01
+  , CAST(DATEADD(DAY, -2, DATEADD(MONTH, 1, DATEADD(DAY, 1 - (DAY(GETDATE())), GETDATE()))) AS DATE) AS Step5         -- 2024-12-30
 ```
 
 ```
