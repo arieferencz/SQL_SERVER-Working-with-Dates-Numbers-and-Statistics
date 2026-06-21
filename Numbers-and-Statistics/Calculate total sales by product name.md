@@ -10,7 +10,7 @@ Calculate the total sales amount for each product — showing the cumulative rev
 ### Approach
 We join three tables to connect each sales order line to its product name. We then use `SUM()` on the `LineTotal` column grouped by product name to calculate the total revenue per product. `ROUND()` and `FORMAT()` are applied to present the amounts in a readable format.
 
-### T-SQL functions and clauses used
+### T-SQL functions and joins used
 
 | Function / Clause | Purpose |
 |---|---|
