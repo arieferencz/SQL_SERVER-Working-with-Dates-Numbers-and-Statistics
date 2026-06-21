@@ -10,7 +10,7 @@ Count the number of employees hired in each month of each year — including mon
 ### Approach
 We generate a complete list of every calendar day between the first day of the earliest hire month and the first day of the latest hire month using `GENERATE_SERIES()`. We then `LEFT JOIN` this list to a subquery that converts each employee's hire date to the first day of their hire month. A `CASE` flag marks matching rows as `1` and non-matching rows as `0`. Filtering to the 1st of each month and summing the flags produces the final monthly count — including months with zero hires.
 
-### T-SQL functions used
+### T-SQL join and functions used
 
 | Function | Purpose |
 |---|---|
