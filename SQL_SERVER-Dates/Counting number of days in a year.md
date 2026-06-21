@@ -16,7 +16,7 @@ Count the total number of days in the current year — correctly identifying whe
 ### Approach
 We calculate the first day of the current year and the first day of next year using `DATEADD()` and `DATEDIFF()` applied to SQL Server's default `DATETIME` value (`1900-01-01`). We then use `DATEDIFF(DAY, ...)` between those two dates to get the total number of days in the current year. Since `DATEDIFF` counts day boundaries crossed, no `+ 1` is needed here — going from Jan 1 of this year to Jan 1 of next year crosses exactly as many boundaries as there are days in the year.
 
-### T-SQL functions used
+### T-SQL clauses and functions used
 
 | Function | Purpose |
 |---|---|
