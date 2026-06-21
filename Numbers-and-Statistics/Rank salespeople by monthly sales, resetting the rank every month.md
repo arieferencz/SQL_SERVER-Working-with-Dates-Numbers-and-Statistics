@@ -184,7 +184,7 @@ The `ORDER BY MonthlySales` in the `RANK()` clause uses **ascending** order by d
 ```sql
 RANK() OVER (
     PARTITION BY X.YearSale, X.MonthSale
-    ORDER BY X.MonthlySales DESC)   -- highest sales = rank 1
+    ORDER BY X.MonthlySales DESC)        -- highest sales = rank 1
 ```
 
 ---
