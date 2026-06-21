@@ -43,10 +43,10 @@ GO
 
 SELECT
     X.ProductName
-  , FORMAT(ROUND(X.SalesByProductName, 2, 2), '#,#.##')                AS SalesByProductName
+  , FORMAT(ROUND(X.SalesByProductName, 2, 2), '#,#.##') AS SalesByProductName
   , FORMAT(ROUND(X.SalesByProductName
         - LAG(X.SalesByProductName) OVER (ORDER BY X.SalesByProductName),
-        2, 2), '#,#.##')                                                AS SalesDiff
+        2, 2), '#,#.##') AS SalesDiff
 FROM (
     SELECT
         Product.[Name]       AS ProductName
