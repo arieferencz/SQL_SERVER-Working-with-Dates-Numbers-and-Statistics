@@ -10,7 +10,7 @@ Calculate the salary percentile rank for each employee — both across the entir
 ### Approach
 We join four tables to retrieve each employee's most recent salary rate, using `ROW_NUMBER()` to remove duplicates. We then apply `PERCENT_RANK()` and `CUME_DIST()` as window functions ordered by salary rate to calculate each employee's relative position within the company's salary distribution.
 
-### T-SQL functions used
+### T-SQL functions and clauses used
 
 | Function | Purpose |
 |---|---|
