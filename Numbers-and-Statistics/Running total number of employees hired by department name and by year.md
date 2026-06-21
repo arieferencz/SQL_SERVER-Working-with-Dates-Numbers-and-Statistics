@@ -91,7 +91,7 @@ Tool Design       2010       2
 
 ### The key difference from the previous exercise
 
-In the [previous exercise](https://github.com/arieferencz/SQL_SERVER-Working-with-Dates-Numbers-and-Statistics/blob/main/Numbers-and-Statistics/Running%20total%20number%20of%20employees%20hired%20by%20department%20name.md), `PARTITION BY` used only `Departments.[Name]` — creating one partition per department. The running total grew continuously from the first hire to the last within each department.
+In the [previous exercise](https://github.com/arieferencz/SQL_SERVER-Working-with-Dates-Numbers-and-Statistics/blob/main/Numbers-and-Statistics/Running%20Total%20number%20of%20employees%20hired%20by%20department%20name.md), `PARTITION BY` used only `Departments.[Name]` — creating one partition per department. The running total grew continuously from the first hire to the last within each department.
 
 In this exercise, `PARTITION BY` uses **both** `Departments.[Name]` and `YEAR(Employees.[HireDate])` — creating one partition per **department-year combination**. The running total now restarts at `1` every time the year changes within a department.
 
