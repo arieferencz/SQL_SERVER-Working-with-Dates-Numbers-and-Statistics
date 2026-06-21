@@ -10,7 +10,7 @@ Calculate the median employee salary rate for every department using both `PERCE
 ### Approach
 We join four tables to retrieve each employee's most recent salary rate in their current department. We use `ROW_NUMBER()` to remove duplicates caused by department history changes and multiple pay rate records. We then apply `PERCENTILE_DISC(0.5)` and `PERCENTILE_CONT(0.5)` as window functions partitioned by department to calculate the median salary rate for each department.
 
-### T-SQL functions used
+### T-SQL functions and clauses used
 
 | Function | Purpose |
 |---|---|
