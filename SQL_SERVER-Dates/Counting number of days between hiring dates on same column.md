@@ -50,7 +50,7 @@ OriginalTablesLevel1 AS
             ELSE 'Error'
         END
       , EmployeeDepartmentHistory.DepartmentID
-      , Department.[Name]                       AS DeparmentName
+      , Department.[Name] AS DeparmentName
       , Employee.JobTitle
       , Employee.OrganizationLevel
       , EmployeeDepartmentHistory.StartDate
@@ -80,11 +80,11 @@ SELECT
   , RemovingDuplicatesLevel2.DepartmentID
   , RemovingDuplicatesLevel2.StartDate
   , LEAD(RemovingDuplicatesLevel2.StartDate)
-        OVER (ORDER BY RemovingDuplicatesLevel2.StartDate)                             AS NextHireDate
+        OVER (ORDER BY RemovingDuplicatesLevel2.StartDate) AS NextHireDate
   , DATEDIFF(DAY,
         RemovingDuplicatesLevel2.StartDate,
         LEAD(RemovingDuplicatesLevel2.StartDate)
-            OVER (ORDER BY RemovingDuplicatesLevel2.StartDate))                        AS DateDiffHireDates
+            OVER (ORDER BY RemovingDuplicatesLevel2.StartDate)) AS DateDiffHireDates
 FROM RemovingDuplicatesLevel2
 WHERE RemovingDuplicatesLevel2.DepartmentID = 11
 ORDER BY RemovingDuplicatesLevel2.OrganizationLevel, RemovingDuplicatesLevel2.StartDate
