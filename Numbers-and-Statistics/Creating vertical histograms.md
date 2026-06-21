@@ -65,22 +65,22 @@ FROM (
     SELECT
         ROW_NUMBER() OVER (PARTITION BY Y.DepartmentName
                            ORDER BY Y.BusinessEntityID)                         AS RN
-      , CASE WHEN Y.DepartmentName = 'Document Control'        THEN '*' ELSE NULL END AS dept_DocControl
-      , CASE WHEN Y.DepartmentName = 'Engineering'             THEN '*' ELSE NULL END AS dept_Engin
-      , CASE WHEN Y.DepartmentName = 'Executive'               THEN '*' ELSE NULL END AS dept_Exec
+      , CASE WHEN Y.DepartmentName = 'Document Control'           THEN '*' ELSE NULL END AS dept_DocControl
+      , CASE WHEN Y.DepartmentName = 'Engineering'                THEN '*' ELSE NULL END AS dept_Engin
+      , CASE WHEN Y.DepartmentName = 'Executive'                  THEN '*' ELSE NULL END AS dept_Exec
       , CASE WHEN Y.DepartmentName = 'Facilities and Maintenance' THEN '*' ELSE NULL END AS dept_FacILMaint
-      , CASE WHEN Y.DepartmentName = 'Finance'                 THEN '*' ELSE NULL END AS dept_Finance
-      , CASE WHEN Y.DepartmentName = 'Human Resources'         THEN '*' ELSE NULL END AS dept_HR
-      , CASE WHEN Y.DepartmentName = 'Information Services'    THEN '*' ELSE NULL END AS dept_IT
-      , CASE WHEN Y.DepartmentName = 'Marketing'               THEN '*' ELSE NULL END AS dept_Marketing
-      , CASE WHEN Y.DepartmentName = 'Production'              THEN '*' ELSE NULL END AS dept_Prod
-      , CASE WHEN Y.DepartmentName = 'Production Control'      THEN '*' ELSE NULL END AS dept_ProdControl
-      , CASE WHEN Y.DepartmentName = 'Purchasing'              THEN '*' ELSE NULL END AS dept_Purch
-      , CASE WHEN Y.DepartmentName = 'Quality Assurance'       THEN '*' ELSE NULL END AS dept_QA
-      , CASE WHEN Y.DepartmentName = 'Research and Development' THEN '*' ELSE NULL END AS dept_R_and_D
-      , CASE WHEN Y.DepartmentName = 'Sales'                   THEN '*' ELSE NULL END AS dept_Sales
-      , CASE WHEN Y.DepartmentName = 'Shipping and Receiving'  THEN '*' ELSE NULL END AS dept_ShipReceiv
-      , CASE WHEN Y.DepartmentName = 'Tool Design'             THEN '*' ELSE NULL END AS dept_ToolDesign
+      , CASE WHEN Y.DepartmentName = 'Finance'                    THEN '*' ELSE NULL END AS dept_Finance
+      , CASE WHEN Y.DepartmentName = 'Human Resources'            THEN '*' ELSE NULL END AS dept_HR
+      , CASE WHEN Y.DepartmentName = 'Information Services'       THEN '*' ELSE NULL END AS dept_IT
+      , CASE WHEN Y.DepartmentName = 'Marketing'                  THEN '*' ELSE NULL END AS dept_Marketing
+      , CASE WHEN Y.DepartmentName = 'Production'                 THEN '*' ELSE NULL END AS dept_Prod
+      , CASE WHEN Y.DepartmentName = 'Production Control'         THEN '*' ELSE NULL END AS dept_ProdControl
+      , CASE WHEN Y.DepartmentName = 'Purchasing'                 THEN '*' ELSE NULL END AS dept_Purch
+      , CASE WHEN Y.DepartmentName = 'Quality Assurance'          THEN '*' ELSE NULL END AS dept_QA
+      , CASE WHEN Y.DepartmentName = 'Research and Development'   THEN '*' ELSE NULL END AS dept_R_and_D
+      , CASE WHEN Y.DepartmentName = 'Sales'                      THEN '*' ELSE NULL END AS dept_Sales
+      , CASE WHEN Y.DepartmentName = 'Shipping and Receiving'     THEN '*' ELSE NULL END AS dept_ShipReceiv
+      , CASE WHEN Y.DepartmentName = 'Tool Design'                THEN '*' ELSE NULL END AS dept_ToolDesign
     FROM (
         SELECT
             X.BusinessEntityID
