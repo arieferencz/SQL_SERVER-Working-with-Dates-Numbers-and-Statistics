@@ -10,7 +10,7 @@ Retrieve the start and end dates for all 4 quarters of a specific year — in th
 ### Approach
 We use `UNION ALL` to generate 4 rows — one per quarter — each encoded as a 5-digit integer (`YYYYQ`, e.g. `20241` for Q1 2024). We extract the year using `LEFT()` and the quarter number using the modulus operator `%`. Multiplying the quarter number by `3` gives the last month of that quarter. We then cast this into a date (the first day of that last month), subtract 2 months to get the quarter start, and add 1 month then subtract 1 day to get the quarter end.
 
-### T-SQL functions and operators used
+### T-SQL functions, operators, and clauses used
 
 | Function / Operator | Purpose |
 |---|---|
