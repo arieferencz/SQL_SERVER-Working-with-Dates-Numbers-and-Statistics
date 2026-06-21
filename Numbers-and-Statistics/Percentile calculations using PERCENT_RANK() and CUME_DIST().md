@@ -46,15 +46,15 @@ FROM (
         SELECT
             EmployeeDepartmentHistory.BusinessEntityID
           , EmployeeDepartmentHistory.DepartmentID
-          , EmployeeDepartmentHistory.ModifiedDate  AS EDH_ModifiedDate
-          , Department.[Name]                       AS DepartmentName
+          , EmployeeDepartmentHistory.ModifiedDate AS EDH_ModifiedDate
+          , Department.[Name]                      AS DepartmentName
           , EmployeePayHistory.Rate
-          , EmployeePayHistory.ModifiedDate         AS EPH_ModifiedDate
+          , EmployeePayHistory.ModifiedDate        AS EPH_ModifiedDate
           , ROW_NUMBER() OVER (
                 PARTITION BY EmployeeDepartmentHistory.BusinessEntityID
                 ORDER BY EmployeeDepartmentHistory.BusinessEntityID ASC,
                          EmployeeDepartmentHistory.ModifiedDate DESC,
-                         EmployeePayHistory.ModifiedDate DESC)  AS RowNumber
+                         EmployeePayHistory.ModifiedDate DESC) AS RowNumber
         FROM [AdventureWorks2022].[HumanResources].[EmployeeDepartmentHistory] AS EmployeeDepartmentHistory
         LEFT JOIN [AdventureWorks2022].[HumanResources].[Department] AS Department
             ON EmployeeDepartmentHistory.DepartmentID = Department.DepartmentID
@@ -180,10 +180,10 @@ FROM (
         SELECT
             EmployeeDepartmentHistory.BusinessEntityID
           , EmployeeDepartmentHistory.DepartmentID
-          , EmployeeDepartmentHistory.ModifiedDate  AS EDH_ModifiedDate
-          , Department.[Name]                       AS DepartmentName
+          , EmployeeDepartmentHistory.ModifiedDate AS EDH_ModifiedDate
+          , Department.[Name]                      AS DepartmentName
           , EmployeePayHistory.Rate
-          , EmployeePayHistory.ModifiedDate         AS EPH_ModifiedDate
+          , EmployeePayHistory.ModifiedDate        AS EPH_ModifiedDate
           , ROW_NUMBER() OVER (
                 PARTITION BY EmployeeDepartmentHistory.BusinessEntityID
                 ORDER BY EmployeeDepartmentHistory.BusinessEntityID ASC,
