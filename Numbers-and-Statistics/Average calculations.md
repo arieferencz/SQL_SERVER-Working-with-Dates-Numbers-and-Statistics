@@ -47,8 +47,8 @@ HistoricAverageSalesAmount
 ```sql
 SELECT
     FORMAT(ROUND(SUM(TotalDue) / COUNT(TotalDue), 2, 2), '#,#.##') AS HistoricAverageSalesAmount
-  , FORMAT(SUM(TotalDue), '#,#.##')                                 AS SumTotalSalesAmount
-  , FORMAT(COUNT(TotalDue), '#,#')                                  AS CountTotalSales
+  , FORMAT(SUM(TotalDue), '#,#.##')                                AS SumTotalSalesAmount
+  , FORMAT(COUNT(TotalDue), '#,#')                                 AS CountTotalSales
 FROM [AdventureWorks2022].[Sales].[SalesOrderHeader]
 ```
 
@@ -120,10 +120,10 @@ North America  5,539.4
 
 ```sql
 SELECT
-    COALESCE(SalesTerritory.[Group], 'Total')                              AS CountryCode
-  , FORMAT(SUM(SalesOrderHeader.TotalDue), '#,#.##')                      AS TotalSalesAmount
-  , FORMAT(COUNT(TotalDue), '#,#')                                         AS CountTotalSales
-  , FORMAT(ROUND(SUM(TotalDue) / COUNT(TotalDue), 2, 2), '#,#.##')        AS AverageSalesAmount
+    COALESCE(SalesTerritory.[Group], 'Total')                      AS CountryCode
+  , FORMAT(SUM(SalesOrderHeader.TotalDue), '#,#.##')               AS TotalSalesAmount
+  , FORMAT(COUNT(TotalDue), '#,#')                                 AS CountTotalSales
+  , FORMAT(ROUND(SUM(TotalDue) / COUNT(TotalDue), 2, 2), '#,#.##') AS AverageSalesAmount
 FROM [AdventureWorks2022].[Sales].[SalesOrderHeader] AS SalesOrderHeader
 LEFT JOIN [AdventureWorks2022].[Sales].[SalesTerritory] AS SalesTerritory
     ON SalesOrderHeader.TerritoryID = SalesTerritory.TerritoryID
@@ -199,10 +199,10 @@ US                 5,882.39
 
 ```sql
 SELECT
-    COALESCE(SalesTerritory.CountryRegionCode, 'Total')                    AS CountryCode
-  , FORMAT(SUM(SalesOrderHeader.TotalDue), '#,#.##')                      AS TotalSalesAmount
-  , FORMAT(COUNT(TotalDue), '#,#')                                         AS CountTotalSales
-  , FORMAT(ROUND(SUM(TotalDue) / COUNT(TotalDue), 2, 2), '#,#.##')        AS AverageSalesAmount
+    COALESCE(SalesTerritory.CountryRegionCode, 'Total')            AS CountryCode
+  , FORMAT(SUM(SalesOrderHeader.TotalDue), '#,#.##')               AS TotalSalesAmount
+  , FORMAT(COUNT(TotalDue), '#,#')                                 AS CountTotalSales
+  , FORMAT(ROUND(SUM(TotalDue) / COUNT(TotalDue), 2, 2), '#,#.##') AS AverageSalesAmount
 FROM [AdventureWorks2022].[Sales].[SalesOrderHeader] AS SalesOrderHeader
 LEFT JOIN [AdventureWorks2022].[Sales].[SalesTerritory] AS SalesTerritory
     ON SalesOrderHeader.TerritoryID = SalesTerritory.TerritoryID
