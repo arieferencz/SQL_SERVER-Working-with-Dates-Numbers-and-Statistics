@@ -7,7 +7,7 @@ Calculate a cumulative running total of the number of employees hired per depart
 
 ## 📝 Note
 
-> This exercise builds directly on [Running total number of employees hired by department name](https://github.com/arieferencz/SQL_SERVER-Working-with-Dates-Numbers-and-Statistics/blob/main/Numbers-and-Statistics/Running%20total%20number%20of%20employees%20hired%20by%20department%20name.md). The only difference is that `YEAR(HireDate)` is added to `PARTITION BY` — creating a finer partition that restarts the running total for every new department-year combination instead of just every new department.
+> This exercise builds directly on [Running total number of employees hired by department name](https://github.com/arieferencz/SQL_SERVER-Working-with-Dates-Numbers-and-Statistics/blob/main/Numbers-and-Statistics/Running%20Total%20number%20of%20employees%20hired%20by%20department%20name.md). The only difference is that `YEAR(HireDate)` is added to `PARTITION BY` — creating a finer partition that restarts the running total for every new department-year combination instead of just every new department.
 
 ---
 
