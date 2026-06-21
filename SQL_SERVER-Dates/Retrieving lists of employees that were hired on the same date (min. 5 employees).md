@@ -40,11 +40,11 @@ SELECT
 FROM (
     SELECT DISTINCT
         A.BusinessEntityID  AS EmpIDA
-      , A.JobTitle           AS EmpJobTitleA
-      , A.HireDate           AS EmpHireDateA
+      , A.JobTitle          AS EmpJobTitleA
+      , A.HireDate          AS EmpHireDateA
       , B.BusinessEntityID  AS EmpIDB
-      , B.JobTitle           AS EmpJobTitleB
-      , B.HireDate           AS EmpHireDateB
+      , B.JobTitle          AS EmpJobTitleB
+      , B.HireDate          AS EmpHireDateB
     FROM [AdventureWorks2022].[HumanResources].[Employee] AS A
        , [AdventureWorks2022].[HumanResources].[Employee] AS B
     WHERE DATENAME(YEAR,    A.HireDate) = DATENAME(YEAR,    B.HireDate)
