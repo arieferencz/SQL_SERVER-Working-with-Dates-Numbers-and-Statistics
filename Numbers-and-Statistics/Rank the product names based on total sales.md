@@ -42,12 +42,12 @@ GO
 SELECT
     X.ProductID
   , X.ProductName
-  , FORMAT(ROUND(X.SalesByProductName, 2, 2), '#,#.##')     AS SalesByProductName
-  , RANK() OVER (ORDER BY X.SalesByProductName DESC)         AS SalesByProductNameRANK
+  , FORMAT(ROUND(X.SalesByProductName, 2, 2), '#,#.##') AS SalesByProductName
+  , RANK() OVER (ORDER BY X.SalesByProductName DESC)    AS SalesByProductNameRANK
 FROM (
     SELECT
-        Product.[Name]       AS ProductName
-      , Product.[ProductID]  AS ProductID
+        Product.[Name]      AS ProductName
+      , Product.[ProductID] AS ProductID
       , SUM(SalesOrderDetail.[LineTotal]) AS SalesByProductName
     FROM [AdventureWorks2022].[Sales].[SalesOrderHeader] AS SalesOrderHeader
     INNER JOIN [AdventureWorks2022].[Sales].[SalesOrderDetail] AS SalesOrderDetail
