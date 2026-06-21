@@ -9,7 +9,7 @@ Retrieve the start and end dates for all 4 quarters of the current year — dyna
 
 > The output shown below was captured in **2024**. Since `GETDATE()` is used, the query automatically reflects the current year when run.
 >
-> This exercise is related to [Retrieving the start and end dates for a specific quarter](https://github.com/arieferencz/SQL_SERVER-Working-with-Dates-Numbers-and-Statistics/blob/main/SQL_SERVER-Dates/Retrieving%20the%20start%20and%20end%20dates%20for%20a%20specific%20quarter.md), which uses `UNION ALL` and hardcoded year-quarter values. This exercise instead uses an iteration approach with `ROW_NUMBER()` and a `WHERE` clause — making it fully dynamic.
+> This exercise is related to [Retrieving the start and end dates for a specific quarter](https://github.com/arieferencz/SQL_SERVER-Working-with-Dates-Numbers-and-Statistics/blob/main/SQL_SERVER-Dates/Retrieving%20start%20and%20end%20dates%20for%20a%20specific%20quarter.md), which uses `UNION ALL` and hardcoded year-quarter values. This exercise instead uses an iteration approach with `ROW_NUMBER()` and a `WHERE` clause — making it fully dynamic.
 
 ---
 
