@@ -73,7 +73,7 @@ VendorID  VendorName                         TotalPurchasesAmount  GroupsRowNumb
 1618      Metro Sport Equipment              6,324.50              11.571428        12
 1566      Burnett Road Warriors              5,780                 11.714285        12
 1592      Lindell                            5,412.60              11.857142        12
-1520      G & K Bicycle Corp.               5,036.10              12               12  ← Group 12: 7 vendors
+1520      G & K Bicycle Corp.                5,036.10              12               12  ← Group 12: 7 vendors
 1548      Consumer Cycles                    3,378.20              12.142857        13
 1662      Northern Bike Travel               2,048.40              12.285714        13  ← Group 13: 2 vendors
 (86 rows affected)
