@@ -18,7 +18,7 @@ Retrieve the dates of the **first** and **last** occurrence of a specific weekda
 ### Approach
 We generate all calendar dates for the current month using `GENERATE_SERIES()`. We then add a `CASE` statement flag that marks Tuesdays as `1` and all other days as `0`. We filter to keep only the flagged Tuesday rows, then use `MIN()` and `MAX()` to return the first and last Tuesday of the month in a single row.
 
-### T-SQL functions used
+### T-SQL functions, case expressions, and clauses used
 
 | Function | Purpose |
 |---|---|
