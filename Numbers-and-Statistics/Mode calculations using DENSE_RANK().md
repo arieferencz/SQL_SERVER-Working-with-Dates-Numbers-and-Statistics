@@ -45,12 +45,12 @@ SELECT
 FROM (
     SELECT
         X.ProductID
-      , X.ProductName    AS ProductName
-      , SUM(X.OrderQty)  AS SUMOrderQty
+      , X.ProductName   AS ProductName
+      , SUM(X.OrderQty) AS SUMOrderQty
     FROM (
         SELECT
             SalesOrderHeader.SalesOrderID
-          , [Product].[Name]          AS ProductName
+          , [Product].[Name] AS ProductName
           , SalesOrderDetail.ProductID
           , SalesOrderDetail.OrderQty
         FROM [AdventureWorks2022].[Sales].[SalesOrderHeader] AS SalesOrderHeader
