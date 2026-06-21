@@ -38,9 +38,9 @@ We use `NTILE(10)` as a window function over the vendors ordered by their total 
 ```sql
 SELECT
     PurchaseOrderHeader.VendorID
-  , Vendor.[Name]                                                              AS VendorName
-  , FORMAT(SUM(PurchaseOrderHeader.TotalDue), '#,##.#')                       AS TotalPurchasesAmount
-  , NTILE(10) OVER (ORDER BY SUM(PurchaseOrderHeader.TotalDue) DESC)          AS GroupNumber
+  , Vendor.[Name]                                                    AS VendorName
+  , FORMAT(SUM(PurchaseOrderHeader.TotalDue), '#,##.#')              AS TotalPurchasesAmount
+  , NTILE(10) OVER (ORDER BY SUM(PurchaseOrderHeader.TotalDue) DESC) AS GroupNumber
 FROM [AdventureWorks2022].[Purchasing].[PurchaseOrderHeader] AS PurchaseOrderHeader
 JOIN [AdventureWorks2022].[Purchasing].[Vendor] AS Vendor
     ON PurchaseOrderHeader.VendorID = Vendor.BusinessEntityID
@@ -93,9 +93,9 @@ SELECT
 FROM (
     SELECT
         PurchaseOrderHeader.VendorID
-      , Vendor.[Name]                                                          AS VendorName
-      , FORMAT(SUM(PurchaseOrderHeader.TotalDue), '#,##.#')                   AS TotalPurchasesAmount
-      , NTILE(10) OVER (ORDER BY SUM(PurchaseOrderHeader.TotalDue) DESC)      AS GroupNumber
+      , Vendor.[Name]                                                    AS VendorName
+      , FORMAT(SUM(PurchaseOrderHeader.TotalDue), '#,##.#')              AS TotalPurchasesAmount
+      , NTILE(10) OVER (ORDER BY SUM(PurchaseOrderHeader.TotalDue) DESC) AS GroupNumber
     FROM [AdventureWorks2022].[Purchasing].[PurchaseOrderHeader] AS PurchaseOrderHeader
     JOIN [AdventureWorks2022].[Purchasing].[Vendor] AS Vendor
         ON PurchaseOrderHeader.VendorID = Vendor.BusinessEntityID
