@@ -49,7 +49,7 @@ SELECT
   , CAST(DATEADD(QUARTER,
         DATEDIFF(QUARTER, 0, DATEADD(YEAR, DATEDIFF(YEAR, 0, GETDATE()), 0))
         + Iteration.Position,
-        0) AS DATE)                                                          AS QtrStartDate
+        0) AS DATE) AS QtrStartDate
   , CAST(DATEADD(QUARTER,
         Iteration.Position,
         DATEADD(DAY, -1, DATEADD(YEAR, DATEDIFF(YEAR, 0, GETDATE()), 0))) AS DATE) AS QtrEndDate
@@ -57,8 +57,8 @@ FROM (
     SELECT DISTINCT
         DATEADD(QUARTER,
             DATEDIFF(QUARTER, 0, DATEADD(YEAR, DATEDIFF(YEAR, 0, GETDATE()), 0)) + 0,
-            0)                                                               AS Quarter1StartDate
-      , DATEADD(DAY, -1, DATEADD(YEAR, DATEDIFF(YEAR, 0, GETDATE()), 0))   AS Quarter1EndDate
+            0) AS Quarter1StartDate
+      , DATEADD(DAY, -1, DATEADD(YEAR, DATEDIFF(YEAR, 0, GETDATE()), 0)) AS Quarter1EndDate
     FROM [AdventureWorks2022].[Person].[BusinessEntity]
 ) AS QuarterStartEndDates,
 (
