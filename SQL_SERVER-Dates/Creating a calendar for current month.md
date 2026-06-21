@@ -59,9 +59,9 @@ SELECT
   , MAX(CASE Y.DayOfWeek WHEN 1 THEN Y.DayOfMonth END) AS Su
 FROM (
     SELECT
-        DATENAME(WEEKDAY, X.GeneratedDates)       AS GeneratedWeekDays
+        DATENAME(WEEKDAY, X.GeneratedDates)        AS GeneratedWeekDays
       , X.GeneratedDates
-      , DAY(X.GeneratedDates)                     AS DayOfMonth
+      , DAY(X.GeneratedDates)                      AS DayOfMonth
       , DATEPART(MONTH,   X.GeneratedDates)        AS CurrentMonth
       , DATEPART(WEEKDAY, X.GeneratedDates)        AS DayOfWeek
       , DATEPART(ISO_WEEK, X.GeneratedDates)       AS ISOWeek
