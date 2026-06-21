@@ -16,7 +16,7 @@ Count how many times each day of the week (Monday, Tuesday, Wednesday, etc.) occ
 ### Approach
 We generate a complete list of every day in the current year using `GENERATE_SERIES()` — from January 1st to December 31st. We then use `DATENAME(weekday, date)` to assign a weekday name to each date, and `GROUP BY` with `COUNT(*)` to count how many times each weekday name appears.
 
-### T-SQL clauses and functions used
+### T-SQL functions and clauses used
 
 | Function | Purpose |
 |---|---|
