@@ -147,9 +147,9 @@ SELECT
 FROM (
     SELECT
         X.ProductID
-      , X.ProductName    AS ProductName
-      , SUM(X.OrderQty)  AS SUMOrderQty
-      , X.SalesYear      AS [Year]
+      , X.ProductName   AS ProductName
+      , SUM(X.OrderQty) AS SUMOrderQty
+      , X.SalesYear     AS [Year]
     FROM (
         SELECT
             SalesOrderHeader.SalesOrderID
