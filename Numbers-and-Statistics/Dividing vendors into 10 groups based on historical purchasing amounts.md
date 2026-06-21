@@ -7,7 +7,7 @@ Divide all vendors into exactly 10 groups based on their historical purchasing a
 
 ## 📝 Note
 
-> This exercise is related to [Creating evenly sized groups of vendors](https://github.com/arieferencz/SQL_SERVER-Working-with-Data-Sets/blob/main/SQL_SERVER-Working-with-data-sets/Creating%20evenly%20size%20groups%20of%20vendors.md), which uses `CEILING()` and `ROW_NUMBER()` to create fixed-size groups. This exercise uses `NTILE()` instead, which automatically handles uneven distributions.
+> This exercise is related to [Creating evenly sized groups of vendors](https://github.com/arieferencz/SQL_SERVER-Working-with-Dates-Numbers-and-Statistics/blob/main/Numbers-and-Statistics/Creating%20evenly%20size%20groups%20of%20vendors.md), which uses `CEILING()` and `ROW_NUMBER()` to create fixed-size groups. This exercise uses `NTILE()` instead, which automatically handles uneven distributions.
 
 ---
 
