@@ -176,7 +176,7 @@ Engineering       2009      6
 Engineering       2009      7            ← 7 employees total in Engineering
 ```
 
-The last row of each department shows the department's total employee count — matching the results from the [List all departments and their employee counts](https://github.com/arieferencz/SQL_SERVER-Working-with-Data-Sets/blob/main/SQL_SERVER-Working-with-data-sets/List%20all%20departments%20and%20their%20employee%20counts%2C%20including%20departments%20with%20zero%20employees.md) exercise.
+The last row of each department shows the department's total employee count — matching the results from the [List all departments and their employee counts](https://github.com/arieferencz/SQL_SERVER-Working-with-Data-Sets/blob/main/SQL_SERVER-Working-with-data-sets/List%20all%20departments%20and%20their%20employee%20counts.md) exercise.
 
 ---
 
