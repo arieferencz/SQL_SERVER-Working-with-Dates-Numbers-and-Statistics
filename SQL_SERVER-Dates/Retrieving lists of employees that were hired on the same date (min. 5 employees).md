@@ -10,7 +10,7 @@ Retrieve the list of employees who were hired on the same date as at least 4 oth
 ### Approach
 We use a **self-join via Cartesian Product** to pair each employee (table `A`) with every other employee (table `B`) who shares the same hire date. We use `DATENAME()` comparisons across year, month, week, and weekday to match hire dates. The condition `A.BusinessEntityID <= B.BusinessEntityID` prevents duplicate pairs. We then group by employee and use `HAVING COUNT(*) >= 5` to keep only employees who appear in a group of 5 or more.
 
-### T-SQL functions used
+### T-SQL functions and clauses used
 
 | Function | Purpose |
 |---|---|
