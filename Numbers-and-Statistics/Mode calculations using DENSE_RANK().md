@@ -94,10 +94,10 @@ We join `SalesOrderHeader`, `SalesOrderDetail`, and `Product` to get each order 
 **Output:** 121,317 rows — one per order line.
 
 ```
-SalesOrderID  ProductName           ProductID  OrderQty
-43659         Mountain Bike Socks, M 709        6
-43659         Sport-100 Helmet, Black 708       1
-43659         Road-650 Red, 44       773        2
+SalesOrderID  ProductName               ProductID  OrderQty
+43659         Mountain Bike Socks, M    709        6
+43659         Sport-100 Helmet, Black   708        1
+43659         Road-650 Red, 44          773        2
 ...
 (121317 rows affected)
 ```
