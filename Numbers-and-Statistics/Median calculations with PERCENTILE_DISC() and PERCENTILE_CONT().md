@@ -36,9 +36,9 @@ We join four tables to retrieve each employee's most recent salary rate in their
 SELECT DISTINCT
     Y.DepartmentName
   , PERCENTILE_DISC(0.5) WITHIN GROUP (ORDER BY Y.SalaryRate)
-        OVER (PARTITION BY Y.DepartmentName)  AS MedianPercentileDisc
+        OVER (PARTITION BY Y.DepartmentName) AS MedianPercentileDisc
   , PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY Y.SalaryRate)
-        OVER (PARTITION BY Y.DepartmentName)  AS MedianPercentileCont
+        OVER (PARTITION BY Y.DepartmentName) AS MedianPercentileCont
 FROM (
     SELECT
         X.BusinessEntityID
@@ -48,10 +48,10 @@ FROM (
         SELECT
             EmployeeDepartmentHistory.BusinessEntityID
           , EmployeeDepartmentHistory.DepartmentID
-          , EmployeeDepartmentHistory.ModifiedDate  AS EDH_ModifiedDate
-          , Department.[Name]                       AS DepartmentName
+          , EmployeeDepartmentHistory.ModifiedDate AS EDH_ModifiedDate
+          , Department.[Name]                      AS DepartmentName
           , EmployeePayHistory.Rate
-          , EmployeePayHistory.ModifiedDate         AS EPH_ModifiedDate
+          , EmployeePayHistory.ModifiedDate        AS EPH_ModifiedDate
           , ROW_NUMBER() OVER (
                 PARTITION BY EmployeeDepartmentHistory.BusinessEntityID
                 ORDER BY EmployeeDepartmentHistory.BusinessEntityID ASC,
