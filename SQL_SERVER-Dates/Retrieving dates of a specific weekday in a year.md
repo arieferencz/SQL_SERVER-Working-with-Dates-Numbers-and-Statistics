@@ -18,7 +18,7 @@ Retrieve all dates during the current year that fall on a specific weekday — i
 ### Approach
 We generate a complete list of every calendar day in the current year using `GENERATE_SERIES()`. We then use `DATENAME(weekday, date)` to assign a weekday name to each date, and filter with `WHERE DATENAME(weekday, ...) IN ('Sunday')` to keep only the dates that fall on Sundays.
 
-### T-SQL functions used
+### T-SQL functions and clauses used
 
 | Function | Purpose |
 |---|---|
