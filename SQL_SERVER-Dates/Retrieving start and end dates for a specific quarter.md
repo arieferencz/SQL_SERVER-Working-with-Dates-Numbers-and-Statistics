@@ -41,7 +41,7 @@ FROM (
     SELECT
         CAST(Y.[YEAR] AS VARCHAR)                                                   AS YearOfLastMonthOfQuarter
       , CAST(Y.[MONTH] AS VARCHAR)                                                  AS MonthOfLastMonthOfQuarter
-      , CAST(Y.[YEAR] AS VARCHAR) + '-' + CAST(Y.[MONTH] AS VARCHAR) + '-1'        AS DateOfLastMonthOfQuarterCAST
+      , CAST(Y.[YEAR] AS VARCHAR) + '-' + CAST(Y.[MONTH] AS VARCHAR) + '-1'         AS DateOfLastMonthOfQuarterCAST
       , CAST(CAST(Y.[YEAR] AS VARCHAR) + '-' + CAST(Y.[MONTH] AS VARCHAR) + '-1'
             AS DATE)                                                                AS FirstDayOfLastMonthOfQuarter
     FROM (
