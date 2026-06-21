@@ -38,7 +38,7 @@ SELECT
   , FORMAT(SUM(PurchaseOrderHeader.TotalDue), '#,##.#')                       AS TotalPurchasesAmount
   , ROW_NUMBER() OVER (ORDER BY SUM(PurchaseOrderHeader.TotalDue) DESC) / 7.0 AS GroupsRowNumber
   , CEILING(ROW_NUMBER() OVER (ORDER BY SUM(PurchaseOrderHeader.TotalDue) DESC)
-      / 7.0)                                                                   AS Groups_Plus
+      / 7.0)                                                                  AS Groups_Plus
 FROM [AdventureWorks2022].[Purchasing].[PurchaseOrderHeader] AS PurchaseOrderHeader
 JOIN [AdventureWorks2022].[Purchasing].[Vendor] AS Vendor
     ON PurchaseOrderHeader.VendorID = Vendor.BusinessEntityID
