@@ -110,11 +110,11 @@ SalesOrderID  ProductName               ProductID  OrderQty
 **Output (truncated):** 266 rows — one per product.
 
 ```
-ProductID  ProductName                    SUMOrderQty
-707        Sport-100 Helmet, Red          4384
-708        Sport-100 Helmet, Black        6532
-709        Mountain Bike Socks, M         3680
-712        AWC Logo Cap                   8311
+ProductID  ProductName                SUMOrderQty
+707        Sport-100 Helmet, Red      4384
+708        Sport-100 Helmet, Black    6532
+709        Mountain Bike Socks, M     3680
+712        AWC Logo Cap               8311
 ...
 (266 rows affected)
 ```
