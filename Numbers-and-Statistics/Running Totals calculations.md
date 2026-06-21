@@ -36,8 +36,8 @@ We join `SalesOrderHeader` to `SalesTerritory` to get each order's geographical 
 ```sql
 SELECT
     Y.CountryGroup
-  , FORMAT(ROUND(Y.Amount, 2, 2), '#,#.##')                                        AS TotalSalesAmount
-  , FORMAT(ROUND(SUM(Y.Amount) OVER (ORDER BY Y.CountryGroup), 2, 2), '#,#.##')    AS RunningTotalSalesAmount
+  , FORMAT(ROUND(Y.Amount, 2, 2), '#,#.##')                                     AS TotalSalesAmount
+  , FORMAT(ROUND(SUM(Y.Amount) OVER (ORDER BY Y.CountryGroup), 2, 2), '#,#.##') AS RunningTotalSalesAmount
 FROM (
     SELECT
         X.CountryGroupRegion AS CountryGroup
@@ -92,8 +92,8 @@ We join `SalesOrderHeader` to `Address` and `StateProvince` to retrieve each ord
 ```sql
 SELECT
     Y.Country
-  , FORMAT(ROUND(Y.Amount, 2, 2), '#,#.##')                                     AS TotalSalesAmount
-  , FORMAT(ROUND(SUM(Y.Amount) OVER (ORDER BY Y.Country), 2, 2), '#,#.##')      AS RunningTotalSalesAmount
+  , FORMAT(ROUND(Y.Amount, 2, 2), '#,#.##')                                AS TotalSalesAmount
+  , FORMAT(ROUND(SUM(Y.Amount) OVER (ORDER BY Y.Country), 2, 2), '#,#.##') AS RunningTotalSalesAmount
 FROM (
     SELECT
         X.CountryRegionCode AS Country
@@ -155,8 +155,8 @@ We join `SalesOrderHeader` to `Address` and `StateProvince` using `BillToAddress
 ```sql
 SELECT
     Y.StateProvince
-  , FORMAT(ROUND(Y.Amount, 2, 2), '#,#.##')                                          AS TotalSalesAmount
-  , FORMAT(ROUND(SUM(Y.Amount) OVER (ORDER BY Y.StateProvince), 2, 2), '#,#.##')     AS RunningTotalSalesAmount
+  , FORMAT(ROUND(Y.Amount, 2, 2), '#,#.##')                                      AS TotalSalesAmount
+  , FORMAT(ROUND(SUM(Y.Amount) OVER (ORDER BY Y.StateProvince), 2, 2), '#,#.##') AS RunningTotalSalesAmount
 FROM (
     SELECT
         X.StateProvinceName AS StateProvince
@@ -220,9 +220,9 @@ Instead of summing to one total per state, we keep each individual order amount 
 ```sql
 SELECT
     X.StateProvinceName
-  , FORMAT(ROUND(X.TotalDue, 2, 2), '#,#.##')                                         AS SalesOrderAmount
+  , FORMAT(ROUND(X.TotalDue, 2, 2), '#,#.##')                       AS SalesOrderAmount
   , FORMAT(ROUND(SUM(X.TotalDue) OVER (PARTITION BY X.StateProvinceName
-        ORDER BY X.StateProvinceName, X.TotalDue), 2, 2), '#,#.##')                   AS RunningTotalSalesAmount
+        ORDER BY X.StateProvinceName, X.TotalDue), 2, 2), '#,#.##') AS RunningTotalSalesAmount
 FROM (
     SELECT
         SalesOrderHeader.SalesOrderID
@@ -255,7 +255,7 @@ Row    StateProvince  SalesOrderAmount  RunningTotalSalesAmount
 ...
 19     Alabama        5,683.61          34,351.91
 20     Alabama        7,294.29          41,646.20
-21     Alabama        9,186.17          50,832.38   ← Alabama total resets for next state
+21     Alabama        9,186.17          50,832.38    ← Alabama total resets for next state
 22     Alberta        8.04              8.04         ← Alberta starts fresh
 23     Alberta        18.37             26.42
 ...
