@@ -20,7 +20,7 @@ We build the calendar in 4 steps:
 3. Pivot the day numbers across 7 columns (one per weekday) using `CASE` statements
 4. Collapse each week into a single row using `GROUP BY WK` and `MAX()` to remove `NULL`s
 
-### T-SQL functions used
+### T-SQL functions, case expressions, and clauses used
 
 | Function | Purpose |
 |---|---|
