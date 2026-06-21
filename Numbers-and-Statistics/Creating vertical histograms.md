@@ -20,7 +20,7 @@ We build the vertical histogram in 4 steps:
 3. Use `CASE` statements to place `'*'` in the correct department column and `NULL` elsewhere
 4. Group by `RN` (row number) and use `MAX(CASE ...)` with `COALESCE()` to collapse each row — replacing `NULL` with `''` for a clean display
 
-### T-SQL functions used
+### T-SQL functions, case expressions, and clauses used
 
 | Function | Purpose |
 |---|---|
