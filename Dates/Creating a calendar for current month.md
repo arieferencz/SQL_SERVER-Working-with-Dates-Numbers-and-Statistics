@@ -261,7 +261,7 @@ FROM (
 
 ```
 
-**Output (truncated):** 31 rows — one per day, each with its day number in one column and `NULL` in the other six.
+**Output:** 31 rows — one per day, each with its day number in one column and `NULL` in the other six.
 
 ```
 Mo    	Tu    	We    	Th    	Fr    	Sa    	Su
