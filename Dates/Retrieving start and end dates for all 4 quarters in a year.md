@@ -179,6 +179,28 @@ Q4
 
 `ROW_NUMBER() OVER (ORDER BY BusinessEntityID)` generates 20,777 sequential integers from the `BusinessEntity` table. Only the first 4 are needed — controlled by `WHERE Iteration.Position <= 4`.
 
+**T-SQL code:**
+```sql
+SELECT ROW_NUMBER() OVER(ORDER BY BusinessEntityID) AS Position			-- IterationLevel1
+FROM [AdventureWorks2022].[Person].[BusinessEntity]						-- IterationLevel1
+```
+
+**Output (truncated):**
+```
+Position
+1
+2
+3
+4
+5
+...
+20773
+20774
+20775
+20776
+20777
+(20777 rows affected)
+```
 ---
 
 ### Query 1.3 — Generate start and end dates for all 20,777 quarters (before filtering)
