@@ -201,19 +201,24 @@ SELECT DATENAME(WEEKDAY, X.GeneratedDates) AS GeneratedWeekDays				-- GenerateWe
 **Output (truncated):**
 
 ```
-GeneratedWeekDays  GeneratedDates  DayOfMonth  CurrentMonth  DayOfWeek  ISOWeek  WK
-Sunday             2024-12-01      1           12            1          48       48
-Monday             2024-12-02      2           12            2          49       49
-Tuesday            2024-12-03      3           12            3          49       49
-Wednesday          2024-12-04      4           12            4          49       49
-Thursday           2024-12-05      5           12            5          49       49
-Friday             2024-12-06      6           12            6          49       49
-Saturday           2024-12-07      7           12            7          49       49
-Sunday             2024-12-08      8           12            1          49       49
-Monday             2024-12-09      9           12            2          50       50
+GeneratedWeekDays	GeneratedDates	DayOfMonth	CurrentMonth	DayOfWeek  ISOWeek	WK
+Sunday				2024-12-01		1           12				1			48		48
+Monday				2024-12-02		2           12				2			49		49
+Tuesday				2024-12-03		3           12				3			49		49
+Wednesday			2024-12-04		4           12				4			49		49
+Thursday			2024-12-05		5           12				5			49		49
+Friday				2024-12-06		6           12				6			49		49
+Saturday			2024-12-07		7           12				7			49		49
+Sunday				2024-12-08		8           12				1			49		49
+Monday				2024-12-09		9           12				2			50		50
 ...
-Monday             2024-12-30      30          12            2          1        1
-Tuesday            2024-12-31      31          12            3          1        1
+Wednesday			2024-12-25		25			12				4			52		52
+Thursday			2024-12-26		26			12				5			52		52
+Friday				2024-12-27		27			12				6			52		52
+Saturday			2024-12-28		28			12				7			52		52
+Sunday				2024-12-29		29			12				1			52		52
+Monday				2024-12-30      30          12				2			1		1
+Tuesday				2024-12-31      31          12				3			1		1
 (31 rows affected)
 ```
 
