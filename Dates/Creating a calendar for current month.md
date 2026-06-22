@@ -117,11 +117,13 @@ Warning: Null value is eliminated by an aggregate or other SET operation.
 
 ### Query 1.1 — Calculate the first and last day of the current month
 
+**T-SQL code:**
 ```sql
 SELECT CAST(DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()), 0) AS DATE)    AS FirstDayofCurrentMonth
 SELECT CAST(DATEADD(MONTH, DATEDIFF(MONTH, -1, GETDATE()), -1) AS DATE)  AS LastDayofCurrentMonth
 ```
 
+**Output:**
 ```
 FirstDayofCurrentMonth   LastDayofCurrentMonth
 2024-12-01               2024-12-31
@@ -134,6 +136,17 @@ These are the same boundary calculations used in the **"Calculate first day, las
 ### Query 1.2 — Generate all dates for the current month
 
 `GENERATE_SERIES(0, 30, 1)` generates integers from `0` to `30` (31 days in December). `DATEADD(DAY, value, '2024-12-01')` converts each into a calendar date.
+
+**T-SQL code:**
+```sql
+SELECT						-- GenerateDatesInYear_1_Dec_31_DecLevel1
+CAST(DATEADD(DAY, value, (SELECT DISTINCT DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()), 0) FROM [AdventureWorks2022].[Person].[BusinessEntity])) AS DATE) AS GeneratedDates
+FROM GENERATE_SERIES(0
+		     , DATEDIFF(DAY
+				, (SELECT DISTINCT DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()), 0) FROM [AdventureWorks2022].[Person].[BusinessEntity])
+				, (SELECT DISTINCT DATEADD(MONTH,DATEDIFF(MONTH, -1, GETDATE()),-1) FROM [AdventureWorks2022].[Person].[BusinessEntity]))
+		    , 1)			-- GenerateDatesInYear_1_Dec_31_DecLevel1
+```
 
 **Output (truncated):** 31 rows — every day in December 2024.
 
@@ -161,6 +174,29 @@ We add several calculated columns to each date to prepare for pivoting:
 
 **Why adjust `WK` for Sundays?**
 In SQL Server, `DATEPART(WEEKDAY, date)` treats Sunday as day `1`. This means a Sunday that falls at the end of a week (e.g. Dec 8) would get a different `WEEK` number than the Monday-Saturday days in the same calendar row. The `CASE` statement subtracts `1` from the week number when `DayOfWeek = 1` (Sunday), keeping it aligned with the rest of its calendar week.
+
+**T-SQL code:**
+```sql
+SELECT DATENAME(WEEKDAY, X.GeneratedDates) AS GeneratedWeekDays				-- GenerateWeekDaysLevel2
+, X.GeneratedDates
+, DAY(X.GeneratedDates) AS DayOfMonth
+, DATEPART(MONTH, X.GeneratedDates) AS CurrentMonth
+, DATEPART(WEEKDAY, X.GeneratedDates) AS [DayOfWeek]
+, DATEPART(ISO_WEEK, X.GeneratedDates) AS ISOWeek 
+, CASE WHEN DATEPART(WEEKDAY, X.GeneratedDates) = 1
+		THEN DATEPART(WEEK, X.GeneratedDates) - 1
+		ELSE DATEPART(WEEK, X.GeneratedDates)
+		END AS WK
+	FROM (
+	SELECT						-- GenerateDatesInYear_1_Dec_31_DecLevel1
+	CAST(DATEADD(DAY, value, (SELECT DISTINCT DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()), 0) FROM [AdventureWorks2022].[Person].[BusinessEntity])) AS DATE) AS GeneratedDates
+	FROM GENERATE_SERIES(0
+			     , DATEDIFF(DAY
+			     		, (SELECT DISTINCT DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()), 0) FROM [AdventureWorks2022].[Person].[BusinessEntity])
+					, (SELECT DISTINCT DATEADD(MONTH,DATEDIFF(MONTH, -1, GETDATE()),-1) FROM [AdventureWorks2022].[Person].[BusinessEntity]))
+			     , 1)			-- GenerateDatesInYear_1_Dec_31_DecLevel1
+	) AS X									-- GenerateWeekDaysLevel2
+```
 
 **Output (truncated):**
 
