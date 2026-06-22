@@ -93,6 +93,7 @@ Tuesday            2024-12-03                    2024-12-31
 
 ### Query 1.1 — Calculate the first and last day of the current month
 
+**T-SQL code:**
 ```sql
 SELECT CAST(DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()), 0) AS DATE)   AS FirstDayofCurrentMonth
 SELECT CAST(DATEADD(MONTH, DATEDIFF(MONTH, -1, GETDATE()), -1) AS DATE) AS LastDayofCurrentMonth
@@ -110,6 +111,7 @@ FirstDayofCurrentMonth  LastDayofCurrentMonth
 
 `GENERATE_SERIES(0, 30, 1)` generates integers from `0` to `30` (31 days in December). `DATEADD(DAY, value, '2024-12-01')` converts each into a calendar date.
 
+**T-SQL code:**
 ```sql
 SELECT										-- GenerateDatesInYear_1_Dec_31_DecLevel1
 CAST(DATEADD(DAY, value, (SELECT DISTINCT DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()), 0) FROM [AdventureWorks2022].[Person].[BusinessEntity])) AS DATE) AS GeneratedDates
@@ -140,6 +142,7 @@ GeneratedDates
 
 `DATENAME(weekday, date)` assigns the weekday name to each date. The `CASE` statement flags each Tuesday as `1` and all other days as `0`.
 
+**T-SQL code:**
 ```sql
 SELECT DATENAME(weekday, X.GeneratedDates) AS GeneratedWeekDays			-- GenerateWeekDaysLevel2
 , X.GeneratedDates
