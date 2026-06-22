@@ -98,6 +98,7 @@ SELECT CAST(DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()), 0) AS DATE)   AS First
 SELECT CAST(DATEADD(MONTH, DATEDIFF(MONTH, -1, GETDATE()), -1) AS DATE) AS LastDayofCurrentMonth
 ```
 
+**Output:**
 ```
 FirstDayofCurrentMonth  LastDayofCurrentMonth
 2024-12-01              2024-12-31
