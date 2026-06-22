@@ -207,8 +207,24 @@ Position
 
 Without the `WHERE` clause the Cartesian Product between the single-row anchor subquery and the full `BusinessEntity` table generates start and end dates for 20,777 consecutive quarters — stretching all the way to the year 7218.
 
-**Output (truncated — without WHERE clause):**
+**T-SQL code:**
+```sql
+SELECT Iteration.Position AS QuarterNum											-- GenearatedStartEndDatesLevel2
+, DATEADD(QUARTER, DATEDIFF(QUARTER, 0, DATEADD(YEAR, DATEDIFF(YEAR, 0, GETDATE()), 0)) + Iteration.Position, 0) AS QtrStartDate
+, DATEADD(QUARTER, Iteration.Position, DATEADD(DAY, - 1 , DATEADD(YEAR, DATEDIFF(YEAR, 0, GETDATE()), 0))) AS QtrEndDate
+FROM (
+	SELECT														-- QuarterStartEndDatesLevel1
+	    DISTINCT DATEADD(QUARTER, DATEDIFF(QUARTER, 0, DATEADD(YEAR, DATEDIFF(YEAR, 0, GETDATE()), 0)) + 0, 0) AS Quarter1StartDate
+	    , DATEADD(DAY, - 1 , DATEADD(YEAR, DATEDIFF(YEAR, 0, GETDATE()), 0)) AS Quarter1EndDate
+	FROM [AdventureWorks2022].[Person].[BusinessEntity]			-- QuarterStartEndDatesLevel1
+	) AS QuarterStartEndDates,
+	(
+	SELECT ROW_NUMBER() OVER(ORDER BY BusinessEntityID) AS Position		-- IterationLevel1
+	FROM [AdventureWorks2022].[Person].[BusinessEntity]					-- IterationLevel1
+	) AS Iteration																-- GenearatedStartEndDatesLevel2
+```
 
+**Output (truncated — without WHERE clause):**
 ```
 QuarterNum  QtrStartDate  QtrEndDate
 1           2024-04-01    2024-03-31
