@@ -40,7 +40,7 @@ We generate all calendar dates for the current month using `GENERATE_SERIES()`. 
 
 ---
 
-### T-SQL code — Final query
+### T-SQL code — Full Solution
 
 ```sql
 SELECT
