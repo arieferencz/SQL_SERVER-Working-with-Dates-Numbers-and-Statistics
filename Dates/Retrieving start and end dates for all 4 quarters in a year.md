@@ -143,29 +143,32 @@ Q4
 2024-10-01 00:00:00.000
 ```
 
-
+**T-SQL code for End dates** (adding quarters to Dec 31 last year):
 ```sql
--- Q1 start: + 0 quarters → 2024-01-01
-DATEADD(QUARTER, n + 0, 0)
--- Q2 start: + 1 quarter  → 2024-04-01
-DATEADD(QUARTER, n + 1, 0)
--- Q3 start: + 2 quarters → 2024-07-01
-DATEADD(QUARTER, n + 2, 0)
--- Q4 start: + 3 quarters → 2024-10-01
-DATEADD(QUARTER, n + 3, 0)
+	-- 2023-12-31
+SELECT DATEADD(DAY, - 1 , DATEADD(YEAR, DATEDIFF(YEAR, 0, GETDATE()), 0)) AS Q4			-- <--- used as QuarterStartEndDatesLevel1, see Query #1.1
+	-- 2024-03-31
+SELECT DATEADD(QUARTER, 1, DATEADD(DAY, - 1 , DATEADD(YEAR, DATEDIFF(YEAR, 0, GETDATE()), 0))) AS Q1
+	-- 2024-06-30
+SELECT DATEADD(QUARTER, 2, DATEADD(DAY, - 1 , DATEADD(YEAR, DATEDIFF(YEAR, 0, GETDATE()), 0))) AS Q2
+	-- 2024-09-30
+SELECT DATEADD(QUARTER, 3, DATEADD(DAY, - 1 , DATEADD(YEAR, DATEDIFF(YEAR, 0, GETDATE()), 0))) AS Q3
+	-- 2024-12-31
+SELECT DATEADD(QUARTER, 4, DATEADD(DAY, - 1 , DATEADD(YEAR, DATEDIFF(YEAR, 0, GETDATE()), 0))) AS Q4
 ```
 
-**End dates** (adding quarters to Dec 31 last year):
-
-```sql
--- Q1 end: + 1 quarter  → 2024-03-31
-DATEADD(QUARTER, 1, '2023-12-31')
--- Q2 end: + 2 quarters → 2024-06-30
-DATEADD(QUARTER, 2, '2023-12-31')
--- Q3 end: + 3 quarters → 2024-09-30
-DATEADD(QUARTER, 3, '2023-12-31')
--- Q4 end: + 4 quarters → 2024-12-31
-DATEADD(QUARTER, 4, '2023-12-31')
+**Output for Start dates:**
+```
+Q4
+2025-12-31 00:00:00.000
+Q1
+2026-03-31 00:00:00.000
+Q2
+2026-06-30 00:00:00.000
+Q3
+2026-09-30 00:00:00.000
+Q4
+2026-12-31 00:00:00.000
 ```
 
 > **Why does adding quarters to Dec 31 always land on the last day of the quarter?** Dec 31 is the last day of Q4. Adding exactly 1 quarter moves to Mar 31 (last day of Q1), adding 2 quarters moves to Jun 30 (last day of Q2), and so on — always landing on a quarter-end date.
