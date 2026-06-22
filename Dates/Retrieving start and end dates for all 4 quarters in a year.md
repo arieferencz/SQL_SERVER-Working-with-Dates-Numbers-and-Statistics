@@ -41,7 +41,7 @@ We calculate two anchor dates — the start of Q1 and Dec 31 of the previous yea
 
 ---
 
-### T-SQL code — Final query
+### T-SQL code
 
 ```sql
 SELECT
