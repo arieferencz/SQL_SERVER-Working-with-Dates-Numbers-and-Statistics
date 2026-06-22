@@ -96,7 +96,7 @@ SELECT DISTINCT DATEADD(YEAR, DATEDIFF(YEAR, 0, GETDATE()) + 1, 0) AS BeginningN
 FROM [AdventureWorks2022].[Person].[BusinessEntity];
 ```
 
-**Output (truncated):**
+**Output:**
 ```
 BeginningThisYear             BeginningNextYear
 2024-01-01 00:00:00.000       2025-01-01 00:00:00.000
@@ -178,6 +178,22 @@ Tuesday            2024-12-31
 ### Query 1.4 — Count occurrences including the individual date (intermediate step)
 
 Adding `GROUP BY DATENAME(weekday, ...), X.GeneratedDates` and `COUNT(*)` gives one row per day with a count of `1` — since each date appears exactly once. This is an intermediate step used to verify the data before collapsing by weekday name only.
+
+```sql
+SELECT DATENAME(weekday, X.GeneratedDates) AS GeneratedWeekDays			-- CountOccurrencesLevel3
+, X.GeneratedDates
+, COUNT(*) AS CountOccurrencesForWeekDaysInYear
+FROM (
+SELECT											-- GenerateDatesInYear_1_Jan_31_DecLevel1
+CAST(DATEADD(DAY, value, (SELECT DISTINCT DATEADD(YEAR, DATEDIFF(YEAR, 0, GETDATE()), 0) FROM [AdventureWorks2022].[Person].[BusinessEntity])) AS DATE) AS GeneratedDates
+FROM GENERATE_SERIES(0
+					, DATEDIFF(DAY
+						, (SELECT DISTINCT DATEADD(YEAR, DATEDIFF(YEAR, 0, GETDATE()), 0) FROM [AdventureWorks2022].[Person].[BusinessEntity])
+						, (SELECT DISTINCT DATEADD(DAY, -1 , (SELECT DISTINCT DATEADD(YEAR, DATEDIFF(YEAR, 0, GETDATE()) + 1, 0) FROM [AdventureWorks2022].[Person].[BusinessEntity]))))
+							, 1)				-- GenerateDatesInYear_1_Jan_31_DecLevel1
+	) AS X		
+GROUP BY DATENAME(weekday, X.GeneratedDates), X.GeneratedDates			-- CountOccurrencesLevel3
+```
 
 **Output (truncated):**
 
