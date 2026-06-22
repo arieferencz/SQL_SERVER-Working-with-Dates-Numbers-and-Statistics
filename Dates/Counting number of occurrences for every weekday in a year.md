@@ -117,8 +117,6 @@ FROM GENERATE_SERIES(0
 						, (SELECT DISTINCT DATEADD(YEAR, DATEDIFF(YEAR, 0, GETDATE()), 0) FROM [AdventureWorks2022].[Person].[BusinessEntity])
 						, (SELECT DISTINCT DATEADD(DAY, -1 , (SELECT DISTINCT DATEADD(YEAR, DATEDIFF(YEAR, 0, GETDATE()) + 1, 0) FROM [AdventureWorks2022].[Person].[BusinessEntity]))))
 							, 1)				-- GenerateDatesInYear_1_Jan_31_DecLevel1
-
-
 ```
 
 **Output (truncated):** 366 rows — every day of the year.
@@ -140,6 +138,20 @@ GeneratedDates
 ### Query 1.3 — Add weekday names using `DATENAME()`
 
 `DATENAME(weekday, date)` returns the full weekday name for each generated date.
+
+```sql
+SELECT DATENAME(weekday, X.GeneratedDates) AS GeneratedWeekDays			-- GenerateWeekDaysLevel2
+, X.GeneratedDates
+FROM (
+SELECT										-- GenerateDatesInYear_1_Jan_31_DecLevel1
+CAST(DATEADD(DAY, value, (SELECT DISTINCT DATEADD(YEAR, DATEDIFF(YEAR, 0, GETDATE()), 0) FROM [AdventureWorks2022].[Person].[BusinessEntity])) AS DATE) AS GeneratedDates
+FROM GENERATE_SERIES(0
+					, DATEDIFF(DAY
+						, (SELECT DISTINCT DATEADD(YEAR, DATEDIFF(YEAR, 0, GETDATE()), 0) FROM [AdventureWorks2022].[Person].[BusinessEntity])
+						, (SELECT DISTINCT DATEADD(DAY, -1 , (SELECT DISTINCT DATEADD(YEAR, DATEDIFF(YEAR, 0, GETDATE()) + 1, 0) FROM [AdventureWorks2022].[Person].[BusinessEntity]))))
+							, 1)			-- GenerateDatesInYear_1_Jan_31_DecLevel1
+	) AS X									-- GenerateWeekDaysLevel2
+```
 
 **Output (truncated):**
 
