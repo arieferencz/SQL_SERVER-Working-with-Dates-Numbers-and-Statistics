@@ -100,7 +100,6 @@ FROM [AdventureWorks2022].[Person].[BusinessEntity]
 ```
 
 **Output:**
-
 ```
 Quarter1StartDate             Quarter1EndDate
 2024-01-01 00:00:00.000       2023-12-31 00:00:00.000
@@ -120,8 +119,7 @@ Quarter1StartDate             Quarter1EndDate
 
 Adding `Position` quarters to each anchor produces the correct start and end date for each quarter:
 
-**Start dates** (adding quarters to Jan 1 this year):
-**T-SQL code:**
+**T-SQL code for Start dates** (adding quarters to Jan 1 this year):
 ```sql
 	-- 1-JAN-2024
 SELECT DATEADD(QUARTER, DATEDIFF(QUARTER, 0, DATEADD(YEAR, DATEDIFF(YEAR, 0, GETDATE()), 0)) + 0, 0)		-- <--- used as QuarterStartEndDatesLevel1, see Query #1.1
@@ -132,6 +130,8 @@ SELECT DATEADD(QUARTER, DATEDIFF(QUARTER, 0, DATEADD(YEAR, DATEDIFF(YEAR, 0, GET
 	-- 1-OCT-2024
 SELECT DATEADD(QUARTER, DATEDIFF(QUARTER, 0, DATEADD(YEAR, DATEDIFF(YEAR, 0, GETDATE()), 0)) + 3, 0)
 ```
+
+**Output:**
 
 
 ```sql
