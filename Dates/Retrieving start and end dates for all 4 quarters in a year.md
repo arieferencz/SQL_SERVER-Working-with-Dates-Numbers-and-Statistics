@@ -89,6 +89,7 @@ QuarterNum  QtrStartDate  QtrEndDate
 
 We calculate two anchor dates that drive all quarter date calculations:
 
+**T-SQL code:**
 ```sql
 SELECT DISTINCT
     DATEADD(QUARTER,
@@ -120,6 +121,20 @@ Quarter1StartDate             Quarter1EndDate
 Adding `Position` quarters to each anchor produces the correct start and end date for each quarter:
 
 **Start dates** (adding quarters to Jan 1 this year):
+**T-SQL code:**
+```sql
+	-- 1-JAN-2024
+SELECT DATEADD(QUARTER, DATEDIFF(QUARTER, 0, DATEADD(YEAR, DATEDIFF(YEAR, 0, GETDATE()), 0)) + 0, 0)		-- <--- used as QuarterStartEndDatesLevel1, see Query #1.1
+
+	-- 1-APR-2024
+SELECT DATEADD(QUARTER, DATEDIFF(QUARTER, 0, DATEADD(YEAR, DATEDIFF(YEAR, 0, GETDATE()), 0)) + 1, 0)
+
+	-- 1-JUL-2024
+SELECT DATEADD(QUARTER, DATEDIFF(QUARTER, 0, DATEADD(YEAR, DATEDIFF(YEAR, 0, GETDATE()), 0)) + 2, 0)
+
+	-- 1-OCT-2024
+SELECT DATEADD(QUARTER, DATEDIFF(QUARTER, 0, DATEADD(YEAR, DATEDIFF(YEAR, 0, GETDATE()), 0)) + 3, 0)
+```
 
 ```sql
 -- Q1 start: + 0 quarters → 2024-01-01
