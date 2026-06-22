@@ -96,6 +96,7 @@ SELECT DISTINCT DATEADD(YEAR, DATEDIFF(YEAR, 0, GETDATE()) + 1, 0) AS BeginningN
 FROM [AdventureWorks2022].[Person].[BusinessEntity];
 ```
 
+**Output (truncated):**
 ```
 BeginningThisYear             BeginningNextYear
 2024-01-01 00:00:00.000       2025-01-01 00:00:00.000
