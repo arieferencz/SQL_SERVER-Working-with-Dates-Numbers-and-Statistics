@@ -194,6 +194,30 @@ Tuesday            2024-12-31      1
 
 Adding `WHERE Y.IS_Tuesday = 1` keeps only the 5 Tuesday rows.
 
+**T-SQL code:**
+```sql
+SELECT Y.GeneratedWeekDays				-- KeepOnlyTuesdaysLevel3
+, Y.GeneratedDates
+FROM (
+	SELECT DATENAME(weekday, X.GeneratedDates) AS GeneratedWeekDays			-- GenerateWeekDaysLevel2
+	, X.GeneratedDates
+	, CASE	WHEN DATENAME(weekday, X.GeneratedDates) = 'Tuesday'
+			THEN 1 
+			ELSE 0
+			END AS IS_Tuesday
+	FROM (
+		SELECT										-- GenerateDatesInYear_1_Dec_31_DecLevel1
+		CAST(DATEADD(DAY, value, (SELECT DISTINCT DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()), 0) FROM [AdventureWorks2022].[Person].[BusinessEntity])) AS DATE) AS GeneratedDates
+		FROM GENERATE_SERIES(0
+							, DATEDIFF(DAY
+								, (SELECT DISTINCT DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()), 0) FROM [AdventureWorks2022].[Person].[BusinessEntity])
+								, (SELECT DISTINCT DATEADD(MONTH,DATEDIFF(MONTH, -1, GETDATE()),-1) FROM [AdventureWorks2022].[Person].[BusinessEntity]))
+									, 1)			-- GenerateDatesInYear_1_Dec_31_DecLevel1
+		) AS X									-- GenerateWeekDaysLevel2
+	) AS Y
+WHERE Y.IS_Tuesday = 1					-- KeepOnlyTuesdaysLevel3
+```
+
 **Output:**
 
 ```
