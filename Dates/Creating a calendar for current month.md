@@ -46,7 +46,7 @@ We build the calendar in 4 steps:
 
 ---
 
-### T-SQL code — Final query
+### T-SQL code
 
 ```sql
 SELECT
@@ -228,17 +228,74 @@ Tuesday				2024-12-31      31          12				3			1		1
 
 For each row, 7 `CASE` statements check `DayOfWeek` and place `DayOfMonth` in the matching column, leaving `NULL` in all others.
 
+**T-SQL code:**
+```sql
+SELECT CASE Y.DayOfWeek WHEN 2 THEN Y.DayOfMonth END AS Mo			-- PivotDatesCurrentMonthIntoDaysOfWeekLevel3
+, CASE Y.DayOfWeek WHEN 3 THEN Y.DayOfMonth END AS Tu
+, CASE Y.DayOfWeek WHEN 4 THEN Y.DayOfMonth END AS We
+, CASE Y.DayOfWeek WHEN 5 THEN Y.DayOfMonth END AS Th
+, CASE Y.DayOfWeek WHEN 6 THEN Y.DayOfMonth END AS Fr
+, CASE Y.DayOfWeek WHEN 7 THEN Y.DayOfMonth END AS Sa
+, CASE Y.DayOfWeek WHEN 1 THEN Y.DayOfMonth END AS Su
+FROM (
+	SELECT DATENAME(WEEKDAY, X.GeneratedDates) AS GeneratedWeekDays		-- GenerateWeekDaysLevel2
+	, X.GeneratedDates
+	, DAY(X.GeneratedDates) AS DayOfMonth
+	, DATEPART(MONTH, X.GeneratedDates) AS CurrentMonth
+	, DATEPART(WEEKDAY, X.GeneratedDates) AS [DayOfWeek]
+	, DATEPART(ISO_WEEK, X.GeneratedDates) AS ISOWeek 
+	, CASE WHEN DATEPART(WEEKDAY, X.GeneratedDates) = 1
+			THEN DATEPART(WEEK, X.GeneratedDates) - 1
+			ELSE DATEPART(WEEK, X.GeneratedDates)
+			END AS WK
+		FROM (
+		SELECT					-- GenerateDatesInYear_1_Dec_31_DecLevel1
+		CAST(DATEADD(DAY, value, (SELECT DISTINCT DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()), 0) FROM [AdventureWorks2022].[Person].[BusinessEntity])) AS DATE) AS GeneratedDates
+		FROM GENERATE_SERIES(0
+				     , DATEDIFF(DAY
+						, (SELECT DISTINCT DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()), 0) FROM [AdventureWorks2022].[Person].[BusinessEntity])
+						, (SELECT DISTINCT DATEADD(MONTH,DATEDIFF(MONTH, -1, GETDATE()),-1) FROM [AdventureWorks2022].[Person].[BusinessEntity]))
+				     , 1)		-- GenerateDatesInYear_1_Dec_31_DecLevel1
+		) AS X						-- GenerateWeekDaysLevel2
+	) AS Y								-- PivotDatesCurrentMonthIntoDaysOfWeekLevel3
+
+```
+
 **Output (truncated):** 31 rows — one per day, each with its day number in one column and `NULL` in the other six.
 
 ```
-Mo    Tu    We    Th    Fr    Sa    Su
-NULL  NULL  NULL  NULL  NULL  NULL  1
-2     NULL  NULL  NULL  NULL  NULL  NULL
-NULL  3     NULL  NULL  NULL  NULL  NULL
-...
-NULL  NULL  NULL  NULL  NULL  NULL  29
-30    NULL  NULL  NULL  NULL  NULL  NULL
-NULL  31    NULL  NULL  NULL  NULL  NULL
+Mo    	Tu    	We    	Th    	Fr    	Sa    	Su
+NULL	NULL	NULL	NULL	NULL	NULL	1
+2		NULL	NULL	NULL	NULL	NULL	NULL
+NULL	3		NULL	NULL	NULL	NULL	NULL
+NULL	NULL	4		NULL	NULL	NULL	NULL
+NULL	NULL	NULL	5		NULL	NULL	NULL
+NULL	NULL	NULL	NULL	6		NULL	NULL
+NULL	NULL	NULL	NULL	NULL	7		NULL
+NULL	NULL	NULL	NULL	NULL	NULL	8
+9		NULL	NULL	NULL	NULL	NULL	NULL
+NULL	10		NULL	NULL	NULL	NULL	NULL
+NULL	NULL	11		NULL	NULL	NULL	NULL
+NULL	NULL	NULL	12		NULL	NULL	NULL
+NULL	NULL	NULL	NULL	13		NULL	NULL
+NULL	NULL	NULL	NULL	NULL	14		NULL
+NULL	NULL	NULL	NULL	NULL	NULL	15
+16		NULL	NULL	NULL	NULL	NULL	NULL
+NULL	17		NULL	NULL	NULL	NULL	NULL
+NULL	NULL	18		NULL	NULL	NULL	NULL
+NULL	NULL	NULL	19		NULL	NULL	NULL
+NULL	NULL	NULL	NULL	20		NULL	NULL
+NULL	NULL	NULL	NULL	NULL	21		NULL
+NULL	NULL	NULL	NULL	NULL	NULL	22
+23		NULL	NULL	NULL	NULL	NULL	NULL
+NULL	24		NULL	NULL	NULL	NULL	NULL
+NULL	NULL	25		NULL	NULL	NULL	NULL
+NULL	NULL	NULL	26		NULL	NULL	NULL
+NULL	NULL	NULL	NULL	27		NULL	NULL
+NULL	NULL	NULL	NULL	NULL	28		NULL
+NULL	NULL	NULL	NULL	NULL	NULL	29
+30		NULL	NULL	NULL	NULL	NULL	NULL
+NULL	31		NULL	NULL	NULL	NULL	NULL
 (31 rows affected)
 ```
 
