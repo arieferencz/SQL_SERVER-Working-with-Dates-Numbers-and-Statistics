@@ -36,12 +36,12 @@ SELECT
   , CAST(GETDATE() - DAY(GETDATE()) + 1 AS DATE)   AS Step3          -- 2024-12-01
 ```
 
-**T-SQL code of Solution 1.1**
+**T-SQL code**
 ```sql
 SELECT CAST(GETDATE() - DAY(GETDATE()) + 1 AS DATE) AS FirstDayofCurrentMonth
 ```
 
-**Output of Solution 1.1**
+**Output**
 ```
 TodayGetDate	Step1	Step2	Step3_FirstDayofCurrentMonth
 2024-12-02		-2		-1		2024-12-01
@@ -62,12 +62,12 @@ SELECT
   , CAST(DATEADD(DAY, -(DAY(GETDATE() - 1)), GETDATE()) AS DATE)   AS Step4         -- 2024-12-01
 ```
 
-**T-SQL code of Solution 1.2**
+**T-SQL code**
 ```sql
 SELECT CAST(DATEADD(DAY, -(DAY(GETDATE() - 1)), GETDATE()) AS DATE) AS FirstDayofCurrentMonth
 ```
 
-**Output of Solution 1.2**
+**Output**
 ```
 TodayGetDate	Step1	Step2	Step3	Step4_FirstDayofCurrentMonth
 2024-12-02		2		1		-1		2024-12-01
@@ -78,8 +78,8 @@ TodayGetDate	Step1	Step2	Step3	Step4_FirstDayofCurrentMonth
 ---
 
 ### Solution 1.3 — Using `DATEADD()` and `1 - DAY()`
-**How it works step by step:**
 
+**How it works step by step:**
 ```sql
 SELECT
     CAST(GETDATE() AS DATE)                                       AS TodayGetDate  -- 2024-12-02
@@ -88,12 +88,12 @@ SELECT
   , CAST(DATEADD(DAY, 1 - (DAY(GETDATE())), GETDATE()) AS DATE)   AS Step3         -- 2024-12-01
 ```
 
-**T-SQL code of Solution 1.3**
+**T-SQL code**
 ```sql
 SELECT CAST(DATEADD(DAY, 1 - (DAY(GETDATE())), GETDATE()) AS DATE) AS FirstDayofCurrentMonth
 ```
 
-**Output of Solution 1.3**
+**Output**
 ```
 TodayGetDate	Step1	Step2	Step3_FirstDayofCurrentMonth
 2024-12-02		2		-1		2024-12-01
@@ -113,12 +113,12 @@ SELECT
   , CAST(DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()), 0) AS DATE) AS Step2         -- 2024-12-01
 ```
 
-**T-SQL code of Solution 1.4**
+**T-SQL code**
 ```sql
 SELECT CAST(DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()), 0) AS DATE) AS FirstDayofCurrentMonth
 ```
 
-**Output of Solution 1.4**
+**Output**
 ```
 TodayGetDate	Step1	Step2_FirstDayofCurrentMonth
 2024-12-02		1499	2024-12-01
@@ -140,12 +140,12 @@ TodayGetDate	Step1	Step2_FirstDayofCurrentMonth
 ---
 
 ### Solution 2.1 — Using `EOMONTH()` *(simplest)*
-**T-SQL code of Query 2.1**
+**T-SQL code**
 ```sql
 SELECT EOMONTH(GETDATE()) AS LastDayofCurrentMonth
 ```
 
-**Output of Query 2.1**
+**Output**
 ```
 LastDayofCurrentMonth
 2024-12-31
@@ -165,12 +165,12 @@ SELECT
   , CAST(DATEADD(MONTH, DATEDIFF(MONTH, -1, GETDATE()), -1) AS DATE)  AS Step3         -- 2024-12-31
 ```
 
-**T-SQL code of Solution 2.2**
+**T-SQL code**
 ```sql
 SELECT CAST(DATEADD(MONTH, DATEDIFF(MONTH, -1, GETDATE()), -1) AS DATE) AS LastDayofCurrentMonth
 ```
 
-**Output of Solution 2.2**
+**Output**
 ```
 TodayGetDate	Step1	Step2			Step3_LastDayofCurrentMonth
 2024-12-02		1500	1899-12-31		2024-12-31
@@ -191,12 +191,12 @@ SELECT
   , CAST(DATEADD(DAY, -1, DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()) + 1, 0)) AS DATE)  AS Step4         -- 2024-12-31
 ```
 
-**T-SQL code of Solution 2.3**
+**T-SQL code**
 ```sql
 SELECT CAST(DATEADD(DAY, -1, DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()) + 1, 0)) AS DATE) AS LastDayofCurrentMonth
 ```
 
-**Output of Solution 2.3**
+**Output**
 ```
 TodayGetDate	Step1	Step2	Step3			Step4_LastDayofCurrentMonth
 2024-12-02		1499	1500	2025-01-01		2024-12-31
@@ -218,12 +218,12 @@ SELECT
   , CAST(DATEADD(DAY, -1, DATEADD(MONTH, 1, DATEADD(DAY, 1 - (DAY(GETDATE())), GETDATE()))) AS DATE) AS Step5         -- 2024-12-31
 ```
 
-**T-SQL code of Solution 2.4**
+**T-SQL code**
 ```sql
 SELECT CAST(DATEADD(DAY, -1, DATEADD(MONTH, 1, DATEADD(DAY, 1 - (DAY(GETDATE())), GETDATE()))) AS DATE) AS LastDayofCurrentMonth
 ```
 
-**Output of Solution 2.4**
+**Output**
 ```
 TodayGetDate	Step1	Step2	Step3			Step4			Step5_LastDayofCurrentMonth
 2024-12-02		2		-1		2024-12-01		2025-01-01		2024-12-31
@@ -245,12 +245,12 @@ SELECT
   , DATEADD(DAY, -1, EOMONTH(GETDATE())) AS SecondtoLastDayofCurrentMonth  -- 2024-12-30
 ```
 
-**T-SQL code of Solution 3.1**
+**T-SQL code**
 ```sql
 SELECT DATEADD(DAY, -1, EOMONTH(GETDATE())) AS SecondtoLastDayofCurrentMonth
 ```
 
-**Output of Solution 3.1:**
+**Output**
 ```
 TodayGetDate	Step1			SecondtoLastDayofCurrentMonth
 2024-12-02		2024-12-31		2024-12-30
@@ -273,12 +273,12 @@ SELECT
   , CAST(DATEADD(DAY, -2, DATEADD(MONTH, 1, DATEADD(DAY, 1 - (DAY(GETDATE())), GETDATE()))) AS DATE) AS Step5         -- 2024-12-30
 ```
 
-**T-SQL code of Solution 3.2**
+**T-SQL code**
 ```sql
 SELECT CAST(DATEADD(DAY, -2, DATEADD(MONTH, 1, DATEADD(DAY, 1 - (DAY(GETDATE())), GETDATE()))) AS DATE) AS SecondtoLastDayofCurrentMonth
 ```
 
-**Output of Solution 3.2:**
+**Output**
 ```
 TodayGetDate  Step1  Step2  Step3       Step4       Step5_SecondtoLastDayofCurrentMonth
 2024-12-02    2      -1     2024-12-01  2025-01-01  2024-12-30
