@@ -33,40 +33,22 @@ We generate a complete list of every calendar day between the first day of the e
 ---
 
 ### T-SQL code — Final solution
-
 ```sql
 SELECT
     W.GeneratedDates
-  , SUM(CASE
-        WHEN Employee.FirstDayOfMonthOfHireDate IS NOT NULL THEN 1
-        ELSE 0
-        END) AS CountHireDates
+  , SUM(CASE WHEN Employee.FirstDayOfMonthOfHireDate IS NOT NULL THEN 1 ELSE 0 END) AS CountHireDates
 FROM (
-    SELECT
-        CAST(DATEADD(
-                DAY,
-                value,
-                (SELECT DATEADD(MONTH, DATEDIFF(MONTH, 0, (SELECT MIN(HireDate) FROM [AdventureWorks2022].[HumanResources].[Employee])), 0))
-            ) AS DATE) AS GeneratedDates
-    FROM GENERATE_SERIES(
-        0,
-        DATEDIFF(DAY,
-            (SELECT DATEADD(MONTH,
-                DATEDIFF(MONTH, 0,
-                    (SELECT MIN(HireDate) FROM [AdventureWorks2022].[HumanResources].[Employee])),
-                0)),
-            (SELECT DATEADD(MONTH,
-                DATEDIFF(MONTH, 0,
-                    (SELECT MAX(HireDate) FROM [AdventureWorks2022].[HumanResources].[Employee])),
-                0))
-        ),
-        1
-    )
-) AS W
+    SELECT CAST(DATEADD(DAY, value, (SELECT DATEADD(MONTH, DATEDIFF(MONTH, 0, (SELECT MIN(HireDate) FROM [AdventureWorks2022].[HumanResources].[Employee])), 0))) AS DATE) AS GeneratedDates
+    FROM GENERATE_SERIES(0,
+                        DATEDIFF(DAY,
+                            (SELECT DATEADD(MONTH, DATEDIFF(MONTH, 0, (SELECT MIN(HireDate) FROM [AdventureWorks2022].[HumanResources].[Employee])), 0)),
+                            (SELECT DATEADD(MONTH, DATEDIFF(MONTH, 0, (SELECT MAX(HireDate) FROM [AdventureWorks2022].[HumanResources].[Employee])), 0))),
+                        1)
+    ) AS W
 LEFT JOIN (
-    SELECT DATEADD(DAY, -(DAY(HireDate) - 1), HireDate) AS FirstDayOfMonthOfHireDate
-    FROM [AdventureWorks2022].[HumanResources].[Employee]
-) AS Employee
+            SELECT DATEADD(DAY, -(DAY(HireDate) - 1), HireDate) AS FirstDayOfMonthOfHireDate
+            FROM [AdventureWorks2022].[HumanResources].[Employee]
+        ) AS Employee
     ON W.GeneratedDates = Employee.FirstDayOfMonthOfHireDate
 WHERE DATEPART(DAY, W.GeneratedDates) = 1
 GROUP BY W.GeneratedDates
@@ -76,7 +58,6 @@ ORDER BY W.GeneratedDates
 ---
 
 ### Output (truncated)
-
 ```
 GeneratedDates  CountHireDates
 2006-06-01      1
