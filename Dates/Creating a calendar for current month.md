@@ -70,8 +70,7 @@ FROM (
             ELSE DATEPART(WEEK, X.GeneratedDates)
         END                                        AS WK
     FROM (
-        SELECT
-            CAST(DATEADD(DAY, value, (SELECT DISTINCT DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()), 0) FROM [AdventureWorks2022].[Person].[BusinessEntity])) AS DATE
+        SELECT CAST(DATEADD(DAY, value, (SELECT DISTINCT DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()), 0) FROM [AdventureWorks2022].[Person].[BusinessEntity])) AS DATE
 				) AS GeneratedDates
         FROM GENERATE_SERIES(0,
             				DATEDIFF(DAY,
