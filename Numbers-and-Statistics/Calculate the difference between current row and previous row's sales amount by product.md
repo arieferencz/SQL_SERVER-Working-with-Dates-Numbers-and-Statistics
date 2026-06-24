@@ -35,7 +35,7 @@ We use two levels of queries — an inner subquery and an outer query:
 
 ---
 
-### T-SQL code
+### T-SQL code — Full solution
 
 ```sql
 USE AdventureWorks2022;
@@ -45,8 +45,7 @@ SELECT
     X.ProductName
   , FORMAT(ROUND(X.SalesByProductName, 2, 2), '#,#.##') AS SalesByProductName
   , FORMAT(ROUND(X.SalesByProductName
-        - LAG(X.SalesByProductName) OVER (ORDER BY X.SalesByProductName),
-        2, 2), '#,#.##') AS SalesDiff
+        - LAG(X.SalesByProductName) OVER (ORDER BY X.SalesByProductName), 2, 2), '#,#.##') AS SalesDiff
 FROM (
     SELECT
         Product.[Name]       AS ProductName
@@ -65,24 +64,23 @@ ORDER BY X.SalesByProductName ASC
 ---
 
 ### Output (truncated)
-
 ```
-ProductName                       SalesByProductName  SalesDiff
-LL Road Seat/Saddle               162.72              NULL
-Mountain Bike Socks, L            513                 350.28
-LL Touring Frame - Blue, 58       800.2               287.2
-LL Mountain Frame - Black, 40     1,198.99            398.78
-LL Touring Seat/Saddle            1,480.75            281.76
-ML Mountain Frame-W - Silver, 38  1,529.17            48.42
-LL Touring Handlebars             1,548.62            19.44
-LL Headset                        1,949.4             400.77
+ProductName							SalesByProductName		SalesDiff
+LL Road Seat/Saddle					162.72					NULL
+Mountain Bike Socks, L				513						350.28
+LL Touring Frame - Blue, 58			800.2					287.2
+LL Mountain Frame - Black, 40		1,198.99				398.78
+LL Touring Seat/Saddle				1,480.75				281.76
+ML Mountain Frame-W - Silver, 38	1,529.17				48.42
+LL Touring Handlebars				1,548.62				19.44
+LL Headset							1,949.4					400.77
 ...
-Mountain-200 Black, 46            3,309,673.21        792,815.9
-Mountain-200 Silver, 46           3,434,256.94        124,583.72
-Mountain-200 Silver, 42           3,438,478.86        4,221.91
-Mountain-200 Silver, 38           3,693,678.02        255,199.16
-Mountain-200 Black, 42            4,009,494.76        315,816.73
-Mountain-200 Black, 38            4,400,592.8         391,098.03
+Mountain-200 Black, 46				3,309,673.21			792,815.9
+Mountain-200 Silver, 46				3,434,256.94			124,583.72
+Mountain-200 Silver, 42				3,438,478.86			4,221.91
+Mountain-200 Silver, 38				3,693,678.02			255,199.16
+Mountain-200 Black, 42				4,009,494.76			315,816.73
+Mountain-200 Black, 38				4,400,592.8				391,098.03
 (266 rows affected)
 ```
 
