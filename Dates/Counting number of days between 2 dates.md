@@ -30,7 +30,8 @@ We use a subquery to retrieve the oldest (`MIN`) and youngest (`MAX`) birth date
 ### T-SQL code
 
 ```sql
-SELECT FORMAT(DATEDIFF(DAY, OldestEmployee, YoungestEmployee) + 1, '#,#') AS NumberDaysDifference
+SELECT
+    FORMAT(DATEDIFF(DAY, OldestEmployee, YoungestEmployee) + 1, '#,#') AS NumberDaysDifference
 FROM (
     SELECT
         MAX(BirthDate) AS YoungestEmployee
