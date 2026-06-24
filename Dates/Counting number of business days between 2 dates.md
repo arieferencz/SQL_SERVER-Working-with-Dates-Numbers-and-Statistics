@@ -53,15 +53,15 @@ FROM (
             ) AS DATE) AS GeneratedDates
         FROM GENERATE_SERIES(
             0,
-            DATEDIFF(DAY,
+            DATEDIFF(
+				DAY,
                 (SELECT MIN(BirthDate) FROM [AdventureWorks2022].[HumanResources].[Employee]),
                 (SELECT MAX(BirthDate) FROM [AdventureWorks2022].[HumanResources].[Employee])
-            ),
-            1
-        )
-    ) AS X
-    WHERE DATENAME(weekday, X.GeneratedDates) NOT IN ('Saturday', 'Sunday')
-) AS Y
+				),
+            1)
+    	) AS X
+	WHERE DATENAME(weekday, X.GeneratedDates) NOT IN ('Saturday', 'Sunday')
+	) AS Y
 ```
 
 ---
@@ -101,17 +101,15 @@ OldestEmployee    YoungestEmployee
 **T-SQL code**
 ```sql
 SELECT
-    CAST(DATEADD(DAY, value,
-        (SELECT MIN(BirthDate) FROM [AdventureWorks2022].[HumanResources].[Employee])
-    ) AS DATE) AS GeneratedDates
+    CAST(DATEADD(DAY, value, (SELECT MIN(BirthDate) FROM [AdventureWorks2022].[HumanResources].[Employee])) AS DATE) AS GeneratedDates
 FROM GENERATE_SERIES(
     0,
-    DATEDIFF(DAY,
+    DATEDIFF(
+		DAY,
         (SELECT MIN(BirthDate) FROM [AdventureWorks2022].[HumanResources].[Employee]),
         (SELECT MAX(BirthDate) FROM [AdventureWorks2022].[HumanResources].[Employee])
-    ),
-    1
-)
+    		),
+    1)
 ```
 
 **Output (truncated):**
