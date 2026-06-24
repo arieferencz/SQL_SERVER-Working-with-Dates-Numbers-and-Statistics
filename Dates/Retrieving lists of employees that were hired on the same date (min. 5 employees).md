@@ -30,7 +30,7 @@ We use a **self-join via Cartesian Product** to pair each employee (table `A`) w
 
 ---
 
-### T-SQL code — Final query
+### T-SQL code — Full solution
 
 ```sql
 SELECT
