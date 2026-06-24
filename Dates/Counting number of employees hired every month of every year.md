@@ -45,10 +45,8 @@ FROM (
                             (SELECT DATEADD(MONTH, DATEDIFF(MONTH, 0, (SELECT MAX(HireDate) FROM [AdventureWorks2022].[HumanResources].[Employee])), 0))),
                         1)
     ) AS W
-LEFT JOIN (
-            SELECT DATEADD(DAY, -(DAY(HireDate) - 1), HireDate) AS FirstDayOfMonthOfHireDate
-            FROM [AdventureWorks2022].[HumanResources].[Employee]
-        ) AS Employee
+LEFT JOIN (SELECT DATEADD(DAY, -(DAY(HireDate) - 1), HireDate) AS FirstDayOfMonthOfHireDate
+            FROM [AdventureWorks2022].[HumanResources].[Employee]) AS Employee
     ON W.GeneratedDates = Employee.FirstDayOfMonthOfHireDate
 WHERE DATEPART(DAY, W.GeneratedDates) = 1
 GROUP BY W.GeneratedDates
