@@ -90,7 +90,7 @@ QuarterNum  QtrStartDate  QtrEndDate
 
 We calculate two anchor dates that drive all quarter date calculations:
 
-**T-SQL code:**
+**T-SQL code**
 ```sql
 SELECT DISTINCT
     DATEADD(QUARTER, DATEDIFF(QUARTER, 0, DATEADD(YEAR, DATEDIFF(YEAR, 0, GETDATE()), 0)) + 0, 0) AS Quarter1StartDate
@@ -98,7 +98,7 @@ SELECT DISTINCT
 FROM [AdventureWorks2022].[Person].[BusinessEntity]
 ```
 
-**Output:**
+**Output**
 ```
 Quarter1StartDate             Quarter1EndDate
 2024-01-01 00:00:00.000       2023-12-31 00:00:00.000
