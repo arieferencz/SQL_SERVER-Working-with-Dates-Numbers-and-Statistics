@@ -146,7 +146,11 @@ FROM
 	(
 	SELECT										-- GenerateDatesLevel1
 	CAST(DATEADD(DAY, value, (SELECT MIN(BirthDate) FROM [AdventureWorks2022].[HumanResources].[Employee])) AS DATE) AS GeneratedDates
-	FROM GENERATE_SERIES(0, DATEDIFF(DAY,(SELECT MIN(BirthDate) FROM [AdventureWorks2022].[HumanResources].[Employee]), (SELECT MAX(BirthDate) FROM [AdventureWorks2022].[HumanResources].[Employee])), 1)				-- GenerateDatesLevel1
+	FROM GENERATE_SERIES(0, DATEDIFF(DAY,
+										(SELECT MIN(BirthDate) FROM [AdventureWorks2022].[HumanResources].[Employee]),
+										(SELECT MAX(BirthDate) FROM [AdventureWorks2022].[HumanResources].[Employee])
+							),
+						1)						-- GenerateDatesLevel1
 	) AS X										-- GenerateWeekDaysLevel2
 ```
 
@@ -180,7 +184,11 @@ FROM
 	(
 	SELECT																		-- GeneratedDatesLevel1
 	CAST(DATEADD(DAY, value, (SELECT MIN(BirthDate) FROM [AdventureWorks2022].[HumanResources].[Employee])) AS DATE) AS GeneratedDates
-	FROM GENERATE_SERIES(0, DATEDIFF(DAY,(SELECT MIN(BirthDate) FROM [AdventureWorks2022].[HumanResources].[Employee]), (SELECT MAX(BirthDate) FROM [AdventureWorks2022].[HumanResources].[Employee])), 1)												-- GeneratedDatesLevel1
+	FROM GENERATE_SERIES(0, DATEDIFF(DAY,
+								(SELECT MIN(BirthDate) FROM [AdventureWorks2022].[HumanResources].[Employee]),
+								(SELECT MAX(BirthDate) FROM [AdventureWorks2022].[HumanResources].[Employee])
+							),
+						1)														-- GeneratedDatesLevel1
 	) AS X	
 WHERE DATENAME(weekday, X.GeneratedDates) NOT IN ('Saturday','Sunday')			-- GenerateBusinessDaysLevel3
 ```
