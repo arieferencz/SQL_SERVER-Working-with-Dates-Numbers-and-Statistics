@@ -80,11 +80,13 @@ CountBusinessdays
 
 ### Query 1.1 — Retrieve the oldest and youngest birth dates
 
+**T-SQL code**
 ```sql
 SELECT MIN(BirthDate) AS OldestEmployee FROM [AdventureWorks2022].[HumanResources].[Employee];
 SELECT MAX(BirthDate) AS YoungestEmployee FROM [AdventureWorks2022].[HumanResources].[Employee];
 ```
 
+**Output**
 ```
 OldestEmployee    YoungestEmployee
 1951-10-17        1991-05-31
@@ -96,6 +98,7 @@ OldestEmployee    YoungestEmployee
 
 `GENERATE_SERIES(0, 14471, 1)` generates integers from `0` to `14471` (the total number of days between the two dates). `DATEADD(DAY, value, '1951-10-17')` converts each integer into a date starting from the oldest birth date.
 
+**T-SQL code**
 ```sql
 SELECT
     CAST(DATEADD(DAY, value,
@@ -135,15 +138,19 @@ GeneratedDates
 
 ### Query 1.3 — Add weekday names using `DATENAME()`
 
+**T-SQL code**
 ```sql
-SELECT
-    X.GeneratedDates
-  , DATENAME(weekday, X.GeneratedDates) AS GeneratedWeekDays
-FROM ( ... ) AS X
+SELECT X.GeneratedDates							-- GenerateWeekDaysLevel2
+, DATENAME(weekday, X.GeneratedDates) AS GeneratedWeekDays				
+FROM
+	(
+	SELECT										-- GenerateDatesLevel1
+	CAST(DATEADD(DAY, value, (SELECT MIN(BirthDate) FROM [AdventureWorks2022].[HumanResources].[Employee])) AS DATE) AS GeneratedDates
+	FROM GENERATE_SERIES(0, DATEDIFF(DAY,(SELECT MIN(BirthDate) FROM [AdventureWorks2022].[HumanResources].[Employee]), (SELECT MAX(BirthDate) FROM [AdventureWorks2022].[HumanResources].[Employee])), 1)				-- GenerateDatesLevel1
+	) AS X										-- GenerateWeekDaysLevel2
 ```
 
 **Output (truncated):**
-
 ```
 GeneratedDates  GeneratedWeekDays
 1951-10-17      Wednesday
@@ -165,8 +172,20 @@ GeneratedDates  GeneratedWeekDays
 
 Adding `WHERE DATENAME(weekday, ...) NOT IN ('Saturday', 'Sunday')` removes all Saturday and Sunday rows, leaving only business days.
 
-**Output (truncated):**
+**T-SQL code**
+```sql
+SELECT X.GeneratedDates															-- GenerateBusinessDaysLevel3
+, DATENAME(weekday, X.GeneratedDates) AS GeneratedWeekDays				
+FROM
+	(
+	SELECT																		-- GeneratedDatesLevel1
+	CAST(DATEADD(DAY, value, (SELECT MIN(BirthDate) FROM [AdventureWorks2022].[HumanResources].[Employee])) AS DATE) AS GeneratedDates
+	FROM GENERATE_SERIES(0, DATEDIFF(DAY,(SELECT MIN(BirthDate) FROM [AdventureWorks2022].[HumanResources].[Employee]), (SELECT MAX(BirthDate) FROM [AdventureWorks2022].[HumanResources].[Employee])), 1)												-- GeneratedDatesLevel1
+	) AS X	
+WHERE DATENAME(weekday, X.GeneratedDates) NOT IN ('Saturday','Sunday')			-- GenerateBusinessDaysLevel3
+```
 
+**Output (truncated):**
 ```
 GeneratedDates  GeneratedWeekDays
 1951-10-17      Wednesday
