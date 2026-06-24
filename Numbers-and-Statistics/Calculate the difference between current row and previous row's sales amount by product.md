@@ -130,7 +130,7 @@ Mountain-200 Black, 38        4,400,592.80
 
 `LAG(SalesByProductName) OVER (ORDER BY SalesByProductName)` retrieves the `SalesByProductName` value from the **previous row** in the ascending sales order. For the first row there is no previous row — so `LAG()` returns `NULL`, which is why `SalesDiff` is `NULL` for `LL Road Seat/Saddle`.
 
-**T-SQL code: How `LAG()` works row by row**
+**T-SQL code — How `LAG()` works row by row:**
 ```sql
 SELECT
     X.ProductName
