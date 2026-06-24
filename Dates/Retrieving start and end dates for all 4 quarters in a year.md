@@ -49,7 +49,8 @@ SELECT
   	, CAST(DATEADD(QUARTER, DATEDIFF(QUARTER, 0, DATEADD(YEAR, DATEDIFF(YEAR, 0, GETDATE()), 0)) + Iteration.Position, 0) AS DATE ) AS QtrStartDate
 	, CAST(DATEADD(QUARTER, Iteration.Position, DATEADD(DAY, -1, DATEADD(YEAR, DATEDIFF(YEAR, 0, GETDATE()), 0))) AS DATE) AS QtrEndDate
 FROM (
-    SELECT DISTINCT DATEADD(QUARTER, DATEDIFF(QUARTER, 0, DATEADD(YEAR, DATEDIFF(YEAR, 0, GETDATE()), 0)) + 0, 0) AS Quarter1StartDate
+    SELECT DISTINCT
+		DATEADD(QUARTER, DATEDIFF(QUARTER, 0, DATEADD(YEAR, DATEDIFF(YEAR, 0, GETDATE()), 0)) + 0, 0) AS Quarter1StartDate
 		, DATEADD(DAY, -1, DATEADD(YEAR, DATEDIFF(YEAR, 0, GETDATE()), 0)) AS Quarter1EndDate
     FROM [AdventureWorks2022].[Person].[BusinessEntity]
 	) AS QuarterStartEndDates,
@@ -83,9 +84,7 @@ We calculate two anchor dates that drive all quarter date calculations:
 **T-SQL code:**
 ```sql
 SELECT DISTINCT
-    DATEADD(QUARTER,
-        DATEDIFF(QUARTER, 0, DATEADD(YEAR, DATEDIFF(YEAR, 0, GETDATE()), 0)) + 0,
-        0) AS Quarter1StartDate
+    DATEADD(QUARTER, DATEDIFF(QUARTER, 0, DATEADD(YEAR, DATEDIFF(YEAR, 0, GETDATE()), 0)) + 0, 0) AS Quarter1StartDate
   , DATEADD(DAY, -1, DATEADD(YEAR, DATEDIFF(YEAR, 0, GETDATE()), 0)) AS Quarter1EndDate
 FROM [AdventureWorks2022].[Person].[BusinessEntity]
 ```
