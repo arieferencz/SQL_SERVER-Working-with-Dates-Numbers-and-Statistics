@@ -27,10 +27,6 @@ Calculate the first day, last day, and second to last day of the current month â
 
 ### Solution 1.1 â€” Using `GETDATE()` and `DAY()`
 
-```sql
-SELECT CAST(GETDATE() - DAY(GETDATE()) + 1 AS DATE) AS FirstDayofCurrentMonth
-```
-
 **How it works step by step:**
 
 ```sql
@@ -41,6 +37,12 @@ SELECT
   , CAST(GETDATE() - DAY(GETDATE()) + 1 AS DATE)   AS Step3          -- 2024-12-01
 ```
 
+**T-SQL code of Solution 1.1**
+```sql
+SELECT CAST(GETDATE() - DAY(GETDATE()) + 1 AS DATE) AS FirstDayofCurrentMonth
+```
+
+**Output of Solution 1.1:**
 ```
 TodayGetDate  Step1  Step2  Step3_FirstDayofCurrentMonth
 2024-12-02    -2     -1     2024-12-01
