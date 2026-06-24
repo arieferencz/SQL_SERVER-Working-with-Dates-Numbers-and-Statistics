@@ -37,7 +37,8 @@ We calculate the first day of the current year and the first day of next year us
 ### T-SQL code
 
 ```sql
-SELECT DATEDIFF(DAY, X.BeginningThisYear, X.BeginningNextYear) AS NumberDaysInCurrentYear
+SELECT
+    DATEDIFF(DAY, X.BeginningThisYear, X.BeginningNextYear) AS NumberDaysInCurrentYear
 FROM (
     SELECT DISTINCT
         DATEADD(YEAR, DATEDIFF(YEAR, 0, GETDATE()),     0) AS BeginningThisYear
