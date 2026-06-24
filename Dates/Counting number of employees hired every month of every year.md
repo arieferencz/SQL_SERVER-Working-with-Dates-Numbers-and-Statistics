@@ -43,8 +43,11 @@ SELECT
         END) AS CountHireDates
 FROM (
     SELECT
-        CAST(DATEADD(DAY, value, (SELECT DATEADD(MONTH, DATEDIFF(MONTH, 0, (SELECT MIN(HireDate) FROM [AdventureWorks2022].[HumanResources].[Employee])), 0)))
-            AS DATE) AS GeneratedDates
+        CAST(DATEADD(
+                DAY,
+                value,
+                (SELECT DATEADD(MONTH, DATEDIFF(MONTH, 0, (SELECT MIN(HireDate) FROM [AdventureWorks2022].[HumanResources].[Employee])), 0))
+            ) AS DATE) AS GeneratedDates
     FROM GENERATE_SERIES(
         0,
         DATEDIFF(DAY,
