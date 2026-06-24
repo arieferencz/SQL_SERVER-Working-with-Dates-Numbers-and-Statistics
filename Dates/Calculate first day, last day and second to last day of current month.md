@@ -140,11 +140,12 @@ TodayGetDate	Step1	Step2_FirstDayofCurrentMonth
 ---
 
 ### Solution 2.1 — Using `EOMONTH()` *(simplest)*
-
+**T-SQL code of Query 2.1**
 ```sql
 SELECT EOMONTH(GETDATE()) AS LastDayofCurrentMonth
 ```
 
+**Output of Query 2.1:**
 ```
 LastDayofCurrentMonth
 2024-12-31
@@ -155,13 +156,7 @@ LastDayofCurrentMonth
 ---
 
 ### Solution 2.2 — Using `DATEADD()`, `DATEDIFF()`, and the DATETIME default minus one month
-
-```sql
-SELECT CAST(DATEADD(MONTH, DATEDIFF(MONTH, -1, GETDATE()), -1) AS DATE) AS LastDayofCurrentMonth
-```
-
 **How it works step by step:**
-
 ```sql
 SELECT
     CAST(GETDATE() AS DATE)                                           AS TodayGetDate  -- 2024-12-02
@@ -170,9 +165,15 @@ SELECT
   , CAST(DATEADD(MONTH, DATEDIFF(MONTH, -1, GETDATE()), -1) AS DATE)  AS Step3         -- 2024-12-31
 ```
 
+**T-SQL code of Query 2.2**
+```sql
+SELECT CAST(DATEADD(MONTH, DATEDIFF(MONTH, -1, GETDATE()), -1) AS DATE) AS LastDayofCurrentMonth
 ```
-TodayGetDate  Step1  Step2       Step3_LastDayofCurrentMonth
-2024-12-02    1500   1899-12-31  2024-12-31
+
+**Output of Query 2.2:**
+```
+TodayGetDate	Step1	Step2			Step3_LastDayofCurrentMonth
+2024-12-02		1500	1899-12-31		2024-12-31
 ```
 
 > `-1` in a date context equals `1899-12-31` (one day before `1900-01-01`). `DATEDIFF(MONTH, -1, GETDATE())` returns 1,500 months between `1899-12-01` and today. Adding 1,500 months to `1899-12-31` lands on `2024-12-31`.
@@ -180,13 +181,7 @@ TodayGetDate  Step1  Step2       Step3_LastDayofCurrentMonth
 ---
 
 ### Solution 2.3 — Using `DATEADD()`, `DATEDIFF()`, and first-of-next-month minus 1 day
-
-```sql
-SELECT CAST(DATEADD(DAY, -1, DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()) + 1, 0)) AS DATE) AS LastDayofCurrentMonth
-```
-
 **How it works step by step:**
-
 ```sql
 SELECT
     CAST(GETDATE() AS DATE)                                                               AS TodayGetDate  -- 2024-12-02
@@ -196,9 +191,15 @@ SELECT
   , CAST(DATEADD(DAY, -1, DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()) + 1, 0)) AS DATE)  AS Step4         -- 2024-12-31
 ```
 
+**T-SQL code of Query 2.3**
+```sql
+SELECT CAST(DATEADD(DAY, -1, DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()) + 1, 0)) AS DATE) AS LastDayofCurrentMonth
 ```
-TodayGetDate  Step1  Step2  Step3       Step4_LastDayofCurrentMonth
-2024-12-02    1499   1500   2025-01-01  2024-12-31
+
+**Output of Query 2.3:**
+```
+TodayGetDate	Step1	Step2	Step3			Step4_LastDayofCurrentMonth
+2024-12-02		1499	1500	2025-01-01		2024-12-31
 ```
 
 Adding 1,500 months to `1900-01-01` gives the first of next month (`2025-01-01`). Subtracting 1 day gives the last day of the current month.
@@ -206,13 +207,7 @@ Adding 1,500 months to `1900-01-01` gives the first of next month (`2025-01-01`)
 ---
 
 ### Solution 2.4 — Using `DATEADD()` and `DAY()` (first-of-month then +1 month then -1 day)
-
-```sql
-SELECT CAST(DATEADD(DAY, -1, DATEADD(MONTH, 1, DATEADD(DAY, 1 - (DAY(GETDATE())), GETDATE()))) AS DATE) AS LastDayofCurrentMonth
-```
-
 **How it works step by step:**
-
 ```sql
 SELECT
     CAST(GETDATE() AS DATE)                                                                          AS TodayGetDate  -- 2024-12-02
@@ -223,14 +218,21 @@ SELECT
   , CAST(DATEADD(DAY, -1, DATEADD(MONTH, 1, DATEADD(DAY, 1 - (DAY(GETDATE())), GETDATE()))) AS DATE) AS Step5         -- 2024-12-31
 ```
 
+**T-SQL code of Query 2.4**
+```sql
+SELECT CAST(DATEADD(DAY, -1, DATEADD(MONTH, 1, DATEADD(DAY, 1 - (DAY(GETDATE())), GETDATE()))) AS DATE) AS LastDayofCurrentMonth
 ```
-TodayGetDate  Step1  Step2  Step3       Step4       Step5_LastDayofCurrentMonth
-2024-12-02    2      -1     2024-12-01  2025-01-01  2024-12-31
+
+**Output of Query 2.4:**
+```
+TodayGetDate	Step1	Step2	Step3			Step4			Step5_LastDayofCurrentMonth
+2024-12-02		2		-1		2024-12-01		2025-01-01		2024-12-31
 ```
 
 Step 3 finds the first of the current month (from Solution 1.3). Step 4 adds 1 month to get the first of next month. Step 5 subtracts 1 day.
 
 ---
+<br>
 
 ## 💡 Exercise 3 — Second to last day of the current month (2 solutions)
 
