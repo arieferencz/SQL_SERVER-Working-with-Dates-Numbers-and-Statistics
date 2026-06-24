@@ -267,8 +267,33 @@ WHERE Iteration.Position <=
 ### Query 2.1 — Generate dates via Cartesian Product and iteration
 The Cartesian Product pairs the single-row `EmployeesBirthDates` subquery with each row from `Iteration`. `DATEADD(DAY, Position - 1, OldestEmployee)` converts each position number into a date. The `WHERE` clause stops the iteration at `14,472` (total calendar days + 1).
 
-**Output (truncated):**
+**T-SQL code**
+```sql
+SELECT																								-- IterationLevelandGeneratedDated2
+	Iteration.Position
+	, EmployeesBirthDates.OldestEmployee
+	, EmployeesBirthDates.YoungestEmployee
+	, DATEDIFF(DAY, EmployeesBirthDates.OldestEmployee, EmployeesBirthDates.YoungestEmployee) + 1 AS DiffDaysEmployeeDates
+	, (DATEDIFF(DAY, EmployeesBirthDates.OldestEmployee, EmployeesBirthDates.YoungestEmployee) + 1) - Iteration.Position AS IterationOnWhereClause
+	, DATEADD(DAY, Iteration.Position - 1, EmployeesBirthDates.OldestEmployee) AS GeneratedDates
+FROM (
+	SELECT																	-- DatesOldestYoungestOriginalTablesLevel1
+		MIN(BirthDate) AS OldestEmployee
+		, MAX(BirthDate) AS YoungestEmployee
+	FROM [AdventureWorks2022].[HumanResources].[Employee]					-- DatesOldestYoungestOriginalTablesLevel1
+	) AS EmployeesBirthDates
+	,(
+	SELECT
+		ROW_NUMBER() OVER (ORDER BY SalesOrderDetailID) AS Position				-- IterationLevel1
+	FROM [AdventureWorks2022].[Sales].[SalesOrderDetail]						-- IterationLevel1
+	) AS Iteration
+WHERE Iteration.Position <= DATEDIFF(DAY, EmployeesBirthDates.OldestEmployee, EmployeesBirthDates.YoungestEmployee) + 1
+GROUP BY Iteration.Position, EmployeesBirthDates.OldestEmployee, EmployeesBirthDates.YoungestEmployee
+ORDER BY DATEADD(DAY, Iteration.Position, EmployeesBirthDates.OldestEmployee)						-- IterationLevelandGeneratedDated2
+```
 
+
+**Output (truncated):**
 ```
 Position  OldestEmployee  YoungestEmployee  DiffDays  GeneratedDates
 1         1951-10-17      1991-05-31        14472     1951-10-17
@@ -279,11 +304,38 @@ Position  OldestEmployee  YoungestEmployee  DiffDays  GeneratedDates
 (14472 rows affected)
 ```
 
+---
+
 ### Query 2.2 — Assign `1` or `0` per day using `CASE`
 `DATENAME(WEEKDAY, ...)` returns the weekday name. The `CASE` statement assigns `0` for Saturday and Sunday, `1` for all other days. `SUM()` in the final query totals all the `1`s.
 
-**Output (truncated):**
+**T-SQL code**
+```sql
+SELECT																								-- GeneratedBusinessDatesLevel2
+	DATEADD(DAY, Iteration.Position - 1, EmployeesBirthDates.OldestEmployee) AS GeneratedDates
+	, DATENAME(WEEKDAY, DATEADD(DAY, Iteration.Position, EmployeesBirthDates.OldestEmployee)) AS GeneratedWeekdates
+	, CASE
+		WHEN DATENAME(WEEKDAY, DATEADD(DAY, Iteration.Position, EmployeesBirthDates.OldestEmployee)) IN ('Saturday','Sunday') THEN 0
+		ELSE 1
+		END AS CountBusinessdays
+FROM (
+	SELECT																	-- DatesOldestYoungestOriginalTablesLevel1
+		MIN(BirthDate) AS OldestEmployee
+		, MAX(BirthDate) AS YoungestEmployee
+	FROM [AdventureWorks2022].[HumanResources].[Employee]					-- DatesOldestYoungestOriginalTablesLevel1
+	) AS EmployeesBirthDates
+	,(
+	SELECT																	-- IterationLevel1
+		ROW_NUMBER() OVER (ORDER BY SalesOrderDetailID) AS Position
+	FROM [AdventureWorks2022].[Sales].[SalesOrderDetail]					-- IterationLevel1
+	) AS Iteration
+WHERE Iteration.Position <= DATEDIFF(DAY, EmployeesBirthDates.OldestEmployee, EmployeesBirthDates.YoungestEmployee) + 1
+GROUP BY Iteration.Position, EmployeesBirthDates.OldestEmployee
+ORDER BY DATEADD(DAY, Iteration.Position, EmployeesBirthDates.OldestEmployee)						-- GeneratedBusinessDatesLevel2
+```
 
+
+**Output (truncated):**
 ```
 GeneratedDates  GeneratedWeekdates  CountBusinessdays
 1951-10-17      Thursday            1
