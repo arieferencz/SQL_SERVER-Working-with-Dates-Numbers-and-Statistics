@@ -40,7 +40,7 @@ We generate all calendar dates for the current month using `GENERATE_SERIES()`. 
 
 ---
 
-### T-SQL code
+### T-SQL code — Full solution
 
 ```sql
 SELECT
@@ -54,36 +54,27 @@ FROM (
       , CASE
             WHEN DATENAME(weekday, X.GeneratedDates) = 'Tuesday' THEN 1
             ELSE 0
-        END                                  AS IS_Tuesday
+        	END AS IS_Tuesday
     FROM (
-        SELECT
-            CAST(DATEADD(DAY, value,
-                (SELECT DISTINCT DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()), 0)
-                 FROM [AdventureWorks2022].[Person].[BusinessEntity])
-            ) AS DATE) AS GeneratedDates
-        FROM GENERATE_SERIES(
-            0,
-            DATEDIFF(DAY,
-                (SELECT DISTINCT DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()), 0)
-                 FROM [AdventureWorks2022].[Person].[BusinessEntity]),
-                (SELECT DISTINCT DATEADD(MONTH, DATEDIFF(MONTH, -1, GETDATE()), -1)
-                 FROM [AdventureWorks2022].[Person].[BusinessEntity])
-            ),
-            1
-        )
-    ) AS X
-) AS Y
+        SELECT CAST(DATEADD(DAY, value, (SELECT DISTINCT DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()), 0) FROM [AdventureWorks2022].[Person].[BusinessEntity])) AS DATE
+			) AS GeneratedDates
+        FROM GENERATE_SERIES(0, 
+							DATEDIFF(DAY,
+                					(SELECT DISTINCT DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()), 0) FROM [AdventureWorks2022].[Person].[BusinessEntity]),
+                					(SELECT DISTINCT DATEADD(MONTH, DATEDIFF(MONTH, -1, GETDATE()), -1) FROM [AdventureWorks2022].[Person].[BusinessEntity])),
+            				1)
+    	) AS X
+	) AS Y
 WHERE Y.IS_Tuesday = 1
 GROUP BY Y.GeneratedWeekDays
 ```
 
 ---
-
 ### Output — December 2024
 
 ```
-GeneratedWeekDays  DateFirstTuesdayCurrentMonth  DateLastTuesdayCurrentMonth
-Tuesday            2024-12-03                    2024-12-31
+GeneratedWeekDays		DateFirstTuesdayCurrentMonth		DateLastTuesdayCurrentMonth
+Tuesday					2024-12-03							2024-12-31
 (1 row affected)
 ```
 
