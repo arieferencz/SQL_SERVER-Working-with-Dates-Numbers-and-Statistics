@@ -184,6 +184,7 @@ GeneratedDates  GeneratedWeekDays
 ```
 
 ---
+<br>
 
 ## 💡 Solution 2 — Using a Cartesian Product and iteration
 
