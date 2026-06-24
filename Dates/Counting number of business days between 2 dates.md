@@ -269,7 +269,7 @@ The Cartesian Product pairs the single-row `EmployeesBirthDates` subquery with e
 
 **T-SQL code**
 ```sql
-SELECT																								-- IterationLevelandGeneratedDated2
+SELECT																						-- IterationLevelandGeneratedDated2
 	Iteration.Position
 	, EmployeesBirthDates.OldestEmployee
 	, EmployeesBirthDates.YoungestEmployee
@@ -289,7 +289,7 @@ FROM (
 	) AS Iteration
 WHERE Iteration.Position <= DATEDIFF(DAY, EmployeesBirthDates.OldestEmployee, EmployeesBirthDates.YoungestEmployee) + 1
 GROUP BY Iteration.Position, EmployeesBirthDates.OldestEmployee, EmployeesBirthDates.YoungestEmployee
-ORDER BY DATEADD(DAY, Iteration.Position, EmployeesBirthDates.OldestEmployee)						-- IterationLevelandGeneratedDated2
+ORDER BY DATEADD(DAY, Iteration.Position, EmployeesBirthDates.OldestEmployee)				-- IterationLevelandGeneratedDated2
 ```
 
 
