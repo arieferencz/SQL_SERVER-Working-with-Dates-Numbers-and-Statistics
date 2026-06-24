@@ -129,13 +129,13 @@ These are the same boundary calculations used in the **"Calculate first day, las
 
 **T-SQL code**
 ```sql
-SELECT							-- GenerateDatesInYear_1_Dec_31_DecLevel1
-CAST(DATEADD(DAY, value, (SELECT DISTINCT DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()), 0) FROM [AdventureWorks2022].[Person].[BusinessEntity])) AS DATE) AS GeneratedDates
-FROM GENERATE_SERIES(0
-		     , DATEDIFF(DAY
-				, (SELECT DISTINCT DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()), 0) FROM [AdventureWorks2022].[Person].[BusinessEntity])
-				, (SELECT DISTINCT DATEADD(MONTH,DATEDIFF(MONTH, -1, GETDATE()),-1) FROM [AdventureWorks2022].[Person].[BusinessEntity]))
-		    , 1)				-- GenerateDatesInYear_1_Dec_31_DecLevel1
+SELECT								-- GenerateDatesInYear_1_Dec_31_DecLevel1
+	CAST(DATEADD(DAY, value, (SELECT DISTINCT DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()), 0) FROM [AdventureWorks2022].[Person].[BusinessEntity])) AS DATE) AS GeneratedDates
+FROM GENERATE_SERIES(0,
+		     		DATEDIFF(DAY,
+							(SELECT DISTINCT DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()), 0) FROM [AdventureWorks2022].[Person].[BusinessEntity]),
+							(SELECT DISTINCT DATEADD(MONTH,DATEDIFF(MONTH, -1, GETDATE()),-1) FROM [AdventureWorks2022].[Person].[BusinessEntity])),
+		    		1)				-- GenerateDatesInYear_1_Dec_31_DecLevel1
 ```
 
 **Output (truncated):** 31 rows — every day in December 2024.
