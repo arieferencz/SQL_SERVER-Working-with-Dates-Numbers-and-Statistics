@@ -139,7 +139,7 @@ HireDate   DayOfHireDate  DayMinus1  NegativeDayMinus1  FirstDayOfMonth
 2007-11-11 11             10         -10                 2007-11-01
 2007-12-05 5              4          -4                  2007-12-01
 ```
-`DAY(HireDate)` returns the day number of the hire date. Subtracting `DAY(HireDate) - 1` days moves back to the 1st of that month.
+> `DAY(HireDate)` returns the day number of the hire date. Subtracting `DAY(HireDate) - 1` days moves back to the 1st of that month.
 
 
 **T-SQL code**
