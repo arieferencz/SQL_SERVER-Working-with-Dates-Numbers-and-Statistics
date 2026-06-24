@@ -37,31 +37,21 @@ We generate a complete list of every calendar day in the current year using `GEN
 
 ---
 
-### T-SQL code — Final query
+### T-SQL code — Full solution
 
 ```sql
 SELECT
     DATENAME(weekday, X.GeneratedDates) AS GeneratedWeekDays
   , X.GeneratedDates
 FROM (
-    SELECT
-        CAST(DATEADD(DAY, value,
-            (SELECT DISTINCT DATEADD(YEAR, DATEDIFF(YEAR, 0, GETDATE()), 0)
-             FROM [AdventureWorks2022].[Person].[BusinessEntity])
-        ) AS DATE) AS GeneratedDates
-    FROM GENERATE_SERIES(
-        0,
-        DATEDIFF(DAY,
-            (SELECT DISTINCT DATEADD(YEAR, DATEDIFF(YEAR, 0, GETDATE()), 0)
-             FROM [AdventureWorks2022].[Person].[BusinessEntity]),
-            (SELECT DISTINCT DATEADD(DAY, -1,
-                (SELECT DISTINCT DATEADD(YEAR, DATEDIFF(YEAR, 0, GETDATE()) + 1, 0)
-                 FROM [AdventureWorks2022].[Person].[BusinessEntity]))
-             FROM [AdventureWorks2022].[Person].[BusinessEntity])
-        ),
-        1
-    )
-) AS X
+    SELECT CAST(DATEADD(DAY, value, (SELECT DISTINCT DATEADD(YEAR, DATEDIFF(YEAR, 0, GETDATE()), 0) FROM [AdventureWorks2022].[Person].[BusinessEntity])) AS DATE
+        ) AS GeneratedDates
+    FROM GENERATE_SERIES(0,
+                        DATEDIFF(DAY, 
+                                (SELECT DISTINCT DATEADD(YEAR, DATEDIFF(YEAR, 0, GETDATE()), 0) FROM [AdventureWorks2022].[Person].[BusinessEntity]),
+                                (SELECT DISTINCT DATEADD(DAY, -1, (SELECT DISTINCT DATEADD(YEAR, DATEDIFF(YEAR, 0, GETDATE()) + 1, 0) FROM [AdventureWorks2022].[Person].[BusinessEntity])) FROM [AdventureWorks2022].[Person].[BusinessEntity])),
+                        1)
+    ) AS X
 WHERE DATENAME(weekday, X.GeneratedDates) IN ('Sunday')
 ```
 
