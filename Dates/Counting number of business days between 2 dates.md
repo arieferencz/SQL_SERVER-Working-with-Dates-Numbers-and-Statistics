@@ -311,7 +311,7 @@ Position  OldestEmployee  YoungestEmployee  DiffDays  GeneratedDates
 
 **T-SQL code**
 ```sql
-SELECT																								-- GeneratedBusinessDatesLevel2
+SELECT																							-- GeneratedBusinessDatesLevel2
 	DATEADD(DAY, Iteration.Position - 1, EmployeesBirthDates.OldestEmployee) AS GeneratedDates
 	, DATENAME(WEEKDAY, DATEADD(DAY, Iteration.Position, EmployeesBirthDates.OldestEmployee)) AS GeneratedWeekdates
 	, CASE
@@ -331,7 +331,7 @@ FROM (
 	) AS Iteration
 WHERE Iteration.Position <= DATEDIFF(DAY, EmployeesBirthDates.OldestEmployee, EmployeesBirthDates.YoungestEmployee) + 1
 GROUP BY Iteration.Position, EmployeesBirthDates.OldestEmployee
-ORDER BY DATEADD(DAY, Iteration.Position, EmployeesBirthDates.OldestEmployee)						-- GeneratedBusinessDatesLevel2
+ORDER BY DATEADD(DAY, Iteration.Position, EmployeesBirthDates.OldestEmployee)					-- GeneratedBusinessDatesLevel2
 ```
 
 
