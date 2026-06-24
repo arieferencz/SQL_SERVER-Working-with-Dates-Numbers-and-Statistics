@@ -82,19 +82,40 @@ EmpIDA		EmpJobTitleA							NumberEmployeesHiredSameDay
 
 We perform a Cartesian Product between the `Employee` table aliased as `A` and the same table aliased as `B`. The `WHERE` clause matches rows where all four date parts are equal — effectively finding all employees who were hired on the exact same date. `A.BusinessEntityID <= B.BusinessEntityID` prevents counting the same pair twice (e.g. pairing employee 275 with 276 and again 276 with 275) by only keeping pairs where A's ID is less than or equal to B's ID. `SELECT DISTINCT` removes any remaining duplicates.
 
-**Output (truncated):** 500 rows — all valid employee pairs sharing a hire date.
 
+**T-SQL code**
+```sql
+SELECT DISTINCT														-- EmployeesHiredOnSameDatesLevel1
+	A.BusinessEntityID AS EmpIDA
+	, A.JobTitle AS EmpJobTitleA
+	, A.HireDate AS EmpHireDateA
+	, B.BusinessEntityID AS EmpIDB
+	, B.JobTitle AS EmpJobTitleB
+	, B.HireDate AS EmpHireDateB
+FROM [AdventureWorks2022].[HumanResources].[Employee] AS A 
+	, [AdventureWorks2022].[HumanResources].[Employee] AS B
+WHERE
+    DATENAME(YEAR, A.HireDate) = DATENAME(YEAR, B.HireDate)
+	AND DATENAME(MONTH, A.HireDate) = DATENAME(MONTH, B.HireDate) 
+	AND DATENAME(WEEK, A.HireDate) = DATENAME(WEEK, B.HireDate)
+	AND DATENAME(WEEKDAY, A.HireDate) = DATENAME(WEEKDAY, B.HireDate)
+	AND A.BusinessEntityID <= B.BusinessEntityID				    -- EmployeesHiredOnSameDatesLevel1
+ORDER BY  A.BusinessEntityID, A.HireDate, B.BusinessEntityID
 ```
-EmpIDA  EmpJobTitleA                   EmpHireDateA  EmpIDB  EmpJobTitleB                   EmpHireDateB
-1       Chief Executive Officer        2009-01-14    1       Chief Executive Officer        2009-01-14
-1       Chief Executive Officer        2009-01-14    134     Production Supervisor - WC20   2009-01-14
-1       Chief Executive Officer        2009-01-14    148     Production Technician - WC30   2009-01-14
-2       Vice President of Engineering  2008-01-31    2       Vice President of Engineering  2008-01-31
-3       Engineering Manager            2007-11-11    3       Engineering Manager            2007-11-11
+
+
+**Output (truncated):** 500 rows — all valid employee pairs sharing a hire date.
+```
+EmpIDA				EmpJobTitleA						EmpHireDateA		EmpIDB		EmpJobTitleB						EmpHireDateB
+1					Chief Executive Officer				2009-01-14		    1			Chief Executive Officer				2009-01-14
+1					Chief Executive Officer				2009-01-14			134			Production Supervisor - WC20		2009-01-14
+1					Chief Executive Officer				2009-01-14			148			Production Technician - WC30		2009-01-14
+2					Vice President of Engineering		2008-01-31			2			Vice President of Engineering		2008-01-31
+3					Engineering Manager					2007-11-11			3			Engineering Manager					2007-11-11
 ...
-275     Sales Representative           2011-05-31    283     Sales Representative           2011-05-31
-286     Sales Representative           2013-05-30    288     Sales Representative           2013-05-30
-289     Sales Representative           2012-05-30    290     Sales Representative           2012-05-30
+275					Sales Representative				2011-05-31			283			Sales Representative				2011-05-31
+286					Sales Representative				2013-05-30			288			Sales Representative				2013-05-30
+289					Sales Representative				2012-05-30			290			Sales Representative				2012-05-30
 (500 rows affected)
 ```
 
