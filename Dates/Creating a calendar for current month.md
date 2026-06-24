@@ -46,8 +46,7 @@ We build the calendar in 4 steps:
 
 ---
 
-### T-SQL code
-
+### T-SQL code — Full solution
 ```sql
 SELECT
     MAX(CASE Y.DayOfWeek WHEN 2 THEN Y.DayOfMonth END) AS Mo
@@ -59,12 +58,12 @@ SELECT
   , MAX(CASE Y.DayOfWeek WHEN 1 THEN Y.DayOfMonth END) AS Su
 FROM (
     SELECT
-        DATENAME(WEEKDAY, X.GeneratedDates)        AS GeneratedWeekDays
+        DATENAME(WEEKDAY, X.GeneratedDates)  AS GeneratedWeekDays
       , X.GeneratedDates
-      , DAY(X.GeneratedDates)                      AS DayOfMonth
-      , DATEPART(MONTH,   X.GeneratedDates)        AS CurrentMonth
-      , DATEPART(WEEKDAY, X.GeneratedDates)        AS DayOfWeek
-      , DATEPART(ISO_WEEK, X.GeneratedDates)       AS ISOWeek
+      , DAY(X.GeneratedDates)                AS DayOfMonth
+      , DATEPART(MONTH,   X.GeneratedDates)  AS CurrentMonth
+      , DATEPART(WEEKDAY, X.GeneratedDates)  AS DayOfWeek
+      , DATEPART(ISO_WEEK, X.GeneratedDates) AS ISOWeek
       , CASE
             WHEN DATEPART(WEEKDAY, X.GeneratedDates) = 1
             THEN DATEPART(WEEK, X.GeneratedDates) - 1
@@ -72,22 +71,15 @@ FROM (
         END                                        AS WK
     FROM (
         SELECT
-            CAST(DATEADD(DAY, value,
-                (SELECT DISTINCT DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()), 0)
-                 FROM [AdventureWorks2022].[Person].[BusinessEntity])
-            ) AS DATE) AS GeneratedDates
-        FROM GENERATE_SERIES(
-            0,
-            DATEDIFF(DAY,
-                (SELECT DISTINCT DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()), 0)
-                 FROM [AdventureWorks2022].[Person].[BusinessEntity]),
-                (SELECT DISTINCT DATEADD(MONTH, DATEDIFF(MONTH, -1, GETDATE()), -1)
-                 FROM [AdventureWorks2022].[Person].[BusinessEntity])
-            ),
-            1
-        )
-    ) AS X
-) AS Y
+            CAST(DATEADD(DAY, value, (SELECT DISTINCT DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()), 0) FROM [AdventureWorks2022].[Person].[BusinessEntity])) AS DATE
+				) AS GeneratedDates
+        FROM GENERATE_SERIES(0,
+            				DATEDIFF(DAY,
+									(SELECT DISTINCT DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()), 0) FROM [AdventureWorks2022].[Person].[BusinessEntity]),
+                					(SELECT DISTINCT DATEADD(MONTH, DATEDIFF(MONTH, -1, GETDATE()), -1) FROM [AdventureWorks2022].[Person].[BusinessEntity])),
+            				1)
+    	) AS X
+	) AS Y
 GROUP BY Y.WK
 ORDER BY Y.WK
 ```
@@ -95,7 +87,6 @@ ORDER BY Y.WK
 ---
 
 ### Output — December 2024
-
 ```
 Mo    Tu    We    Th    Fr    Sa    Su
 NULL  NULL  NULL  NULL  NULL  NULL  1
@@ -117,13 +108,13 @@ Warning: Null value is eliminated by an aggregate or other SET operation.
 
 ### Query 1.1 — Calculate the first and last day of the current month
 
-**T-SQL code:**
+**T-SQL code**
 ```sql
 SELECT CAST(DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()), 0) AS DATE)    AS FirstDayofCurrentMonth
 SELECT CAST(DATEADD(MONTH, DATEDIFF(MONTH, -1, GETDATE()), -1) AS DATE)  AS LastDayofCurrentMonth
 ```
 
-**Output:**
+**Output**
 ```
 FirstDayofCurrentMonth   LastDayofCurrentMonth
 2024-12-01               2024-12-31
@@ -137,19 +128,18 @@ These are the same boundary calculations used in the **"Calculate first day, las
 
 `GENERATE_SERIES(0, 30, 1)` generates integers from `0` to `30` (31 days in December). `DATEADD(DAY, value, '2024-12-01')` converts each into a calendar date.
 
-**T-SQL code:**
+**T-SQL code**
 ```sql
-SELECT						-- GenerateDatesInYear_1_Dec_31_DecLevel1
+SELECT							-- GenerateDatesInYear_1_Dec_31_DecLevel1
 CAST(DATEADD(DAY, value, (SELECT DISTINCT DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()), 0) FROM [AdventureWorks2022].[Person].[BusinessEntity])) AS DATE) AS GeneratedDates
 FROM GENERATE_SERIES(0
 		     , DATEDIFF(DAY
 				, (SELECT DISTINCT DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()), 0) FROM [AdventureWorks2022].[Person].[BusinessEntity])
 				, (SELECT DISTINCT DATEADD(MONTH,DATEDIFF(MONTH, -1, GETDATE()),-1) FROM [AdventureWorks2022].[Person].[BusinessEntity]))
-		    , 1)			-- GenerateDatesInYear_1_Dec_31_DecLevel1
+		    , 1)				-- GenerateDatesInYear_1_Dec_31_DecLevel1
 ```
 
 **Output (truncated):** 31 rows — every day in December 2024.
-
 ```
 GeneratedDates
 2024-12-01
@@ -175,7 +165,7 @@ We add several calculated columns to each date to prepare for pivoting:
 **Why adjust `WK` for Sundays?**
 In SQL Server, `DATEPART(WEEKDAY, date)` treats Sunday as day `1`. This means a Sunday that falls at the end of a week (e.g. Dec 8) would get a different `WEEK` number than the Monday-Saturday days in the same calendar row. The `CASE` statement subtracts `1` from the week number when `DayOfWeek = 1` (Sunday), keeping it aligned with the rest of its calendar week.
 
-**T-SQL code:**
+**T-SQL code**
 ```sql
 SELECT DATENAME(WEEKDAY, X.GeneratedDates) AS GeneratedWeekDays				-- GenerateWeekDaysLevel2
 , X.GeneratedDates
@@ -188,18 +178,17 @@ SELECT DATENAME(WEEKDAY, X.GeneratedDates) AS GeneratedWeekDays				-- GenerateWe
 		ELSE DATEPART(WEEK, X.GeneratedDates)
 		END AS WK
 	FROM (
-	SELECT						-- GenerateDatesInYear_1_Dec_31_DecLevel1
+	SELECT									-- GenerateDatesInYear_1_Dec_31_DecLevel1
 	CAST(DATEADD(DAY, value, (SELECT DISTINCT DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()), 0) FROM [AdventureWorks2022].[Person].[BusinessEntity])) AS DATE) AS GeneratedDates
 	FROM GENERATE_SERIES(0
 			     , DATEDIFF(DAY
 			     		, (SELECT DISTINCT DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()), 0) FROM [AdventureWorks2022].[Person].[BusinessEntity])
 					, (SELECT DISTINCT DATEADD(MONTH,DATEDIFF(MONTH, -1, GETDATE()),-1) FROM [AdventureWorks2022].[Person].[BusinessEntity]))
-			     , 1)			-- GenerateDatesInYear_1_Dec_31_DecLevel1
-	) AS X									-- GenerateWeekDaysLevel2
+			     , 1)						-- GenerateDatesInYear_1_Dec_31_DecLevel1
+	) AS X																		-- GenerateWeekDaysLevel2
 ```
 
-**Output (truncated):**
-
+**Output (truncated)**
 ```
 GeneratedWeekDays	GeneratedDates	DayOfMonth	CurrentMonth	DayOfWeek  ISOWeek	WK
 Sunday				2024-12-01		1           12				1			48		48
@@ -228,7 +217,7 @@ Tuesday				2024-12-31      31          12				3			1		1
 
 For each row, 7 `CASE` statements check `DayOfWeek` and place `DayOfMonth` in the matching column, leaving `NULL` in all others.
 
-**T-SQL code:**
+**T-SQL code**
 ```sql
 SELECT CASE Y.DayOfWeek WHEN 2 THEN Y.DayOfMonth END AS Mo			-- PivotDatesCurrentMonthIntoDaysOfWeekLevel3
 , CASE Y.DayOfWeek WHEN 3 THEN Y.DayOfMonth END AS Tu
@@ -261,8 +250,8 @@ FROM (
 
 ```
 
-**Output:** 31 rows — one per day, each with its day number in one column and `NULL` in the other six.
 
+**Output:** 31 rows — one per day, each with its day number in one column and `NULL` in the other six.
 ```
 Mo    	Tu    	We    	Th    	Fr    	Sa    	Su
 NULL	NULL	NULL	NULL	NULL	NULL	1
