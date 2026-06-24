@@ -26,7 +26,6 @@ Calculate the first day, last day, and second to last day of the current month �
 ---
 
 ### Solution 1.1 — Using `GETDATE()` and `DAY()`
-
 **How it works step by step:**
 
 ```sql
@@ -53,13 +52,7 @@ TodayGetDate	Step1	Step2	Step3_FirstDayofCurrentMonth
 ---
 
 ### Solution 1.2 — Using `DATEADD()` and `DAY(GETDATE() - 1)`
-
-```sql
-SELECT CAST(DATEADD(DAY, -(DAY(GETDATE() - 1)), GETDATE()) AS DATE) AS FirstDayofCurrentMonth
-```
-
 **How it works step by step:**
-
 ```sql
 SELECT
     CAST(GETDATE() AS DATE)                                        AS TodayGetDate  -- 2024-12-02
@@ -69,9 +62,15 @@ SELECT
   , CAST(DATEADD(DAY, -(DAY(GETDATE() - 1)), GETDATE()) AS DATE)   AS Step4         -- 2024-12-01
 ```
 
+**T-SQL code of Solution 1.2**
+```sql
+SELECT CAST(DATEADD(DAY, -(DAY(GETDATE() - 1)), GETDATE()) AS DATE) AS FirstDayofCurrentMonth
 ```
-TodayGetDate  Step1  Step2  Step3  Step4_FirstDayofCurrentMonth
-2024-12-02    2      1      -1     2024-12-01
+
+**Output of Solution 1.2:**
+```
+TodayGetDate	Step1	Step2	Step3	Step4_FirstDayofCurrentMonth
+2024-12-02		2		1		-1		2024-12-01
 ```
 
 `DAY(GETDATE() - 1)` returns the day number of yesterday (`1`). Subtracting that from today lands on the 1st.
@@ -79,11 +78,6 @@ TodayGetDate  Step1  Step2  Step3  Step4_FirstDayofCurrentMonth
 ---
 
 ### Solution 1.3 — Using `DATEADD()` and `1 - DAY()`
-
-```sql
-SELECT CAST(DATEADD(DAY, 1 - (DAY(GETDATE())), GETDATE()) AS DATE) AS FirstDayofCurrentMonth
-```
-
 **How it works step by step:**
 
 ```sql
@@ -94,9 +88,15 @@ SELECT
   , CAST(DATEADD(DAY, 1 - (DAY(GETDATE())), GETDATE()) AS DATE)   AS Step3         -- 2024-12-01
 ```
 
+**T-SQL code of Solution 1.3**
+```sql
+SELECT CAST(DATEADD(DAY, 1 - (DAY(GETDATE())), GETDATE()) AS DATE) AS FirstDayofCurrentMonth
 ```
-TodayGetDate  Step1  Step2  Step3_FirstDayofCurrentMonth
-2024-12-02    2      -1     2024-12-01
+
+**Output of Solution 1.3:**
+```
+TodayGetDate	Step1	Step2	Step3_FirstDayofCurrentMonth
+2024-12-02		2		-1		2024-12-01
 ```
 
 `1 - DAY(GETDATE())` = `1 - 2` = `-1`. Adding `-1` day to today moves back to the 1st.
@@ -104,11 +104,6 @@ TodayGetDate  Step1  Step2  Step3_FirstDayofCurrentMonth
 ---
 
 ### Solution 1.4 — Using `DATEADD()`, `DATEDIFF()`, and the SQL Server DATETIME default (`1900-01-01`)
-
-```sql
-SELECT CAST(DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()), 0) AS DATE) AS FirstDayofCurrentMonth
-```
-
 **How it works step by step:**
 
 ```sql
@@ -118,14 +113,21 @@ SELECT
   , CAST(DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()), 0) AS DATE) AS Step2         -- 2024-12-01
 ```
 
+**T-SQL code of Solution 1.4**
+```sql
+SELECT CAST(DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()), 0) AS DATE) AS FirstDayofCurrentMonth
 ```
-TodayGetDate  Step1  Step2_FirstDayofCurrentMonth
-2024-12-02    1499   2024-12-01
+
+**Output of Solution 1.4:**
+```
+TodayGetDate	Step1	Step2_FirstDayofCurrentMonth
+2024-12-02		1499	2024-12-01
 ```
 
 > **Key concept:** In SQL Server, the integer `0` in a date context equals the default `DATETIME` value `1900-01-01 00:00:00.000`. `DATEDIFF(MONTH, 0, GETDATE())` calculates the number of whole months between `1900-01-01` and today — in this case 1,499. Adding those 1,499 months back to `1900-01-01` always lands on the **1st of the current month**, regardless of which day of the month today is.
 
 ---
+<br>
 
 ## 💡 Exercise 2 — Last day of the current month (4 solutions)
 
