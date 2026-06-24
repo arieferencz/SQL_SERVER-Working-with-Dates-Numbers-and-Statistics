@@ -138,18 +138,22 @@ GeneratedDates
 
 **T-SQL code**
 ```sql
-SELECT X.GeneratedDates							-- GenerateWeekDaysLevel2
-, DATENAME(weekday, X.GeneratedDates) AS GeneratedWeekDays				
+SELECT									-- GenerateWeekDaysLevel2
+	X.GeneratedDates
+	, DATENAME(weekday, X.GeneratedDates) AS GeneratedWeekDays				
 FROM
 	(
-	SELECT										-- GenerateDatesLevel1
+	SELECT								-- GenerateDatesLevel1
 	CAST(DATEADD(DAY, value, (SELECT MIN(BirthDate) FROM [AdventureWorks2022].[HumanResources].[Employee])) AS DATE) AS GeneratedDates
-	FROM GENERATE_SERIES(0, DATEDIFF(DAY,
-										(SELECT MIN(BirthDate) FROM [AdventureWorks2022].[HumanResources].[Employee]),
-										(SELECT MAX(BirthDate) FROM [AdventureWorks2022].[HumanResources].[Employee])
-							),
-						1)						-- GenerateDatesLevel1
-	) AS X										-- GenerateWeekDaysLevel2
+	FROM GENERATE_SERIES(
+		0,
+		DATEDIFF(
+			DAY,
+			(SELECT MIN(BirthDate) FROM [AdventureWorks2022].[HumanResources].[Employee]),
+			(SELECT MAX(BirthDate) FROM [AdventureWorks2022].[HumanResources].[Employee])
+			),
+		1)								-- GenerateDatesLevel1
+	) AS X								-- GenerateWeekDaysLevel2
 ```
 
 **Output (truncated):**
@@ -176,17 +180,21 @@ Adding `WHERE DATENAME(weekday, ...) NOT IN ('Saturday', 'Sunday')` removes all 
 
 **T-SQL code**
 ```sql
-SELECT X.GeneratedDates															-- GenerateBusinessDaysLevel3
-, DATENAME(weekday, X.GeneratedDates) AS GeneratedWeekDays				
+SELECT																			-- GenerateBusinessDaysLevel3
+	X.GeneratedDates
+	, DATENAME(weekday, X.GeneratedDates) AS GeneratedWeekDays				
 FROM
 	(
 	SELECT																		-- GeneratedDatesLevel1
-	CAST(DATEADD(DAY, value, (SELECT MIN(BirthDate) FROM [AdventureWorks2022].[HumanResources].[Employee])) AS DATE) AS GeneratedDates
-	FROM GENERATE_SERIES(0, DATEDIFF(DAY,
-								(SELECT MIN(BirthDate) FROM [AdventureWorks2022].[HumanResources].[Employee]),
-								(SELECT MAX(BirthDate) FROM [AdventureWorks2022].[HumanResources].[Employee])
-							),
-						1)														-- GeneratedDatesLevel1
+		CAST(DATEADD(DAY, value, (SELECT MIN(BirthDate) FROM [AdventureWorks2022].[HumanResources].[Employee])) AS DATE) AS GeneratedDates
+	FROM GENERATE_SERIES(
+		0,
+		DATEDIFF(
+			DAY,
+			(SELECT MIN(BirthDate) FROM [AdventureWorks2022].[HumanResources].[Employee]),
+			(SELECT MAX(BirthDate) FROM [AdventureWorks2022].[HumanResources].[Employee])
+			),
+		1)																		-- GeneratedDatesLevel1
 	) AS X	
 WHERE DATENAME(weekday, X.GeneratedDates) NOT IN ('Saturday','Sunday')			-- GenerateBusinessDaysLevel3
 ```
