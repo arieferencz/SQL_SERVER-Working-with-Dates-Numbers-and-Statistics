@@ -211,8 +211,8 @@ FROM (
 	FROM [AdventureWorks2022].[Person].[BusinessEntity]									-- QuarterStartEndDatesLevel1
 	) AS QuarterStartEndDates
 	,(
-	SELECT ROW_NUMBER() OVER(ORDER BY BusinessEntityID) AS Position				-- IterationLevel1
-	FROM [AdventureWorks2022].[Person].[BusinessEntity]							-- IterationLevel1
+	SELECT ROW_NUMBER() OVER(ORDER BY BusinessEntityID) AS Position						-- IterationLevel1
+	FROM [AdventureWorks2022].[Person].[BusinessEntity]									-- IterationLevel1
 	) AS Iteration																		-- GenearatedStartEndDatesLevel2
 ```
 
