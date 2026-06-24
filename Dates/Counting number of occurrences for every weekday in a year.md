@@ -136,12 +136,12 @@ GeneratedDates
 
 **T-SQL code**
 ```sql
-SELECT
-	DATENAME(weekday, X.GeneratedDates) AS GeneratedWeekDays			-- GenerateWeekDaysLevel2
+SELECT																	-- GenerateWeekDaysLevel2
+	DATENAME(weekday, X.GeneratedDates) AS GeneratedWeekDays
 	, X.GeneratedDates
 FROM (
-	SELECT										-- GenerateDatesInYear_1_Jan_31_DecLevel1
-	CAST(DATEADD(DAY, value, (SELECT DISTINCT DATEADD(YEAR, DATEDIFF(YEAR, 0, GETDATE()), 0) FROM [AdventureWorks2022].[Person].[BusinessEntity])) AS DATE) AS GeneratedDates
+	SELECT																-- GenerateDatesInYear_1_Jan_31_DecLevel1
+		CAST(DATEADD(DAY, value, (SELECT DISTINCT DATEADD(YEAR, DATEDIFF(YEAR, 0, GETDATE()), 0) FROM [AdventureWorks2022].[Person].[BusinessEntity])) AS DATE) AS GeneratedDates
 	FROM GENERATE_SERIES(0,
 						DATEDIFF(DAY,
 						(SELECT DISTINCT DATEADD(YEAR, DATEDIFF(YEAR, 0, GETDATE()), 0) FROM [AdventureWorks2022].[Person].[BusinessEntity]),
@@ -175,24 +175,26 @@ Tuesday            2024-12-31
 
 Adding `GROUP BY DATENAME(weekday, ...), X.GeneratedDates` and `COUNT(*)` gives one row per day with a count of `1` — since each date appears exactly once. This is an intermediate step used to verify the data before collapsing by weekday name only.
 
+**T-SQL code**
 ```sql
-SELECT DATENAME(weekday, X.GeneratedDates) AS GeneratedWeekDays			-- CountOccurrencesLevel3
-, X.GeneratedDates
-, COUNT(*) AS CountOccurrencesForWeekDaysInYear
+SELECT																	-- CountOccurrencesLevel3
+	DATENAME(weekday, X.GeneratedDates) AS GeneratedWeekDays
+	, X.GeneratedDates
+	, COUNT(*) AS CountOccurrencesForWeekDaysInYear
 FROM (
-SELECT											-- GenerateDatesInYear_1_Jan_31_DecLevel1
-CAST(DATEADD(DAY, value, (SELECT DISTINCT DATEADD(YEAR, DATEDIFF(YEAR, 0, GETDATE()), 0) FROM [AdventureWorks2022].[Person].[BusinessEntity])) AS DATE) AS GeneratedDates
-FROM GENERATE_SERIES(0
-					, DATEDIFF(DAY
-						, (SELECT DISTINCT DATEADD(YEAR, DATEDIFF(YEAR, 0, GETDATE()), 0) FROM [AdventureWorks2022].[Person].[BusinessEntity])
-						, (SELECT DISTINCT DATEADD(DAY, -1 , (SELECT DISTINCT DATEADD(YEAR, DATEDIFF(YEAR, 0, GETDATE()) + 1, 0) FROM [AdventureWorks2022].[Person].[BusinessEntity]))))
-							, 1)				-- GenerateDatesInYear_1_Jan_31_DecLevel1
+	SELECT																-- GenerateDatesInYear_1_Jan_31_DecLevel1
+		CAST(DATEADD(DAY, value, (SELECT DISTINCT DATEADD(YEAR, DATEDIFF(YEAR, 0, GETDATE()), 0) FROM [AdventureWorks2022].[Person].[BusinessEntity])) AS DATE) AS GeneratedDates
+	FROM GENERATE_SERIES(0,
+						DATEDIFF(DAY,
+							(SELECT DISTINCT DATEADD(YEAR, DATEDIFF(YEAR, 0, GETDATE()), 0) FROM [AdventureWorks2022].[Person].[BusinessEntity]),
+							(SELECT DISTINCT DATEADD(DAY, -1 , (SELECT DISTINCT DATEADD(YEAR, DATEDIFF(YEAR, 0, GETDATE()) + 1, 0) FROM [AdventureWorks2022].[Person].[BusinessEntity])))),
+						1)												-- GenerateDatesInYear_1_Jan_31_DecLevel1
 	) AS X		
 GROUP BY DATENAME(weekday, X.GeneratedDates), X.GeneratedDates			-- CountOccurrencesLevel3
 ```
 
-**Output (truncated):**
 
+**Output (truncated):**
 ```
 GeneratedWeekDays  GeneratedDates  CountOccurrencesForWeekDaysInYear
 Monday             2024-01-01      1
