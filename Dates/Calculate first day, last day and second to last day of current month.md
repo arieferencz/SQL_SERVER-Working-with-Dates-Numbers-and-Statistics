@@ -44,8 +44,8 @@ SELECT CAST(GETDATE() - DAY(GETDATE()) + 1 AS DATE) AS FirstDayofCurrentMonth
 
 **Output of Solution 1.1:**
 ```
-TodayGetDate  Step1  Step2  Step3_FirstDayofCurrentMonth
-2024-12-02    -2     -1     2024-12-01
+TodayGetDate	Step1	Step2	Step3_FirstDayofCurrentMonth
+2024-12-02		-2		-1		2024-12-01
 ```
 
 `DAY(GETDATE())` returns `2` (the current day number). Subtracting `2` from today and adding `1` moves back to the 1st of the month.
