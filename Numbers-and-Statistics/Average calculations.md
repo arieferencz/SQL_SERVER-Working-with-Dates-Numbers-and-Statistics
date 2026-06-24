@@ -162,6 +162,8 @@ Total          123,216,786.12      31,465           3,915.99
 | `Sales` | `SalesOrderHeader` |
 | `Sales` | `SalesTerritory` |
 
+---
+
 ### Solution 3.1 — Using `AVG()` as a window function with `PARTITION BY`
 
 **T-SQL code**
