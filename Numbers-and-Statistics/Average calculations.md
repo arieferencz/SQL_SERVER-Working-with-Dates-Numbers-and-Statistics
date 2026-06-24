@@ -29,11 +29,13 @@ Calculate the historic average sales order amount at three levels of granularity
 
 ### Solution 1.1 — Using `AVG()`
 
+**T-SQL code**
 ```sql
 SELECT ROUND(AVG(TotalDue), 2, 2) AS HistoricAverageSalesAmount
 FROM [AdventureWorks2022].[Sales].[SalesOrderHeader]
 ```
 
+**Output**
 ```
 HistoricAverageSalesAmount
 3915.99
@@ -44,6 +46,7 @@ HistoricAverageSalesAmount
 
 ### Solution 1.2 — Using `SUM()` / `COUNT()`
 
+**T-SQL code**
 ```sql
 SELECT
     FORMAT(ROUND(SUM(TotalDue) / COUNT(TotalDue), 2, 2), '#,#.##') AS HistoricAverageSalesAmount
@@ -52,6 +55,7 @@ SELECT
 FROM [AdventureWorks2022].[Sales].[SalesOrderHeader]
 ```
 
+**Output**
 ```
 HistoricAverageSalesAmount  SumTotalSalesAmount  CountTotalSales
 3,915.99                    123,216,786.12       31,465
@@ -59,6 +63,7 @@ HistoricAverageSalesAmount  SumTotalSalesAmount  CountTotalSales
 ```
 
 ---
+<br>
 
 ## 💡 Exercise 2 — Historic average by geographical group
 
@@ -73,6 +78,7 @@ HistoricAverageSalesAmount  SumTotalSalesAmount  CountTotalSales
 
 ### Solution 2.1 — Using `AVG()` as a window function with `PARTITION BY`
 
+**T-SQL code**
 ```sql
 SELECT DISTINCT
     SalesTerritory.[Group]
@@ -83,6 +89,7 @@ LEFT JOIN [AdventureWorks2022].[Sales].[SalesTerritory] AS SalesTerritory
     ON SalesOrderHeader.TerritoryID = SalesTerritory.TerritoryID
 ```
 
+**Output**
 ```
 Group          HistoricAverageSalesAmount
 Europe         2,604.37
@@ -95,6 +102,7 @@ Pacific        1,726.49
 
 ### Solution 2.2 — Using `SUM()` / `COUNT()` with `GROUP BY`
 
+**T-SQL code**
 ```sql
 SELECT DISTINCT
     SalesTerritory.[Group]
@@ -106,6 +114,7 @@ GROUP BY SalesTerritory.[Group]
 ORDER BY FORMAT(ROUND(SUM(TotalDue) / COUNT(TotalDue), 2, 2), '#,#.##')
 ```
 
+**Output**
 ```
 Group          HistoricAverageSalesAmount
 Pacific        1,726.49
@@ -118,6 +127,7 @@ North America  5,539.4
 
 ### Solution 2.3 — Using `GROUP BY ... WITH ROLLUP` (includes grand total row)
 
+**T-SQL code**
 ```sql
 SELECT
     COALESCE(SalesTerritory.[Group], 'Total')                      AS CountryCode
@@ -130,6 +140,7 @@ LEFT JOIN [AdventureWorks2022].[Sales].[SalesTerritory] AS SalesTerritory
 GROUP BY SalesTerritory.[Group] WITH ROLLUP
 ```
 
+**Output**
 ```
 CountryCode    TotalSalesAmount    CountTotalSales  AverageSalesAmount
 Europe         22,173,617.63       8,514            2,604.37
@@ -140,6 +151,7 @@ Total          123,216,786.12      31,465           3,915.99
 ```
 
 ---
+<br>
 
 ## 💡 Exercise 3 — Historic average by country
 
@@ -147,6 +159,7 @@ Total          123,216,786.12      31,465           3,915.99
 
 ### Solution 3.1 — Using `AVG()` as a window function with `PARTITION BY`
 
+**T-SQL code**
 ```sql
 SELECT DISTINCT
     SalesTerritory.CountryRegionCode
@@ -157,6 +170,7 @@ LEFT JOIN [AdventureWorks2022].[Sales].[SalesTerritory] AS SalesTerritory
     ON SalesOrderHeader.TerritoryID = SalesTerritory.TerritoryID
 ```
 
+**Output**
 ```
 CountryRegionCode  HistoricAverageSalesAmount
 CA                 4,524
@@ -172,6 +186,7 @@ DE                 2,089
 
 ### Solution 3.2 — Using `SUM()` / `COUNT()` with `GROUP BY`
 
+**T-SQL code**
 ```sql
 SELECT DISTINCT
     SalesTerritory.CountryRegionCode
@@ -182,6 +197,7 @@ LEFT JOIN [AdventureWorks2022].[Sales].[SalesTerritory] AS SalesTerritory
 GROUP BY SalesTerritory.CountryRegionCode
 ```
 
+**Output**
 ```
 CountryRegionCode  HistoricAverageSalesAmount
 DE                 2,089.14
@@ -197,6 +213,7 @@ US                 5,882.39
 
 ### Solution 3.3 — Using `GROUP BY ... WITH ROLLUP` (includes grand total row)
 
+**T-SQL code**
 ```sql
 SELECT
     COALESCE(SalesTerritory.CountryRegionCode, 'Total')            AS CountryCode
@@ -209,6 +226,7 @@ LEFT JOIN [AdventureWorks2022].[Sales].[SalesTerritory] AS SalesTerritory
 GROUP BY SalesTerritory.CountryRegionCode WITH ROLLUP
 ```
 
+**Output**
 ```
 CountryCode  TotalSalesAmount    CountTotalSales  AverageSalesAmount
 AU           11,814,376.1        6,843            1,726.49
