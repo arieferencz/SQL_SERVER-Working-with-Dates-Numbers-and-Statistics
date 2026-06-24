@@ -41,7 +41,7 @@ SELECT
 SELECT CAST(GETDATE() - DAY(GETDATE()) + 1 AS DATE) AS FirstDayofCurrentMonth
 ```
 
-**Output of Solution 1.1:**
+**Output of Solution 1.1**
 ```
 TodayGetDate	Step1	Step2	Step3_FirstDayofCurrentMonth
 2024-12-02		-2		-1		2024-12-01
@@ -67,7 +67,7 @@ SELECT
 SELECT CAST(DATEADD(DAY, -(DAY(GETDATE() - 1)), GETDATE()) AS DATE) AS FirstDayofCurrentMonth
 ```
 
-**Output of Solution 1.2:**
+**Output of Solution 1.2**
 ```
 TodayGetDate	Step1	Step2	Step3	Step4_FirstDayofCurrentMonth
 2024-12-02		2		1		-1		2024-12-01
@@ -93,7 +93,7 @@ SELECT
 SELECT CAST(DATEADD(DAY, 1 - (DAY(GETDATE())), GETDATE()) AS DATE) AS FirstDayofCurrentMonth
 ```
 
-**Output of Solution 1.3:**
+**Output of Solution 1.3**
 ```
 TodayGetDate	Step1	Step2	Step3_FirstDayofCurrentMonth
 2024-12-02		2		-1		2024-12-01
@@ -118,7 +118,7 @@ SELECT
 SELECT CAST(DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()), 0) AS DATE) AS FirstDayofCurrentMonth
 ```
 
-**Output of Solution 1.4:**
+**Output of Solution 1.4**
 ```
 TodayGetDate	Step1	Step2_FirstDayofCurrentMonth
 2024-12-02		1499	2024-12-01
@@ -145,7 +145,7 @@ TodayGetDate	Step1	Step2_FirstDayofCurrentMonth
 SELECT EOMONTH(GETDATE()) AS LastDayofCurrentMonth
 ```
 
-**Output of Query 2.1:**
+**Output of Query 2.1**
 ```
 LastDayofCurrentMonth
 2024-12-31
@@ -170,7 +170,7 @@ SELECT
 SELECT CAST(DATEADD(MONTH, DATEDIFF(MONTH, -1, GETDATE()), -1) AS DATE) AS LastDayofCurrentMonth
 ```
 
-**Output of Query 2.2:**
+**Output of Query 2.2**
 ```
 TodayGetDate	Step1	Step2			Step3_LastDayofCurrentMonth
 2024-12-02		1500	1899-12-31		2024-12-31
@@ -196,7 +196,7 @@ SELECT
 SELECT CAST(DATEADD(DAY, -1, DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()) + 1, 0)) AS DATE) AS LastDayofCurrentMonth
 ```
 
-**Output of Query 2.3:**
+**Output of Query 2.3**
 ```
 TodayGetDate	Step1	Step2	Step3			Step4_LastDayofCurrentMonth
 2024-12-02		1499	1500	2025-01-01		2024-12-31
@@ -223,7 +223,7 @@ SELECT
 SELECT CAST(DATEADD(DAY, -1, DATEADD(MONTH, 1, DATEADD(DAY, 1 - (DAY(GETDATE())), GETDATE()))) AS DATE) AS LastDayofCurrentMonth
 ```
 
-**Output of Query 2.4:**
+**Output of Query 2.4**
 ```
 TodayGetDate	Step1	Step2	Step3			Step4			Step5_LastDayofCurrentMonth
 2024-12-02		2		-1		2024-12-01		2025-01-01		2024-12-31
