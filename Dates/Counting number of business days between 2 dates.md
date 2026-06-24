@@ -108,7 +108,7 @@ FROM GENERATE_SERIES(
 		DAY,
         (SELECT MIN(BirthDate) FROM [AdventureWorks2022].[HumanResources].[Employee]),
         (SELECT MAX(BirthDate) FROM [AdventureWorks2022].[HumanResources].[Employee])
-    		),
+    	),
     1)
 ```
 
