@@ -1,6 +1,6 @@
 # Average calculations
 
-## 🎯 Exercise
+## 🎯 Exercises
 Calculate the historic average sales order amount at three levels of granularity:
 1. Overall (all geographies combined)
 2. By geographical group (Europe, North America, Pacific)
