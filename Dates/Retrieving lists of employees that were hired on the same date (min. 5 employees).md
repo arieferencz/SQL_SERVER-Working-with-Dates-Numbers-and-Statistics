@@ -62,15 +62,15 @@ HAVING COUNT(X.EmpIDA) >= 5
 ### Output
 
 ```
-EmpIDA  EmpJobTitleA                      NumberEmployeesHiredSameDay
-7       Research and Development Manager  5
-45      Production Technician - WC60      5
-109     Production Technician - WC50      5
-275     Sales Representative              9
-276     Sales Representative              8
-277     Sales Representative              7
-278     Sales Representative              6
-279     Sales Representative              5
+EmpIDA		EmpJobTitleA							NumberEmployeesHiredSameDay
+7			Research and Development Manager		5
+45			Production Technician - WC60			5
+109			Production Technician - WC50			5
+275			Sales Representative					9
+276			Sales Representative					8
+277			Sales Representative					7
+278			Sales Representative					6
+279			Sales Representative					5
 (8 rows affected)
 ```
 
