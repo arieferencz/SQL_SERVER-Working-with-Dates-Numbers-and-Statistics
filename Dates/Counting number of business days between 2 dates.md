@@ -248,11 +248,12 @@ FROM (
         MIN(BirthDate) AS OldestEmployee
       , MAX(BirthDate) AS YoungestEmployee
     FROM [AdventureWorks2022].[HumanResources].[Employee]
-) AS EmployeesBirthDates,
-(
-    SELECT ROW_NUMBER() OVER (ORDER BY SalesOrderDetailID) AS Position
+	) AS EmployeesBirthDates,
+	(
+    SELECT
+		ROW_NUMBER() OVER (ORDER BY SalesOrderDetailID) AS Position
     FROM [AdventureWorks2022].[Sales].[SalesOrderDetail]
-) AS Iteration
+	) AS Iteration
 WHERE Iteration.Position <=
     DATEDIFF(DAY, EmployeesBirthDates.OldestEmployee, EmployeesBirthDates.YoungestEmployee) + 1
 ```
