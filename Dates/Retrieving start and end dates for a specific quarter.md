@@ -195,7 +195,6 @@ Starting from `FirstDayOfLastMonthOfQuarter`:
 - **Quarter end:** `DATEADD(DAY, -1, DATEADD(MONTH, 1, FirstDayOfLastMonthOfQuarter))` — adds 1 month to get the first day of the next quarter, then subtracts 1 day to land on the last day of the current quarter
 
 **How the formula works for Q1 (March 1 as anchor):**
-
 ```
 FirstDayOfLastMonthOfQuarter = 2024-03-01
 DateFirstDayOfQuarter        = 2024-03-01 - 2 months = 2024-01-01
@@ -203,14 +202,45 @@ FirstDayNextQuarter          = 2024-03-01 + 1 month  = 2024-04-01
 DateLastDayOfQuarter         = 2024-04-01 - 1 day    = 2024-03-31
 ```
 
-**Final output:**
+**T-SQL code**
+```sql
+SELECT																									-- StartEndDatesQuarterLevel4
+	DATEADD(MONTH, -2, Z.FirstDayOfLastMonthOfQuarter) AS DateFirstDayOfQuarter
+	, DATEADD(MONTH, 1, Z.FirstDayOfLastMonthOfQuarter) AS FirstDayNextQuarter
+	, DATEADD(DAY, -1, DATEADD(MONTH, 1, Z.FirstDayOfLastMonthOfQuarter)) AS DateLastDayOfQuarter
+FROM (
+	SELECT																								-- GenerateDateOfLastMonthOfQuarterLevel3
+		CAST(Y.[YEAR] AS VARCHAR) AS YearOfLastMonthOfQuarter
+		, CAST(Y.[MONTH] AS VARCHAR) AS MonthOfLastMonthOfQuarter
+		, CAST(Y.[YEAR] AS VARCHAR) + '-' + CAST(Y.[MONTH] AS VARCHAR) + '-1' AS DateOfLastMonthOfQuarterCAST
+		, CAST(CAST(Y.[YEAR] AS VARCHAR) + '-' + CAST(Y.[MONTH] AS VARCHAR) + '-1' AS DATE) AS FirstDayOfLastMonthOfQuarter
+	FROM (
+		SELECT																							-- Generate4RowsYearQuarterMonthLevel2
+			LEFT(X.YRQ, 4) AS [YEAR]
+			, X.YRQ % 10 AS [QUARTER]
+			, X.YRQ % 10 * 3 AS [MONTH]
+		FROM (
+			SELECT DISTINCT 20241 AS YRQ FROM [AdventureWorks2022].[Person].[BusinessEntity]			-- Generate4RowsYearQuarterLevel1 
+				UNION ALL
+			SELECT DISTINCT 20242 AS YRQ FROM [AdventureWorks2022].[Person].[BusinessEntity]
+				UNION ALL
+			SELECT DISTINCT 20243 AS YRQ FROM [AdventureWorks2022].[Person].[BusinessEntity]
+				UNION ALL
+			SELECT DISTINCT 20244 AS YRQ FROM [AdventureWorks2022].[Person].[BusinessEntity]			-- Generate4RowsYearQuarterLevel1
+		) AS X																							-- Generate4RowsYearQuarterMonthLevel2
+	) AS Y																								-- GenerateDateOfLastMonthOfQuarterLevel3
+) AS Z																									-- DateLastDayOfQuarterLevel4
 
 ```
-DateFirstDayOfQuarter  DateLastDayOfQuarter
-2024-01-01             2024-03-31
-2024-04-01             2024-06-30
-2024-07-01             2024-09-30
-2024-10-01             2024-12-31
+
+
+**Final output:**
+```
+DateFirstDayOfQuarter		DateLastDayOfQuarter
+2024-01-01					2024-03-31
+2024-04-01					2024-06-30
+2024-07-01					2024-09-30
+2024-10-01					2024-12-31
 (4 rows affected)
 ```
 
