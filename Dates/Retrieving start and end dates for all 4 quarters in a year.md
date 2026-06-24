@@ -47,26 +47,20 @@ We calculate two anchor dates — the start of Q1 and Dec 31 of the previous yea
 SELECT
     Iteration.Position AS QuarterNum
   	, CAST(DATEADD(QUARTER, DATEDIFF(QUARTER, 0, DATEADD(YEAR, DATEDIFF(YEAR, 0, GETDATE()), 0)) + Iteration.Position, 0) AS DATE ) AS QtrStartDate
-  , CAST(DATEADD(QUARTER,
-        Iteration.Position,
-        DATEADD(DAY, -1, DATEADD(YEAR, DATEDIFF(YEAR, 0, GETDATE()), 0))) AS DATE) AS QtrEndDate
+	, CAST(DATEADD(QUARTER, Iteration.Position, DATEADD(DAY, -1, DATEADD(YEAR, DATEDIFF(YEAR, 0, GETDATE()), 0))) AS DATE) AS QtrEndDate
 FROM (
-    SELECT DISTINCT
-        DATEADD(QUARTER,
-            DATEDIFF(QUARTER, 0, DATEADD(YEAR, DATEDIFF(YEAR, 0, GETDATE()), 0)) + 0,
-            0) AS Quarter1StartDate
-      , DATEADD(DAY, -1, DATEADD(YEAR, DATEDIFF(YEAR, 0, GETDATE()), 0)) AS Quarter1EndDate
+    SELECT DISTINCT DATEADD(QUARTER, DATEDIFF(QUARTER, 0, DATEADD(YEAR, DATEDIFF(YEAR, 0, GETDATE()), 0)) + 0, 0) AS Quarter1StartDate
+		, DATEADD(DAY, -1, DATEADD(YEAR, DATEDIFF(YEAR, 0, GETDATE()), 0)) AS Quarter1EndDate
     FROM [AdventureWorks2022].[Person].[BusinessEntity]
-) AS QuarterStartEndDates,
-(
+	) AS QuarterStartEndDates,
+	(
     SELECT ROW_NUMBER() OVER (ORDER BY BusinessEntityID) AS Position
     FROM [AdventureWorks2022].[Person].[BusinessEntity]
-) AS Iteration
+	) AS Iteration
 WHERE Iteration.Position <= 4
 ```
 
 ---
-
 ### Output
 
 ```
