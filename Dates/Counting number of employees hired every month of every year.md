@@ -91,11 +91,13 @@ GeneratedDates  CountHireDates
 
 ### Query 1.1 — Retrieve the first and last hire dates
 
+**T-SQL code**
 ```sql
 SELECT MIN(HireDate) AS FirstHireDate FROM [AdventureWorks2022].[HumanResources].[Employee];
 SELECT MAX(HireDate) AS LastHireDate  FROM [AdventureWorks2022].[HumanResources].[Employee];
 ```
 
+**Output**
 ```
 FirstHireDate   LastHireDate
 2006-06-30      2013-05-30
