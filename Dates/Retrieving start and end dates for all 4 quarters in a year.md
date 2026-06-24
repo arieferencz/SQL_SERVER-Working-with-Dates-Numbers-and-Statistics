@@ -79,6 +79,15 @@ QuarterNum  QtrStartDate  QtrEndDate
 
 ### Query 1.1 — Calculate the two anchor dates
 
+**How the two anchors work:**
+
+**Anchor 1 — `Quarter1StartDate` = Jan 1 of the current year:**
+`DATEADD(YEAR, DATEDIFF(YEAR, 0, GETDATE()), 0)` calculates Jan 1 of the current year (the same technique used in earlier exercises). `DATEDIFF(QUARTER, 0, Jan1ThisYear)` counts the quarters between `1900-01-01` and Jan 1 this year. `DATEADD(QUARTER, n + 0, 0)` lands back on Jan 1 of the current year — adding `0` quarters keeps it at Q1 start.
+
+**Anchor 2 — `Quarter1EndDate` = Dec 31 of the previous year:**
+`DATEADD(DAY, -1, Jan1ThisYear)` subtracts 1 day from Jan 1 this year — giving Dec 31 of last year. This is used as the end-date anchor because adding `n` quarters to Dec 31 always lands on the last day of the corresponding quarter.
+
+
 We calculate two anchor dates that drive all quarter date calculations:
 
 **T-SQL code:**
@@ -94,14 +103,6 @@ FROM [AdventureWorks2022].[Person].[BusinessEntity]
 Quarter1StartDate             Quarter1EndDate
 2024-01-01 00:00:00.000       2023-12-31 00:00:00.000
 ```
-
-**How the two anchors work:**
-
-**Anchor 1 — `Quarter1StartDate` = Jan 1 of the current year:**
-`DATEADD(YEAR, DATEDIFF(YEAR, 0, GETDATE()), 0)` calculates Jan 1 of the current year (the same technique used in earlier exercises). `DATEDIFF(QUARTER, 0, Jan1ThisYear)` counts the quarters between `1900-01-01` and Jan 1 this year. `DATEADD(QUARTER, n + 0, 0)` lands back on Jan 1 of the current year — adding `0` quarters keeps it at Q1 start.
-
-**Anchor 2 — `Quarter1EndDate` = Dec 31 of the previous year:**
-`DATEADD(DAY, -1, Jan1ThisYear)` subtracts 1 day from Jan 1 this year — giving Dec 31 of last year. This is used as the end-date anchor because adding `n` quarters to Dec 31 always lands on the last day of the corresponding quarter.
 
 ---
 
