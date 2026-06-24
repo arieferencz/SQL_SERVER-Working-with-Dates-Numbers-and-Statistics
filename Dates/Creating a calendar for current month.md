@@ -221,34 +221,37 @@ For each row, 7 `CASE` statements check `DayOfWeek` and place `DayOfMonth` in th
 
 **T-SQL code**
 ```sql
-SELECT CASE Y.DayOfWeek WHEN 2 THEN Y.DayOfMonth END AS Mo			-- PivotDatesCurrentMonthIntoDaysOfWeekLevel3
-, CASE Y.DayOfWeek WHEN 3 THEN Y.DayOfMonth END AS Tu
-, CASE Y.DayOfWeek WHEN 4 THEN Y.DayOfMonth END AS We
-, CASE Y.DayOfWeek WHEN 5 THEN Y.DayOfMonth END AS Th
-, CASE Y.DayOfWeek WHEN 6 THEN Y.DayOfMonth END AS Fr
-, CASE Y.DayOfWeek WHEN 7 THEN Y.DayOfMonth END AS Sa
-, CASE Y.DayOfWeek WHEN 1 THEN Y.DayOfMonth END AS Su
+SELECT																-- PivotDatesCurrentMonthIntoDaysOfWeekLevel3
+	CASE Y.DayOfWeek WHEN 2 THEN Y.DayOfMonth END AS Mo
+	, CASE Y.DayOfWeek WHEN 3 THEN Y.DayOfMonth END AS Tu
+	, CASE Y.DayOfWeek WHEN 4 THEN Y.DayOfMonth END AS We
+	, CASE Y.DayOfWeek WHEN 5 THEN Y.DayOfMonth END AS Th
+	, CASE Y.DayOfWeek WHEN 6 THEN Y.DayOfMonth END AS Fr
+	, CASE Y.DayOfWeek WHEN 7 THEN Y.DayOfMonth END AS Sa
+	, CASE Y.DayOfWeek WHEN 1 THEN Y.DayOfMonth END AS Su
 FROM (
-	SELECT DATENAME(WEEKDAY, X.GeneratedDates) AS GeneratedWeekDays		-- GenerateWeekDaysLevel2
-	, X.GeneratedDates
-	, DAY(X.GeneratedDates) AS DayOfMonth
-	, DATEPART(MONTH, X.GeneratedDates) AS CurrentMonth
-	, DATEPART(WEEKDAY, X.GeneratedDates) AS [DayOfWeek]
-	, DATEPART(ISO_WEEK, X.GeneratedDates) AS ISOWeek 
-	, CASE WHEN DATEPART(WEEKDAY, X.GeneratedDates) = 1
+	SELECT															-- GenerateWeekDaysLevel2
+		DATENAME(WEEKDAY, X.GeneratedDates) AS GeneratedWeekDays
+		, X.GeneratedDates
+		, DAY(X.GeneratedDates) AS DayOfMonth
+		, DATEPART(MONTH, X.GeneratedDates) AS CurrentMonth
+		, DATEPART(WEEKDAY, X.GeneratedDates) AS [DayOfWeek]
+		, DATEPART(ISO_WEEK, X.GeneratedDates) AS ISOWeek 
+		, CASE
+			WHEN DATEPART(WEEKDAY, X.GeneratedDates) = 1
 			THEN DATEPART(WEEK, X.GeneratedDates) - 1
 			ELSE DATEPART(WEEK, X.GeneratedDates)
 			END AS WK
-		FROM (
-		SELECT					-- GenerateDatesInYear_1_Dec_31_DecLevel1
-		CAST(DATEADD(DAY, value, (SELECT DISTINCT DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()), 0) FROM [AdventureWorks2022].[Person].[BusinessEntity])) AS DATE) AS GeneratedDates
-		FROM GENERATE_SERIES(0
-				     , DATEDIFF(DAY
-						, (SELECT DISTINCT DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()), 0) FROM [AdventureWorks2022].[Person].[BusinessEntity])
-						, (SELECT DISTINCT DATEADD(MONTH,DATEDIFF(MONTH, -1, GETDATE()),-1) FROM [AdventureWorks2022].[Person].[BusinessEntity]))
-				     , 1)		-- GenerateDatesInYear_1_Dec_31_DecLevel1
-		) AS X						-- GenerateWeekDaysLevel2
-	) AS Y								-- PivotDatesCurrentMonthIntoDaysOfWeekLevel3
+	FROM (
+		SELECT													-- GenerateDatesInYear_1_Dec_31_DecLevel1
+			CAST(DATEADD(DAY, value, (SELECT DISTINCT DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()), 0) FROM [AdventureWorks2022].[Person].[BusinessEntity])) AS DATE) AS GeneratedDates
+		FROM GENERATE_SERIES(0, 
+				     		DATEDIFF(DAY,
+									(SELECT DISTINCT DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()), 0) FROM [AdventureWorks2022].[Person].[BusinessEntity]),
+									(SELECT DISTINCT DATEADD(MONTH,DATEDIFF(MONTH, -1, GETDATE()),-1) FROM [AdventureWorks2022].[Person].[BusinessEntity])),
+				     		1)									-- GenerateDatesInYear_1_Dec_31_DecLevel1
+		) AS X													-- GenerateWeekDaysLevel2
+	) AS Y														-- PivotDatesCurrentMonthIntoDaysOfWeekLevel3
 
 ```
 
