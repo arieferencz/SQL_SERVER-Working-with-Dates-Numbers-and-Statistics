@@ -38,7 +38,7 @@ We use `GENERATE_SERIES()` to generate a sequential list of integers from `0` to
 
 ---
 
-### T-SQL code
+### T-SQL code — Full solution
 
 ```sql
 SELECT FORMAT(COUNT(*), '#,#') AS CountBusinessdays
@@ -200,7 +200,7 @@ We use a Cartesian Product between a subquery returning the oldest and youngest 
 
 ---
 
-### T-SQL code
+### T-SQL code — Full solution
 
 ```sql
 SELECT
