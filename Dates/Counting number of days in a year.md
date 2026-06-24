@@ -63,10 +63,12 @@ NumberDaysInCurrentYear
 
 ### Query 1.1 — Calculate the number of years since `1900-01-01`
 
+**T-SQL code**
 ```sql
 SELECT DATEDIFF(YEAR, 0, GETDATE()) AS YearDiffToDefaultValue
 ```
 
+**Output**
 ```
 YearDiffToDefaultValue
 124
@@ -78,10 +80,12 @@ YearDiffToDefaultValue
 
 ### Query 1.2 — Calculate the first day of next year
 
+**T-SQL code**
 ```sql
 SELECT DATEADD(YEAR, DATEDIFF(YEAR, 0, GETDATE()) + 1, 0) AS NextYear
 ```
 
+**Output**
 ```
 NextYear
 2025-01-01 00:00:00.000
@@ -93,6 +97,7 @@ Adding `124 + 1 = 125` years to `1900-01-01` lands on `2025-01-01` — the first
 
 ### Query 1.3 — Calculate first day of this year and next year together
 
+**T-SQL code**
 ```sql
 SELECT
     DATEADD(YEAR, DATEDIFF(YEAR, 0, GETDATE()),     0) AS BeginningThisYear
@@ -100,9 +105,10 @@ SELECT
 FROM [AdventureWorks2022].[Person].[BusinessEntity]
 ```
 
+**Output**
 ```
-BeginningThisYear         BeginningNextYear
-2024-01-01 00:00:00.000   2025-01-01 00:00:00.000
+BeginningThisYear			BeginningNextYear
+2024-01-01 00:00:00.000		2025-01-01 00:00:00.000
 ```
 
 `DISTINCT` is used in the final query to collapse the 20,777 rows returned by `BusinessEntity` into a single row — since all rows produce the same two dates.
