@@ -146,8 +146,8 @@ FROM (
 						DATEDIFF(DAY,
 						(SELECT DISTINCT DATEADD(YEAR, DATEDIFF(YEAR, 0, GETDATE()), 0) FROM [AdventureWorks2022].[Person].[BusinessEntity]),
 						(SELECT DISTINCT DATEADD(DAY, -1 , (SELECT DISTINCT DATEADD(YEAR, DATEDIFF(YEAR, 0, GETDATE()) + 1, 0) FROM [AdventureWorks2022].[Person].[BusinessEntity])))),
-						1)								-- GenerateDatesInYear_1_Jan_31_DecLevel1
-	) AS X												-- GenerateWeekDaysLevel2
+						1)												-- GenerateDatesInYear_1_Jan_31_DecLevel1
+	) AS X																-- GenerateWeekDaysLevel2
 ```
 
 
