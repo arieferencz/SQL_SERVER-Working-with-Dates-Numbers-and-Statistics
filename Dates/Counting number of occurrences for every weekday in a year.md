@@ -38,7 +38,7 @@ We generate a complete list of every day in the current year using `GENERATE_SER
 
 ---
 
-### T-SQL code — Final query
+### T-SQL code — Full solution
 
 ```sql
 SELECT
@@ -46,23 +46,15 @@ SELECT
   , COUNT(*)                             AS CountOccurrencesForWeekDaysInYear
 FROM (
     SELECT
-        CAST(DATEADD(DAY, value,
-            (SELECT DISTINCT DATEADD(YEAR, DATEDIFF(YEAR, 0, GETDATE()), 0)
-             FROM [AdventureWorks2022].[Person].[BusinessEntity])
-        ) AS DATE) AS GeneratedDates
-    FROM GENERATE_SERIES(
-        0,
-        DATEDIFF(DAY,
-            (SELECT DISTINCT DATEADD(YEAR, DATEDIFF(YEAR, 0, GETDATE()), 0)
-             FROM [AdventureWorks2022].[Person].[BusinessEntity]),
-            (SELECT DISTINCT DATEADD(DAY, -1,
-                (SELECT DISTINCT DATEADD(YEAR, DATEDIFF(YEAR, 0, GETDATE()) + 1, 0)
-                 FROM [AdventureWorks2022].[Person].[BusinessEntity]))
-             FROM [AdventureWorks2022].[Person].[BusinessEntity])
-        ),
-        1
-    )
-) AS X
+        CAST(DATEADD(DAY, value, (SELECT DISTINCT DATEADD(YEAR, DATEDIFF(YEAR, 0, GETDATE()), 0) FROM [AdventureWorks2022].[Person].[BusinessEntity])) AS DATE
+			) AS GeneratedDates
+    FROM GENERATE_SERIES(0,
+        				DATEDIFF(DAY,
+            				(SELECT DISTINCT DATEADD(YEAR, DATEDIFF(YEAR, 0, GETDATE()), 0)FROM [AdventureWorks2022].[Person].[BusinessEntity]),
+            				(SELECT DISTINCT DATEADD(DAY, -1,(SELECT DISTINCT DATEADD(YEAR, DATEDIFF(YEAR, 0, GETDATE()) + 1, 0)FROM [AdventureWorks2022].[Person].[BusinessEntity]))
+             					FROM [AdventureWorks2022].[Person].[BusinessEntity])),
+        				1)
+	) AS X
 GROUP BY DATENAME(weekday, X.GeneratedDates)
 ```
 
