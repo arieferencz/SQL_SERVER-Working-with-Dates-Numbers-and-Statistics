@@ -103,14 +103,15 @@ BeginningThisYear             BeginningNextYear
 
 `GENERATE_SERIES(0, 365, 1)` generates integers from `0` to `365` (366 values for the leap year 2024). `DATEADD(DAY, value, '2024-01-01')` converts each integer into a calendar date.
 
+**T-SQL code**
 ```sql
 SELECT											-- GenerateDatesInYear_1_Jan_31_DecLevel1
-CAST(DATEADD(DAY, value, (SELECT DISTINCT DATEADD(YEAR, DATEDIFF(YEAR, 0, GETDATE()), 0) FROM [AdventureWorks2022].[Person].[BusinessEntity])) AS DATE) AS GeneratedDates
-FROM GENERATE_SERIES(0
-					, DATEDIFF(DAY
-						, (SELECT DISTINCT DATEADD(YEAR, DATEDIFF(YEAR, 0, GETDATE()), 0) FROM [AdventureWorks2022].[Person].[BusinessEntity])
-						, (SELECT DISTINCT DATEADD(DAY, -1 , (SELECT DISTINCT DATEADD(YEAR, DATEDIFF(YEAR, 0, GETDATE()) + 1, 0) FROM [AdventureWorks2022].[Person].[BusinessEntity]))))
-							, 1)				-- GenerateDatesInYear_1_Jan_31_DecLevel1
+	CAST(DATEADD(DAY, value, (SELECT DISTINCT DATEADD(YEAR, DATEDIFF(YEAR, 0, GETDATE()), 0) FROM [AdventureWorks2022].[Person].[BusinessEntity])) AS DATE) AS GeneratedDates
+FROM GENERATE_SERIES(0,
+					DATEDIFF(DAY,
+						(SELECT DISTINCT DATEADD(YEAR, DATEDIFF(YEAR, 0, GETDATE()), 0) FROM [AdventureWorks2022].[Person].[BusinessEntity]),
+						(SELECT DISTINCT DATEADD(DAY, -1 , (SELECT DISTINCT DATEADD(YEAR, DATEDIFF(YEAR, 0, GETDATE()) + 1, 0) FROM [AdventureWorks2022].[Person].[BusinessEntity])))),
+					1)							-- GenerateDatesInYear_1_Jan_31_DecLevel1
 ```
 
 **Output (truncated):** 366 rows — every day of the year.
