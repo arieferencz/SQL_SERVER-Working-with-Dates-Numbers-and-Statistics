@@ -41,15 +41,12 @@ We calculate two anchor dates — the start of Q1 and Dec 31 of the previous yea
 
 ---
 
-### T-SQL code
+### T-SQL code — Full solution
 
 ```sql
 SELECT
     Iteration.Position AS QuarterNum
-  , CAST(DATEADD(QUARTER,
-        DATEDIFF(QUARTER, 0, DATEADD(YEAR, DATEDIFF(YEAR, 0, GETDATE()), 0))
-        + Iteration.Position,
-        0) AS DATE) AS QtrStartDate
+  	, CAST(DATEADD(QUARTER, DATEDIFF(QUARTER, 0, DATEADD(YEAR, DATEDIFF(YEAR, 0, GETDATE()), 0)) + Iteration.Position, 0) AS DATE ) AS QtrStartDate
   , CAST(DATEADD(QUARTER,
         Iteration.Position,
         DATEADD(DAY, -1, DATEADD(YEAR, DATEDIFF(YEAR, 0, GETDATE()), 0))) AS DATE) AS QtrEndDate
