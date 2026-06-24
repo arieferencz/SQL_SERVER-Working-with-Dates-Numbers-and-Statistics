@@ -80,8 +80,9 @@ Wednesday          52
 
 ### Query 1.1 — Calculate the first day of this year and next year
 
+**T-SQL code**
 ```sql
-SELECT DISTINCT DATEADD(YEAR, DATEDIFF(YEAR, 0, GETDATE()), 0)     AS BeginningThisYear
+SELECT DISTINCT DATEADD(YEAR, DATEDIFF(YEAR, 0, GETDATE()), 0) AS BeginningThisYear
 FROM [AdventureWorks2022].[Person].[BusinessEntity];
 
 SELECT DISTINCT DATEADD(YEAR, DATEDIFF(YEAR, 0, GETDATE()) + 1, 0) AS BeginningNextYear
@@ -94,7 +95,7 @@ BeginningThisYear             BeginningNextYear
 2024-01-01 00:00:00.000       2025-01-01 00:00:00.000
 ```
 
-`SELECT DISTINCT` collapses the 20,777 rows returned by `BusinessEntity` into a single value. `DATEADD(DAY, -1, BeginningNextYear)` gives `2024-12-31` — the last day of the current year — which is used as the upper bound for `GENERATE_SERIES`.
+> `SELECT DISTINCT` collapses the 20,777 rows returned by `BusinessEntity` into a single value. `DATEADD(DAY, -1, BeginningNextYear)` gives `2024-12-31` — the last day of the current year — which is used as the upper bound for `GENERATE_SERIES`.
 
 ---
 
