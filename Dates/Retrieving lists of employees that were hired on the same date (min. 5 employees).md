@@ -93,7 +93,7 @@ SELECT DISTINCT														-- EmployeesHiredOnSameDatesLevel1
 	, B.JobTitle AS EmpJobTitleB
 	, B.HireDate AS EmpHireDateB
 FROM [AdventureWorks2022].[HumanResources].[Employee] AS A 
-	, [AdventureWorks2022].[HumanResources].[Employee] AS B
+   , [AdventureWorks2022].[HumanResources].[Employee] AS B
 WHERE
     DATENAME(YEAR, A.HireDate) = DATENAME(YEAR, B.HireDate)
 	AND DATENAME(MONTH, A.HireDate) = DATENAME(MONTH, B.HireDate) 
@@ -127,8 +127,33 @@ EmpIDA				EmpJobTitleA						EmpHireDateA		EmpIDB		EmpJobTitleB						EmpHireDateB
 
 Adding `GROUP BY X.EmpIDA, X.EmpJobTitleA` and `COUNT(X.EmpIDA)` gives the total number of employees sharing the hire date for each employee — including employees hired alone (count = 1).
 
-**Output (truncated):** 290 rows — one per employee with their group size.
+**T-SQL code**
+```sql
+SELECT																		-- CountEmployeesHiredOnSameDatesLevel2
+	X.EmpIDA
+	, X.EmpJobTitleA
+	, COUNT(X.EmpIDA) AS NumberEmployeesHiredSameDay
+FROM (
+	SELECT DISTINCT															-- EmployeesHiredOnSameDatesLevel1
+		A.BusinessEntityID AS EmpIDA
+		, A.JobTitle AS EmpJobTitleA
+		, A.HireDate AS EmpHireDateA
+		, B.BusinessEntityID AS EmpIDB
+		, B.JobTitle AS EmpJobTitleB
+		, B.HireDate AS EmpHireDateB
+	FROM [AdventureWorks2022].[HumanResources].[Employee] AS A
+	   , [AdventureWorks2022].[HumanResources].[Employee] AS B
+	WHERE DATENAME(YEAR, A.HireDate) = DATENAME(YEAR, B.HireDate)
+		AND DATENAME(MONTH, A.HireDate) = DATENAME(MONTH, B.HireDate) 
+		AND DATENAME(WEEK, A.HireDate) = DATENAME(WEEK, B.HireDate)
+		AND DATENAME(WEEKDAY, A.HireDate) = DATENAME(WEEKDAY, B.HireDate)
+		AND A.BusinessEntityID <= B.BusinessEntityID						-- EmployeesHiredOnSameDatesLevel1
+	) AS X
+GROUP BY X.EmpIDA, X.EmpJobTitleA											-- CountEmployeesHiredOnSameDatesLevel2
+```
 
+
+**Output (truncated):** 290 rows — one per employee with their group size.
 ```
 EmpIDA  EmpJobTitleA                      NumberEmployeesHiredSameDay
 1       Chief Executive Officer           3
