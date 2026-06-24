@@ -178,11 +178,11 @@ FROM (
 
 **Output:**
 ```
-YearOfLastMonthOfQuarter  MonthOfLastMonthOfQuarter  DateOfLastMonthOfQuarterCAST  FirstDayOfLastMonthOfQuarter
-2024                      3                          3/1/2024                      2024-03-01
-2024                      6                          6/1/2024                      2024-06-01
-2024                      9                          9/1/2024                      2024-09-01
-2024                      12                         12/1/2024                     2024-12-01
+YearOfLastMonthOfQuarter	MonthOfLastMonthOfQuarter		DateOfLastMonthOfQuarterCAST		FirstDayOfLastMonthOfQuarter
+2024						3								3/1/2024							2024-03-01
+2024						6								6/1/2024							2024-06-01
+2024						9								9/1/2024							2024-09-01
+2024						12								12/1/2024							2024-12-01
 (4 rows affected)
 ```
 
