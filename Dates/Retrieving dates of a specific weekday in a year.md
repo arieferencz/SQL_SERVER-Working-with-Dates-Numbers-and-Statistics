@@ -58,7 +58,6 @@ WHERE DATENAME(weekday, X.GeneratedDates) IN ('Sunday')
 ---
 
 ### Output (truncated)
-
 ```
 GeneratedWeekDays  GeneratedDates
 Sunday             2024-01-07
@@ -88,8 +87,19 @@ Sunday             2024-12-29
 
 This is the same date generation logic used in the **"Counting the number of occurrences for every weekday in a year"** exercise. `GENERATE_SERIES(0, 365, 1)` generates 366 integers (2024 is a leap year). `DATEADD(DAY, value, '2024-01-01')` converts each into a calendar date.
 
-**Output (truncated):** 366 rows — every day of 2024.
+**T-SQL code**
+```sql
+SELECT                                    -- GenerateDatesInYear_1_Jan_31_DecLevel1
+    CAST(DATEADD(DAY, value, (SELECT DISTINCT DATEADD(YEAR, DATEDIFF(YEAR, 0, GETDATE()), 0) FROM [AdventureWorks2022].[Person].[BusinessEntity])) AS DATE) AS GeneratedDates
+FROM GENERATE_SERIES(0,
+					DATEDIFF(DAY,
+					(SELECT DISTINCT DATEADD(YEAR, DATEDIFF(YEAR, 0, GETDATE()), 0) FROM [AdventureWorks2022].[Person].[BusinessEntity]),
+					(SELECT DISTINCT DATEADD(DAY, -1 , (SELECT DISTINCT DATEADD(YEAR, DATEDIFF(YEAR, 0, GETDATE()) + 1, 0) FROM [AdventureWorks2022].[Person].[BusinessEntity])))),
+					1)			        -- GenerateDatesInYear_1_Jan_31_DecLevel1
+```
 
+
+**Output (truncated):** 366 rows — every day of 2024.
 ```
 GeneratedDates
 2024-01-01
@@ -111,8 +121,24 @@ GeneratedDates
 
 `DATENAME(weekday, date)` assigns the full weekday name to each generated date.
 
-**Output (truncated):**
+**T-SQL code**
+```sql
+SELECT                                        	-- GenerateWeekDaysLevel2
+    DATENAME(weekday, X.GeneratedDates) AS GeneratedWeekDays
+    , X.GeneratedDates
+FROM (
+    SELECT										-- GenerateDatesInYear_1_Jan_31_DecLevel1
+        CAST(DATEADD(DAY, value, (SELECT DISTINCT DATEADD(YEAR, DATEDIFF(YEAR, 0, GETDATE()), 0) FROM [AdventureWorks2022].[Person].[BusinessEntity])) AS DATE) AS GeneratedDates
+    FROM GENERATE_SERIES(0, 
+					    DATEDIFF(DAY,
+						(SELECT DISTINCT DATEADD(YEAR, DATEDIFF(YEAR, 0, GETDATE()), 0) FROM [AdventureWorks2022].[Person].[BusinessEntity]),
+						(SELECT DISTINCT DATEADD(DAY, -1 , (SELECT DISTINCT DATEADD(YEAR, DATEDIFF(YEAR, 0, GETDATE()) + 1, 0) FROM [AdventureWorks2022].[Person].[BusinessEntity])))),
+						1)        			-- GenerateDatesInYear_1_Jan_31_DecLevel1
+	) AS X									-- GenerateWeekDaysLevel2
+```
 
+
+**Output (truncated):**
 ```
 GeneratedWeekDays  GeneratedDates
 Monday             2024-01-01
