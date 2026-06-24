@@ -31,30 +31,29 @@ We use `UNION ALL` to generate 4 rows — one per quarter — each encoded as a 
 
 ---
 
-### T-SQL code — Final query
+### T-SQL code — Full solution
 
 ```sql
 SELECT
-    DATEADD(MONTH, -2, Z.FirstDayOfLastMonthOfQuarter)                             AS DateFirstDayOfQuarter
-  , DATEADD(DAY, -1, DATEADD(MONTH, 1, Z.FirstDayOfLastMonthOfQuarter))            AS DateLastDayOfQuarter
+    DATEADD(MONTH, -2, Z.FirstDayOfLastMonthOfQuarter)					AS DateFirstDayOfQuarter
+  , DATEADD(DAY, -1, DATEADD(MONTH, 1, Z.FirstDayOfLastMonthOfQuarter))	AS DateLastDayOfQuarter
 FROM (
     SELECT
-        CAST(Y.[YEAR] AS VARCHAR)                                                   AS YearOfLastMonthOfQuarter
-      , CAST(Y.[MONTH] AS VARCHAR)                                                  AS MonthOfLastMonthOfQuarter
-      , CAST(Y.[YEAR] AS VARCHAR) + '-' + CAST(Y.[MONTH] AS VARCHAR) + '-1'         AS DateOfLastMonthOfQuarterCAST
-      , CAST(CAST(Y.[YEAR] AS VARCHAR) + '-' + CAST(Y.[MONTH] AS VARCHAR) + '-1'
-            AS DATE)                                                                AS FirstDayOfLastMonthOfQuarter
+        CAST(Y.[YEAR] AS VARCHAR)															AS YearOfLastMonthOfQuarter
+      , CAST(Y.[MONTH] AS VARCHAR)															AS MonthOfLastMonthOfQuarter
+      , CAST(Y.[YEAR] AS VARCHAR) + '-' + CAST(Y.[MONTH] AS VARCHAR) + '-1'					AS DateOfLastMonthOfQuarterCAST
+      , CAST(CAST(Y.[YEAR] AS VARCHAR) + '-' + CAST(Y.[MONTH] AS VARCHAR) + '-1' AS DATE)	AS FirstDayOfLastMonthOfQuarter
     FROM (
         SELECT LEFT(X.YRQ, 4) AS [YEAR]
              , X.YRQ % 10     AS [QUARTER]
              , X.YRQ % 10 * 3 AS [MONTH]
         FROM (
             SELECT DISTINCT 20241 AS YRQ FROM [AdventureWorks2022].[Person].[BusinessEntity]
-            UNION ALL
+                UNION ALL
             SELECT DISTINCT 20242 AS YRQ FROM [AdventureWorks2022].[Person].[BusinessEntity]
-            UNION ALL
+                UNION ALL
             SELECT DISTINCT 20243 AS YRQ FROM [AdventureWorks2022].[Person].[BusinessEntity]
-            UNION ALL
+                UNION ALL
             SELECT DISTINCT 20244 AS YRQ FROM [AdventureWorks2022].[Person].[BusinessEntity]
         ) AS X
     ) AS Y
@@ -82,13 +81,14 @@ DateFirstDayOfQuarter  DateLastDayOfQuarter
 
 We hardcode 4 integer values — one per quarter — each combining the year and quarter number into a single 5-digit code (`YYYYQ`). `SELECT DISTINCT` collapses each `BusinessEntity` table into a single row.
 
+**T-SQL code**
 ```sql
 SELECT DISTINCT 20241 AS YRQ FROM [AdventureWorks2022].[Person].[BusinessEntity]
-UNION ALL
+    UNION ALL
 SELECT DISTINCT 20242 AS YRQ FROM [AdventureWorks2022].[Person].[BusinessEntity]
-UNION ALL
+    UNION ALL
 SELECT DISTINCT 20243 AS YRQ FROM [AdventureWorks2022].[Person].[BusinessEntity]
-UNION ALL
+    UNION ALL
 SELECT DISTINCT 20244 AS YRQ FROM [AdventureWorks2022].[Person].[BusinessEntity]
 ```
 
@@ -116,8 +116,26 @@ YRQ
 | Q3 | 3 | 9 → September |
 | Q4 | 4 | 12 → December |
 
-**Output:**
 
+**T-SQL code**
+```sql
+SELECT                                                							            -- Generate4RowsYearQuarterMonthLevel2
+    LEFT(X.YRQ, 4) AS [YEAR]
+    , X.YRQ % 10 AS [QUARTER]
+    , X.YRQ % 10 * 3 AS [MONTH]
+FROM (
+	SELECT DISTINCT 20241 AS YRQ FROM [AdventureWorks2022].[Person].[BusinessEntity]		-- Generate4RowsYearQuarterLevel1 
+		UNION ALL
+	SELECT DISTINCT 20242 AS YRQ FROM [AdventureWorks2022].[Person].[BusinessEntity]
+		UNION ALL
+	SELECT DISTINCT 20243 AS YRQ FROM [AdventureWorks2022].[Person].[BusinessEntity]
+		UNION ALL
+	SELECT DISTINCT 20244 AS YRQ FROM [AdventureWorks2022].[Person].[BusinessEntity]		-- Generate4RowsYearQuarterLevel1
+) AS X										                                                -- Generate4RowsYearQuarterMonthLevel2
+```
+
+
+**Output:**
 ```
 YEAR  QUARTER  MONTH
 2024  1        3
@@ -133,8 +151,32 @@ YEAR  QUARTER  MONTH
 
 We concatenate the year, month, and `-1` into a date string (e.g. `'2024-3-1'`) and cast it as a `DATE`.
 
-**Output:**
+**T-SQL code**
+```sql
+SELECT                                                                        			        -- GenerateDateOfLastMonthOfQuarterLevel3
+    CAST(Y.[YEAR] AS VARCHAR) AS YearOfLastMonthOfQuarter
+    , CAST(Y.[MONTH] AS VARCHAR) AS MonthOfLastMonthOfQuarter
+    , CAST(Y.[YEAR] AS VARCHAR) + '-' + CAST(Y.[MONTH] AS VARCHAR) + '-1' AS DateOfLastMonthOfQuarterCAST
+    , CAST(CAST(Y.[YEAR] AS VARCHAR) + '-' + CAST(Y.[MONTH] AS VARCHAR) + '-1' AS DATE) AS FirstDayOfLastMonthOfQuarter
+FROM (
+	SELECT                                                            							-- Generate4RowsYearQuarterMonthLevel2
+        LEFT(X.YRQ, 4) AS [YEAR]
+	    , X.YRQ % 10 AS [QUARTER]
+	    , X.YRQ % 10 * 3 AS [MONTH]
+	FROM (
+		SELECT DISTINCT 20241 AS YRQ FROM [AdventureWorks2022].[Person].[BusinessEntity]		-- Generate4RowsYearQuarterLevel1 
+			UNION ALL
+		SELECT DISTINCT 20242 AS YRQ FROM [AdventureWorks2022].[Person].[BusinessEntity]
+			UNION ALL
+		SELECT DISTINCT 20243 AS YRQ FROM [AdventureWorks2022].[Person].[BusinessEntity]
+			UNION ALL
+		SELECT DISTINCT 20244 AS YRQ FROM [AdventureWorks2022].[Person].[BusinessEntity]		-- Generate4RowsYearQuarterLevel1
+	) AS X											                                            -- Generate4RowsYearQuarterMonthLevel2
+) AS Y										                                                    -- GenerateDateOfLastMonthOfQuarterLevel3
+```
 
+
+**Output:**
 ```
 YearOfLastMonthOfQuarter  MonthOfLastMonthOfQuarter  DateOfLastMonthOfQuarterCAST  FirstDayOfLastMonthOfQuarter
 2024                      3                          3/1/2024                      2024-03-01
