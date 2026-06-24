@@ -68,7 +68,7 @@ FROM (
             WHEN DATEPART(WEEKDAY, X.GeneratedDates) = 1
             THEN DATEPART(WEEK, X.GeneratedDates) - 1
             ELSE DATEPART(WEEK, X.GeneratedDates)
-        END                                        AS WK
+        END AS WK
     FROM (
         SELECT CAST(DATEADD(DAY, value, (SELECT DISTINCT DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()), 0) FROM [AdventureWorks2022].[Person].[BusinessEntity])) AS DATE
 				) AS GeneratedDates
@@ -166,26 +166,29 @@ In SQL Server, `DATEPART(WEEKDAY, date)` treats Sunday as day `1`. This means a 
 
 **T-SQL code**
 ```sql
-SELECT DATENAME(WEEKDAY, X.GeneratedDates) AS GeneratedWeekDays				-- GenerateWeekDaysLevel2
-, X.GeneratedDates
-, DAY(X.GeneratedDates) AS DayOfMonth
-, DATEPART(MONTH, X.GeneratedDates) AS CurrentMonth
-, DATEPART(WEEKDAY, X.GeneratedDates) AS [DayOfWeek]
-, DATEPART(ISO_WEEK, X.GeneratedDates) AS ISOWeek 
-, CASE WHEN DATEPART(WEEKDAY, X.GeneratedDates) = 1
+SELECT												-- GenerateWeekDaysLevel2
+	DATENAME(WEEKDAY, X.GeneratedDates) AS GeneratedWeekDays
+	, X.GeneratedDates
+	, DAY(X.GeneratedDates) AS DayOfMonth
+	, DATEPART(MONTH, X.GeneratedDates) AS CurrentMonth
+	, DATEPART(WEEKDAY, X.GeneratedDates) AS [DayOfWeek]
+	, DATEPART(ISO_WEEK, X.GeneratedDates) AS ISOWeek 
+	, CASE
+		WHEN DATEPART(WEEKDAY, X.GeneratedDates) = 1
 		THEN DATEPART(WEEK, X.GeneratedDates) - 1
 		ELSE DATEPART(WEEK, X.GeneratedDates)
 		END AS WK
-	FROM (
-	SELECT									-- GenerateDatesInYear_1_Dec_31_DecLevel1
-	CAST(DATEADD(DAY, value, (SELECT DISTINCT DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()), 0) FROM [AdventureWorks2022].[Person].[BusinessEntity])) AS DATE) AS GeneratedDates
-	FROM GENERATE_SERIES(0
-			     , DATEDIFF(DAY
-			     		, (SELECT DISTINCT DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()), 0) FROM [AdventureWorks2022].[Person].[BusinessEntity])
-					, (SELECT DISTINCT DATEADD(MONTH,DATEDIFF(MONTH, -1, GETDATE()),-1) FROM [AdventureWorks2022].[Person].[BusinessEntity]))
-			     , 1)						-- GenerateDatesInYear_1_Dec_31_DecLevel1
-	) AS X																		-- GenerateWeekDaysLevel2
+FROM (
+	SELECT											-- GenerateDatesInYear_1_Dec_31_DecLevel1
+		CAST(DATEADD(DAY, value, (SELECT DISTINCT DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()), 0) FROM [AdventureWorks2022].[Person].[BusinessEntity])) AS DATE) AS GeneratedDates
+	FROM GENERATE_SERIES(0,
+			     		DATEDIFF(DAY,
+			     				(SELECT DISTINCT DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()), 0) FROM [AdventureWorks2022].[Person].[BusinessEntity]),
+								(SELECT DISTINCT DATEADD(MONTH,DATEDIFF(MONTH, -1, GETDATE()),-1) FROM [AdventureWorks2022].[Person].[BusinessEntity])),
+						1)							-- GenerateDatesInYear_1_Dec_31_DecLevel1
+	) AS X											-- GenerateWeekDaysLevel2
 ```
+
 
 **Output (truncated)**
 ```
