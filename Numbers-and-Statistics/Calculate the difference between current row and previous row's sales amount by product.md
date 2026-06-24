@@ -92,8 +92,28 @@ Mountain-200 Black, 38				4,400,592.8				391,098.03
 
 The inner query is identical to the one used in [Calculate total sales by product name](https://github.com/arieferencz/SQL_SERVER-Working-with-Dates-Numbers-and-Statistics/blob/main/Numbers-and-Statistics/Calculate%20total%20sales%20by%20product%20name.md) and [Rank the product names based on total sales](https://github.com/arieferencz/SQL_SERVER-Working-with-Dates-Numbers-and-Statistics/blob/main/Numbers-and-Statistics/Rank%20the%20product%20names%20based%20on%20total%20sales.md). It joins three tables and uses `SUM(LineTotal)` grouped by product to produce 266 rows — one per product with its total revenue.
 
-**Output (truncated):** 266 rows ordered by `SalesByProductName ASC`.
+**T-SQL code**
+```sql
+SELECT
+    X.ProductName
+  , FORMAT(ROUND(X.SalesByProductName, 2, 2), '#,#.##') AS SalesByProductName
+FROM (
+    SELECT
+        Product.[Name]       AS ProductName
+      , Product.[ProductID]  AS ProductID
+      , SUM(SalesOrderDetail.[LineTotal]) AS SalesByProductName
+    FROM [AdventureWorks2022].[Sales].[SalesOrderHeader] AS SalesOrderHeader
+    INNER JOIN [AdventureWorks2022].[Sales].[SalesOrderDetail] AS SalesOrderDetail
+        ON SalesOrderHeader.[SalesOrderID] = SalesOrderDetail.[SalesOrderID]
+    INNER JOIN [AdventureWorks2022].[Production].[Product] AS Product
+        ON SalesOrderDetail.[ProductID] = Product.[ProductID]
+    GROUP BY Product.[Name], Product.[ProductID]
+) AS X
+ORDER BY X.SalesByProductName ASC
+```
 
+
+**Output (truncated):** 266 rows ordered by `SalesByProductName ASC`.
 ```
 ProductName                   SalesByProductName
 LL Road Seat/Saddle           162.72
@@ -110,8 +130,30 @@ Mountain-200 Black, 38        4,400,592.80
 
 `LAG(SalesByProductName) OVER (ORDER BY SalesByProductName)` retrieves the `SalesByProductName` value from the **previous row** in the ascending sales order. For the first row there is no previous row — so `LAG()` returns `NULL`, which is why `SalesDiff` is `NULL` for `LL Road Seat/Saddle`.
 
-**How `LAG()` works row by row:**
+**T-SQL code: How `LAG()` works row by row**
+```sql
+SELECT
+    X.ProductName
+  , FORMAT(ROUND(X.SalesByProductName, 2, 2), '#,#.##') AS SalesByProductName
+  , FORMAT(ROUND(LAG(X.SalesByProductName) OVER (ORDER BY X.SalesByProductName), 2, 2), '#,#.##') AS "LAG value"
+  , FORMAT(ROUND(X.SalesByProductName
+        - LAG(X.SalesByProductName) OVER (ORDER BY X.SalesByProductName), 2, 2), '#,#.##') AS SalesDiff
+FROM (
+    SELECT
+        Product.[Name]       AS ProductName
+      , Product.[ProductID]  AS ProductID
+      , SUM(SalesOrderDetail.[LineTotal]) AS SalesByProductName
+    FROM [AdventureWorks2022].[Sales].[SalesOrderHeader] AS SalesOrderHeader
+    INNER JOIN [AdventureWorks2022].[Sales].[SalesOrderDetail] AS SalesOrderDetail
+        ON SalesOrderHeader.[SalesOrderID] = SalesOrderDetail.[SalesOrderID]
+    INNER JOIN [AdventureWorks2022].[Production].[Product] AS Product
+        ON SalesOrderDetail.[ProductID] = Product.[ProductID]
+    GROUP BY Product.[Name], Product.[ProductID]
+) AS X
+ORDER BY X.SalesByProductName ASC
+```
 
+**Output**
 ```
 Row  ProductName                   SalesByProductName  LAG value    SalesDiff
 1    LL Road Seat/Saddle            162.72              NULL         NULL
