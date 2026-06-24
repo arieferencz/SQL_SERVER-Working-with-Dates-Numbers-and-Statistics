@@ -52,9 +52,7 @@ FROM (
         DATENAME(weekday, X.GeneratedDates)  AS GeneratedWeekDays
       , X.GeneratedDates
       , CASE
-            WHEN DATENAME(weekday, X.GeneratedDates) = 'Tuesday' THEN 1
-            ELSE 0
-        	END AS IS_Tuesday
+            WHEN DATENAME(weekday, X.GeneratedDates) = 'Tuesday' THEN 1 ELSE 0 END AS IS_Tuesday
     FROM (
         SELECT CAST(DATEADD(DAY, value, (SELECT DISTINCT DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()), 0) FROM [AdventureWorks2022].[Person].[BusinessEntity])) AS DATE
 			) AS GeneratedDates
@@ -134,25 +132,23 @@ GeneratedDates
 
 **T-SQL code:**
 ```sql
-SELECT DATENAME(weekday, X.GeneratedDates) AS GeneratedWeekDays			-- GenerateWeekDaysLevel2
-, X.GeneratedDates
-, CASE	WHEN DATENAME(weekday, X.GeneratedDates) = 'Tuesday'
-		THEN 1 
-		ELSE 0
-		END AS IS_Tuesday
+SELECT											-- GenerateWeekDaysLevel2
+	DATENAME(weekday, X.GeneratedDates) AS GeneratedWeekDays
+	, X.GeneratedDates
+	, CASE
+		WHEN DATENAME(weekday, X.GeneratedDates) = 'Tuesday' THEN 1 ELSE 0 END AS IS_Tuesday
 FROM (
 	SELECT										-- GenerateDatesInYear_1_Dec_31_DecLevel1
-	CAST(DATEADD(DAY, value, (SELECT DISTINCT DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()), 0) FROM [AdventureWorks2022].[Person].[BusinessEntity])) AS DATE) AS GeneratedDates
-	FROM GENERATE_SERIES(0
-						, DATEDIFF(DAY
-							, (SELECT DISTINCT DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()), 0) FROM [AdventureWorks2022].[Person].[BusinessEntity])
-							, (SELECT DISTINCT DATEADD(MONTH,DATEDIFF(MONTH, -1, GETDATE()),-1) FROM [AdventureWorks2022].[Person].[BusinessEntity]))
-								, 1)			-- GenerateDatesInYear_1_Dec_31_DecLevel1
-	) AS X									-- GenerateWeekDaysLevel2
+		CAST(DATEADD(DAY, value, (SELECT DISTINCT DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()), 0) FROM [AdventureWorks2022].[Person].[BusinessEntity])) AS DATE) AS GeneratedDates
+	FROM GENERATE_SERIES(0,
+						DATEDIFF(DAY,
+								(SELECT DISTINCT DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()), 0) FROM [AdventureWorks2022].[Person].[BusinessEntity]),
+								(SELECT DISTINCT DATEADD(MONTH,DATEDIFF(MONTH, -1, GETDATE()),-1) FROM [AdventureWorks2022].[Person].[BusinessEntity])),
+						1)						-- GenerateDatesInYear_1_Dec_31_DecLevel1
+	) AS X										-- GenerateWeekDaysLevel2
 ```
 
 **Output:**
-
 ```
 GeneratedWeekDays  GeneratedDates  IS_Tuesday
 Sunday             2024-12-01      0
@@ -186,30 +182,30 @@ Adding `WHERE Y.IS_Tuesday = 1` keeps only the 5 Tuesday rows.
 
 **T-SQL code:**
 ```sql
-SELECT Y.GeneratedWeekDays				-- KeepOnlyTuesdaysLevel3
-, Y.GeneratedDates
+SELECT																		-- KeepOnlyTuesdaysLevel3
+	Y.GeneratedWeekDays
+	, Y.GeneratedDates
 FROM (
-	SELECT DATENAME(weekday, X.GeneratedDates) AS GeneratedWeekDays			-- GenerateWeekDaysLevel2
-	, X.GeneratedDates
-	, CASE	WHEN DATENAME(weekday, X.GeneratedDates) = 'Tuesday'
-			THEN 1 
-			ELSE 0
-			END AS IS_Tuesday
+	SELECT
+		DATENAME(weekday, X.GeneratedDates) AS GeneratedWeekDays			-- GenerateWeekDaysLevel2
+		, X.GeneratedDates
+		, CASE
+			WHEN DATENAME(weekday, X.GeneratedDates) = 'Tuesday' THEN 1 ELSE 0 END AS IS_Tuesday
 	FROM (
-		SELECT										-- GenerateDatesInYear_1_Dec_31_DecLevel1
+		SELECT																-- GenerateDatesInYear_1_Dec_31_DecLevel1
 		CAST(DATEADD(DAY, value, (SELECT DISTINCT DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()), 0) FROM [AdventureWorks2022].[Person].[BusinessEntity])) AS DATE) AS GeneratedDates
-		FROM GENERATE_SERIES(0
-							, DATEDIFF(DAY
-								, (SELECT DISTINCT DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()), 0) FROM [AdventureWorks2022].[Person].[BusinessEntity])
-								, (SELECT DISTINCT DATEADD(MONTH,DATEDIFF(MONTH, -1, GETDATE()),-1) FROM [AdventureWorks2022].[Person].[BusinessEntity]))
-									, 1)			-- GenerateDatesInYear_1_Dec_31_DecLevel1
-		) AS X									-- GenerateWeekDaysLevel2
+		FROM GENERATE_SERIES(0,
+							DATEDIFF(DAY,
+									(SELECT DISTINCT DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()), 0) FROM [AdventureWorks2022].[Person].[BusinessEntity]),
+									(SELECT DISTINCT DATEADD(MONTH,DATEDIFF(MONTH, -1, GETDATE()),-1) FROM [AdventureWorks2022].[Person].[BusinessEntity])),
+							1)												-- GenerateDatesInYear_1_Dec_31_DecLevel1
+		) AS X																-- GenerateWeekDaysLevel2
 	) AS Y
-WHERE Y.IS_Tuesday = 1					-- KeepOnlyTuesdaysLevel3
+WHERE Y.IS_Tuesday = 1														-- KeepOnlyTuesdaysLevel3
 ```
 
-**Output:**
 
+**Output:**
 ```
 GeneratedWeekDays  GeneratedDates
 Tuesday            2024-12-03
@@ -229,8 +225,8 @@ Adding `MIN(Y.GeneratedDates)` and `MAX(Y.GeneratedDates)` with `GROUP BY Y.Gene
 **Final output:**
 
 ```
-GeneratedWeekDays  DateFirstTuesdayCurrentMonth  DateLastTuesdayCurrentMonth
-Tuesday            2024-12-03                    2024-12-31
+GeneratedWeekDays		DateFirstTuesdayCurrentMonth		DateLastTuesdayCurrentMonth
+Tuesday					2024-12-03							2024-12-31
 ```
 
 ### Changing the target weekday
