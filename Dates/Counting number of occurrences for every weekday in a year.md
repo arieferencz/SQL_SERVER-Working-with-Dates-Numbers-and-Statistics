@@ -134,22 +134,24 @@ GeneratedDates
 
 `DATENAME(weekday, date)` returns the full weekday name for each generated date.
 
+**T-SQL code**
 ```sql
-SELECT DATENAME(weekday, X.GeneratedDates) AS GeneratedWeekDays			-- GenerateWeekDaysLevel2
-, X.GeneratedDates
+SELECT
+	DATENAME(weekday, X.GeneratedDates) AS GeneratedWeekDays			-- GenerateWeekDaysLevel2
+	, X.GeneratedDates
 FROM (
-SELECT										-- GenerateDatesInYear_1_Jan_31_DecLevel1
-CAST(DATEADD(DAY, value, (SELECT DISTINCT DATEADD(YEAR, DATEDIFF(YEAR, 0, GETDATE()), 0) FROM [AdventureWorks2022].[Person].[BusinessEntity])) AS DATE) AS GeneratedDates
-FROM GENERATE_SERIES(0
-					, DATEDIFF(DAY
-						, (SELECT DISTINCT DATEADD(YEAR, DATEDIFF(YEAR, 0, GETDATE()), 0) FROM [AdventureWorks2022].[Person].[BusinessEntity])
-						, (SELECT DISTINCT DATEADD(DAY, -1 , (SELECT DISTINCT DATEADD(YEAR, DATEDIFF(YEAR, 0, GETDATE()) + 1, 0) FROM [AdventureWorks2022].[Person].[BusinessEntity]))))
-							, 1)			-- GenerateDatesInYear_1_Jan_31_DecLevel1
-	) AS X									-- GenerateWeekDaysLevel2
+	SELECT										-- GenerateDatesInYear_1_Jan_31_DecLevel1
+	CAST(DATEADD(DAY, value, (SELECT DISTINCT DATEADD(YEAR, DATEDIFF(YEAR, 0, GETDATE()), 0) FROM [AdventureWorks2022].[Person].[BusinessEntity])) AS DATE) AS GeneratedDates
+	FROM GENERATE_SERIES(0,
+						DATEDIFF(DAY,
+						(SELECT DISTINCT DATEADD(YEAR, DATEDIFF(YEAR, 0, GETDATE()), 0) FROM [AdventureWorks2022].[Person].[BusinessEntity]),
+						(SELECT DISTINCT DATEADD(DAY, -1 , (SELECT DISTINCT DATEADD(YEAR, DATEDIFF(YEAR, 0, GETDATE()) + 1, 0) FROM [AdventureWorks2022].[Person].[BusinessEntity])))),
+						1)								-- GenerateDatesInYear_1_Jan_31_DecLevel1
+	) AS X												-- GenerateWeekDaysLevel2
 ```
 
-**Output (truncated):**
 
+**Output (truncated):**
 ```
 GeneratedWeekDays  GeneratedDates
 Monday             2024-01-01
