@@ -34,11 +34,10 @@ We use `ROW_NUMBER()` to assign a sequential rank to each vendor ordered by thei
 ```sql
 SELECT
     PurchaseOrderHeader.VendorID
-  , Vendor.[Name]                                                             AS VendorName
-  , FORMAT(SUM(PurchaseOrderHeader.TotalDue), '#,##.#')                       AS TotalPurchasesAmount
+  , Vendor.[Name] AS VendorName
+  , FORMAT(SUM(PurchaseOrderHeader.TotalDue), '#,##.#') AS TotalPurchasesAmount
   , ROW_NUMBER() OVER (ORDER BY SUM(PurchaseOrderHeader.TotalDue) DESC) / 7.0 AS GroupsRowNumber
-  , CEILING(ROW_NUMBER() OVER (ORDER BY SUM(PurchaseOrderHeader.TotalDue) DESC)
-      / 7.0)                                                                  AS Groups_Plus
+  , CEILING(ROW_NUMBER() OVER (ORDER BY SUM(PurchaseOrderHeader.TotalDue) DESC) / 7.0) AS Groups_Plus
 FROM [AdventureWorks2022].[Purchasing].[PurchaseOrderHeader] AS PurchaseOrderHeader
 JOIN [AdventureWorks2022].[Purchasing].[Vendor] AS Vendor
     ON PurchaseOrderHeader.VendorID = Vendor.BusinessEntityID
