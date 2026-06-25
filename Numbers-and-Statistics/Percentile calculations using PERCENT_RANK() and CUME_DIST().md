@@ -148,6 +148,7 @@ Calculates the **cumulative distribution** of a salary — the proportion of all
 | Use when | Comparing relative standing | Finding what % earns at most X |
 
 ---
+<br>
 
 ## 💡 Exercise 2 — Salary percentiles by department (Sales and Production)
 
