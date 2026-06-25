@@ -74,19 +74,18 @@ SELECT
 FROM (
     SELECT
         EmployeeDeptHistory.BusinessEntityID
-      , EmployeeDeptHistory.DepartmentID
-      , EmployeeDeptHistory.ModifiedDate
-      , Department.[Name]  AS DepartmentName
-      , Employee.Gender
-      , ROW_NUMBER() OVER (PARTITION BY EmployeeDeptHistory.BusinessEntityID
-                           ORDER BY EmployeeDeptHistory.BusinessEntityID ASC,
-                                    EmployeeDeptHistory.ModifiedDate DESC) AS RowNumber
+        , EmployeeDeptHistory.DepartmentID
+        , EmployeeDeptHistory.ModifiedDate
+        , Department.[Name] AS DepartmentName
+        , Employee.Gender
+        , ROW_NUMBER() OVER (PARTITION BY EmployeeDeptHistory.BusinessEntityID
+                        ORDER BY EmployeeDeptHistory.BusinessEntityID ASC, EmployeeDeptHistory.ModifiedDate DESC) AS RowNumber
     FROM [AdventureWorks2022].[HumanResources].[EmployeeDepartmentHistory] AS EmployeeDeptHistory
     LEFT JOIN [AdventureWorks2022].[HumanResources].[Department] AS Department
         ON EmployeeDeptHistory.DepartmentID = Department.DepartmentID
     INNER JOIN [AdventureWorks2022].[HumanResources].[Employee] AS Employee
         ON EmployeeDeptHistory.BusinessEntityID = Employee.BusinessEntityID
-) AS X
+    ) AS X
 WHERE RowNumber = 1
 GROUP BY X.Gender, X.DepartmentName
 ```
@@ -94,9 +93,8 @@ GROUP BY X.Gender, X.DepartmentName
 ---
 
 ### Output
-
 ```
-DepartmentName             Gender  EmployeeCountHistogram
+DepartmentName				Gender  EmployeeCountHistogram
 Document Control           F       *
 Document Control           M       ****
 Engineering                F       ***
@@ -136,11 +134,12 @@ Tool Design                M       ***
 ### Why `ROW_NUMBER()` is needed
 Joining `EmployeeDepartmentHistory` and `Department` produces duplicate rows for employees who have changed departments — 5 employees appear more than once:
 
+**T-SQL code**
 ```sql
 SELECT
     EmployeeDeptHistory.BusinessEntityID
-  , COUNT(*)                     AS EmployeeCount
-  , REPLICATE('*', COUNT(*))     AS EmployeeCountHistogram
+  , COUNT(*) AS EmployeeCount
+  , REPLICATE('*', COUNT(*)) AS EmployeeCountHistogram
 FROM [AdventureWorks2022].[HumanResources].[EmployeeDepartmentHistory] AS EmployeeDeptHistory
 LEFT JOIN [AdventureWorks2022].[HumanResources].[Department] AS Department
     ON EmployeeDeptHistory.DepartmentID = Department.DepartmentID
@@ -149,6 +148,7 @@ HAVING COUNT(*) > 1
 ORDER BY EmployeeDeptHistory.BusinessEntityID
 ```
 
+**Output**
 ```
 BusinessEntityID  EmployeeCount  EmployeeCountHistogram
 4                 2              **
@@ -158,7 +158,9 @@ BusinessEntityID  EmployeeCount  EmployeeCountHistogram
 250               3              ***
 ```
 
-`ROW_NUMBER()` partitioned by `BusinessEntityID` and ordered by `ModifiedDate DESC` numbers each employee's records, and `WHERE RowNumber = 1` keeps only the most recent department record per employee — removing all 5 duplicates.
+> `ROW_NUMBER()` partitioned by `BusinessEntityID` and ordered by `ModifiedDate DESC` numbers each employee's records, and `WHERE RowNumber = 1` keeps only the most recent department record per employee — removing all 5 duplicates.
+
+---
 
 ### How `REPLICATE()` builds the histogram bar
 `REPLICATE('*', COUNT(*))` returns the asterisk character repeated as many times as the employee count. For example:
