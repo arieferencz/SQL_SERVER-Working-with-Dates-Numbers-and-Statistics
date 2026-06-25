@@ -198,45 +198,58 @@ ORDER BY Y.DepartmentName, Y.SalaryRate DESC
 
 ### Output (truncated)
 ```
-DepartmentName  BusinessEntityID  SalaryRate  SalaryRatePercentRank  SalaryRateCummulativeDistribution
-Sales           263               50.4808     1                      1
-Sales           264               39.6635     0.89                   0.9
-Sales           270               38.4615     0.67                   0.8
-Sales           271               38.4615     0.67                   0.8
-Sales           265               32.4519     0.44                   0.6
-Sales           266               32.4519     0.44                   0.6
-Sales           267               27.4038     0                      0.4
-Sales           268               27.4038     0                      0.4
-Sales           269               27.4038     0                      0.4
-Sales           272               27.4038     0                      0.4
-Production      25                84.1346     1                      1
-Production      87                25          0.88                   0.99
-Production      93                25          0.88                   0.99
-Production      78                25          0.88                   0.99
+DepartmentName	BusinessEntityID	SalaryRate	SalaryRatePercentRank	SalaryRateCummulativeDistribution
+Production	25	84.1346	1	1
+Production	87	25.00	0.88	0.99
+Production	93	25.00	0.88	0.99
+Production	78	25.00	0.88	0.99
 ...
-Production      85                15          0.74                   0.88
-Production      86                15          0.74                   0.88
-Production      135               14          0.61                   0.73
-Production      136               14          0.61                   0.73
+Production	193	15.00	0.74	0.88
+Production	194	15.00	0.74	0.88
+Production	195	15.00	0.74	0.88
 ...
-Production      48                13.45       0.52                   0.61
+Production	135	14.00	0.61	0.73
+Production	136	14.00	0.61	0.73
+Production	137	14.00	0.61	0.73
 ...
-Production      41                12.45       0.37                   0.51
-Production      42                12.45       0.37                   0.51
+Production	48	13.45	0.52	0.61
+Production	49	13.45	0.52	0.61
+Production	50	13.45	0.52	0.61
 ...
-Production      75                9.5         0                      0.14
-Production      76                9.5         0                      0.14
-Production      77                9.5         0                      0.14
-(189 rows affected)
+Production	41	12.45	0.37	0.51
+Production	42	12.45	0.37	0.51
+Production	43	12.45	0.37	0.51
+...
+Production	94	11.00	0.22	0.37
+Production	95	11.00	0.22	0.37
+Production	96	11.00	0.22	0.37
+...
+Production	187	10.00	0.14	0.22
+Production	188	10.00	0.14	0.22
+Production	189	10.00	0.14	0.22
+...
+Production	72	9.50	0	0.14
+Production	73	9.50	0	0.14
+Production	74	9.50	0	0.14
+...
+Sales	273	72.1154	1	1
+Sales	285	48.101	0.82	0.94
+Sales	274	48.101	0.82	0.94
+Sales	287	48.101	0.82	0.94
+Sales	286	23.0769	0	0.78
+Sales	288	23.0769	0	0.78
+Sales	289	23.0769	0	0.78
+...
+(197 rows affected)
 ```
 
 ---
 
 ### Key observations from Exercise 2
 
-**Sales department (10 employees):**
-- `BusinessEntityID = 263` earns the highest salary (`$50.48/hr`) — `PERCENT_RANK = 1`, `CUME_DIST = 1`
-- Employees 267–272 all earn `$27.40/hr` — they share `PERCENT_RANK = 0` (no one earns less within this department) and `CUME_DIST = 0.4` (40% of employees earn ≤ $27.40)
+**Sales department (18 employees):**
+- `BusinessEntityID = 273` earns the highest salary (`$72.12/hr`) — `PERCENT_RANK = 1`, `CUME_DIST = 1`
+- Employees 275–290 all earn `$23.08/hr` — they share `PERCENT_RANK = 0` (no one earns less within this department) and `CUME_DIST = 0.78` (78% of employees earn ≤ $23.08)
 
 **Production department (179 employees):**
 - `BusinessEntityID = 25` earns the highest salary (`$84.13/hr`) — significantly above all other Production employees
