@@ -35,26 +35,23 @@ We join four tables to retrieve each employee's most recent salary rate, using `
 
 ```sql
 SELECT DISTINCT
-    Y.SalaryRate
-  , ROUND(PERCENT_RANK() OVER (ORDER BY Y.SalaryRate), 2) AS SalaryRatePercentRank
-  , ROUND(CUME_DIST()    OVER (ORDER BY Y.SalaryRate), 2) AS SalaryRateCummulativeDistribution
+	Y.SalaryRate
+	, ROUND(PERCENT_RANK() OVER (ORDER BY Y.SalaryRate), 2) AS SalaryRatePercentRank
+	, ROUND(CUME_DIST() OVER (ORDER BY Y.SalaryRate), 2) AS SalaryRateCummulativeDistribution
 FROM (
     SELECT
-        X.BusinessEntityID
-      , X.Rate AS SalaryRate
+		X.BusinessEntityID
+		, X.Rate AS SalaryRate
     FROM (
         SELECT
-            EmployeeDepartmentHistory.BusinessEntityID
-          , EmployeeDepartmentHistory.DepartmentID
-          , EmployeeDepartmentHistory.ModifiedDate AS EDH_ModifiedDate
-          , Department.[Name]                      AS DepartmentName
-          , EmployeePayHistory.Rate
-          , EmployeePayHistory.ModifiedDate        AS EPH_ModifiedDate
-          , ROW_NUMBER() OVER (
-                PARTITION BY EmployeeDepartmentHistory.BusinessEntityID
-                ORDER BY EmployeeDepartmentHistory.BusinessEntityID ASC,
-                         EmployeeDepartmentHistory.ModifiedDate DESC,
-                         EmployeePayHistory.ModifiedDate DESC) AS RowNumber
+			EmployeeDepartmentHistory.BusinessEntityID
+			, EmployeeDepartmentHistory.DepartmentID
+			, EmployeeDepartmentHistory.ModifiedDate AS EDH_ModifiedDate
+			, Department.[Name] AS DepartmentName
+			, EmployeePayHistory.Rate
+			, EmployeePayHistory.ModifiedDate AS EPH_ModifiedDate
+			, ROW_NUMBER() OVER (PARTITION BY EmployeeDepartmentHistory.BusinessEntityID
+                ORDER BY EmployeeDepartmentHistory.BusinessEntityID ASC, EmployeeDepartmentHistory.ModifiedDate DESC, EmployeePayHistory.ModifiedDate DESC) AS RowNumber
         FROM [AdventureWorks2022].[HumanResources].[EmployeeDepartmentHistory] AS EmployeeDepartmentHistory
         LEFT JOIN [AdventureWorks2022].[HumanResources].[Department] AS Department
             ON EmployeeDepartmentHistory.DepartmentID = Department.DepartmentID
@@ -70,7 +67,6 @@ FROM (
 ---
 
 ### Output (truncated)
-
 ```
 SalaryRate  SalaryRatePercentRank  SalaryRateCummulativeDistribution
 9           0                      0.01
