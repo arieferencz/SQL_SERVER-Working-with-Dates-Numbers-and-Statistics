@@ -91,13 +91,27 @@ ProductID  ProductName                      	SUMOrderQty  DenseRank
 ### Query 1.1 — Retrieve raw sales data (`OriginalTablesLevel1`)
 We join `SalesOrderHeader`, `SalesOrderDetail`, and `Product` to get each order line with its product name and quantity ordered.
 
-**Output:** 121,317 rows — one per order line.
-
+**T-SQL code**
+```sql
+SELECT
+	SalesOrderHeader.SalesOrderID
+	, [Product].[Name] AS ProductName
+	, SalesOrderDetail.ProductID
+	, SalesOrderDetail.OrderQty
+FROM [AdventureWorks2022].[Sales].[SalesOrderHeader] AS SalesOrderHeader
+LEFT JOIN [AdventureWorks2022].[Sales].[SalesOrderDetail] AS SalesOrderDetail
+	ON SalesOrderHeader.SalesOrderID = SalesOrderDetail.SalesOrderID
+LEFT JOIN [AdventureWorks2022].[Production].[Product] AS [Product]
+	ON SalesOrderDetail.ProductID = [Product].ProductID
 ```
-SalesOrderID  ProductName               ProductID  OrderQty
-43659         Mountain Bike Socks, M    709        6
-43659         Sport-100 Helmet, Black   708        1
-43659         Road-650 Red, 44          773        2
+
+
+**Output:** 121,317 rows — one per order line.
+```
+SalesOrderID  ProductName					ProductID	OrderQty
+43659         Mountain Bike Socks, M		709			6
+43659         Sport-100 Helmet, Black		708			1
+43659         Road-650 Red, 44				773			2
 ...
 (121317 rows affected)
 ```
@@ -107,8 +121,29 @@ SalesOrderID  ProductName               ProductID  OrderQty
 ### Query 1.2 — Sum units sold per product (`SumUnitsSoldPerProductIDLevel2`)
 `GROUP BY ProductID, ProductName` and `SUM(OrderQty)` collapses 121,317 order lines into 266 rows — one per unique product — with the total units sold.
 
-**Output (truncated):** 266 rows — one per product.
+**T-SQL code**
+```sql
+SELECT
+	X.ProductID
+	, X.ProductName   AS ProductName
+	, SUM(X.OrderQty) AS SUMOrderQty
+FROM (
+	SELECT
+		SalesOrderHeader.SalesOrderID
+		, [Product].[Name] AS ProductName
+		, SalesOrderDetail.ProductID
+		, SalesOrderDetail.OrderQty
+	FROM [AdventureWorks2022].[Sales].[SalesOrderHeader] AS SalesOrderHeader
+    LEFT JOIN [AdventureWorks2022].[Sales].[SalesOrderDetail] AS SalesOrderDetail
+		ON SalesOrderHeader.SalesOrderID = SalesOrderDetail.SalesOrderID
+    LEFT JOIN [AdventureWorks2022].[Production].[Product] AS [Product]
+		ON SalesOrderDetail.ProductID = [Product].ProductID
+    ) AS X
+    GROUP BY X.ProductID, X.ProductName
+```
 
+
+**Output (truncated):** 266 rows — one per product.
 ```
 ProductID  ProductName                SUMOrderQty
 707        Sport-100 Helmet, Red      4384
