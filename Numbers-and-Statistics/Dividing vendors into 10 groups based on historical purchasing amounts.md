@@ -93,19 +93,18 @@ SELECT
 FROM (
     SELECT
         PurchaseOrderHeader.VendorID
-      , Vendor.[Name]                                                    AS VendorName
-      , FORMAT(SUM(PurchaseOrderHeader.TotalDue), '#,##.#')              AS TotalPurchasesAmount
-      , NTILE(10) OVER (ORDER BY SUM(PurchaseOrderHeader.TotalDue) DESC) AS GroupNumber
+        , Vendor.[Name] AS VendorName
+        , FORMAT(SUM(PurchaseOrderHeader.TotalDue), '#,##.#') AS TotalPurchasesAmount
+        , NTILE(10) OVER (ORDER BY SUM(PurchaseOrderHeader.TotalDue) DESC) AS GroupNumber
     FROM [AdventureWorks2022].[Purchasing].[PurchaseOrderHeader] AS PurchaseOrderHeader
     JOIN [AdventureWorks2022].[Purchasing].[Vendor] AS Vendor
         ON PurchaseOrderHeader.VendorID = Vendor.BusinessEntityID
     GROUP BY PurchaseOrderHeader.VendorID, Vendor.[Name]
-) AS NtileGroups
+    ) AS NtileGroups
 GROUP BY NtileGroups.GroupNumber
 ```
 
 ### Output
-
 ```
 GroupNumber  CountVendorsPerGroupNumber
 1            9
