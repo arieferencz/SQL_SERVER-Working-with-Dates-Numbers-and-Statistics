@@ -43,19 +43,15 @@ GO
 
 SELECT
     X.TerritoryName
-  , FORMAT(ROUND(X.Sales, 2, 2), '#,#.##') AS Sales
-  , RANK() OVER (
-        PARTITION BY X.TerritoryName
-        ORDER BY X.Sales)               AS SalesRank
-  , X.SalesPersonID
-  , FORMAT(ROUND(PERCENT_RANK() OVER (
-        PARTITION BY X.TerritoryName
-        ORDER BY X.Sales), 2, 2), 'N2') AS SalesPERCENTRANK
+	, FORMAT(ROUND(X.Sales, 2, 2), '#,#.##') AS Sales
+	, RANK() OVER (PARTITION BY X.TerritoryName ORDER BY X.Sales) AS SalesRank
+	, X.SalesPersonID
+	, FORMAT(ROUND(PERCENT_RANK() OVER (PARTITION BY X.TerritoryName ORDER BY X.Sales), 2, 2), 'N2') AS SalesPERCENTRANK
 FROM (
     SELECT
-        SalesTerritory.[Name]            AS TerritoryName
-      , SalesOrderHeader.[SalesPersonID] AS SalesPersonID
-      , SUM(SalesOrderHeader.[TotalDue]) AS Sales
+		SalesTerritory.[Name] AS TerritoryName
+		, SalesOrderHeader.[SalesPersonID] AS SalesPersonID
+		, SUM(SalesOrderHeader.[TotalDue]) AS Sales
     FROM [AdventureWorks2022].[Sales].[SalesOrderHeader] AS SalesOrderHeader
     INNER JOIN [AdventureWorks2022].[Sales].[SalesTerritory] AS SalesTerritory
         ON SalesOrderHeader.TerritoryID = SalesTerritory.TerritoryID
@@ -67,7 +63,6 @@ FROM (
 ---
 
 ### Output
-
 ```
 TerritoryName    Sales           SalesRank  SalesPersonID  SalesPERCENTRANK
 Australia        195,528.78      1          285            0.00
