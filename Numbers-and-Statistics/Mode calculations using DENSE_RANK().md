@@ -175,24 +175,24 @@ We add `DATEPART(YEAR, OrderDate)` to the base query to extract the sales year f
 
 ```sql
 SELECT
-    Y.[Year]
-  , Y.ProductID
-  , Y.ProductName
-  , Y.SUMOrderQty
-  , DENSE_RANK() OVER (ORDER BY Y.[Year], Y.SUMOrderQty DESC) AS DenseRank
+	Y.[Year]
+	, Y.ProductID
+	, Y.ProductName
+	, Y.SUMOrderQty
+	, DENSE_RANK() OVER (ORDER BY Y.[Year], Y.SUMOrderQty DESC) AS DenseRank
 FROM (
     SELECT
-        X.ProductID
-      , X.ProductName   AS ProductName
-      , SUM(X.OrderQty) AS SUMOrderQty
-      , X.SalesYear     AS [Year]
+		X.ProductID
+		, X.ProductName   AS ProductName
+		, SUM(X.OrderQty) AS SUMOrderQty
+		, X.SalesYear     AS [Year]
     FROM (
         SELECT
-            SalesOrderHeader.SalesOrderID
-          , DATEPART(YEAR, SalesOrderHeader.OrderDate) AS SalesYear
-          , [Product].[Name]                           AS ProductName
-          , SalesOrderDetail.ProductID
-          , SalesOrderDetail.OrderQty
+			SalesOrderHeader.SalesOrderID
+			, DATEPART(YEAR, SalesOrderHeader.OrderDate) AS SalesYear
+			, [Product].[Name] AS ProductName
+			, SalesOrderDetail.ProductID
+			, SalesOrderDetail.OrderQty
         FROM [AdventureWorks2022].[Sales].[SalesOrderHeader] AS SalesOrderHeader
         LEFT JOIN [AdventureWorks2022].[Sales].[SalesOrderDetail] AS SalesOrderDetail
             ON SalesOrderHeader.SalesOrderID = SalesOrderDetail.SalesOrderID
@@ -206,33 +206,32 @@ FROM (
 ---
 
 ### Output (truncated)
-
 ```
-Year  ProductID  ProductName                       SUMOrderQty  DenseRank
-2011  709        Mountain Bike Socks, M             608          1   	← 2011 MODE
-2011  712        AWC Logo Cap                       545          2
-2011  715        Long-Sleeve Logo Jersey, L         544          3
-2011  770        Road-650 Black, 52                 415          4
+Year	ProductID		ProductName                       SUMOrderQty	DenseRank
+2011	709				Mountain Bike Socks, M             608          1   	← 2011 MODE
+2011	712				AWC Logo Cap                       545          2
+2011	715				Long-Sleeve Logo Jersey, L         544          3
+2011	770				Road-650 Black, 52                 415          4
 ...
-2011  723        LL Road Frame - Black, 60          1            52
-2012  863        Full-Finger Gloves, L              2380         53  	← 2012 MODE
-2012  715        Long-Sleeve Logo Jersey, L         2113         54
-2012  712        AWC Logo Cap                       2048         55
+2011	723				LL Road Frame - Black, 60          1            52
+2012	863				Full-Finger Gloves, L              2380         53  	← 2012 MODE
+2012	715				Long-Sleeve Logo Jersey, L         2113         54
+2012	712				AWC Logo Cap                       2048         55
 ...
-2012  744        HL Mountain Frame - Black, 44      8            177
-2013  870        Water Bottle - 30 oz.              3913         178 	← 2013 MODE
-2013  712        AWC Logo Cap                       3768         179
-2013  708        Sport-100 Helmet, Black            3088         180
+2012	744				HL Mountain Frame - Black, 44      8            177
+2013	870				Water Bottle - 30 oz.              3913         178 	← 2013 MODE
+2013	712				AWC Logo Cap                       3768         179
+2013	708				Sport-100 Helmet, Black            3088         180
 ...
-2013  828        HL Road Rear Wheel                 2            385
-2014  870        Water Bottle - 30 oz.              2902         386 	← 2014 MODE
-2014  712        AWC Logo Cap                       1950         387
-2014  711        Sport-100 Helmet, Blue             1776         388
+2013	828				HL Road Rear Wheel                 2            385
+2014	870				Water Bottle - 30 oz.              2902         386 	← 2014 MODE
+2014	712				AWC Logo Cap                       1950         387
+2014	711				Sport-100 Helmet, Blue             1776         388
 ...
-2014  763        Road-650 Red, 48                   1            531
-2014  765        Road-650 Black, 58                 1            531
-2014  726        LL Road Frame - Red, 48            1            531
-2014  730        LL Road Frame - Red, 62            1            531
+2014	763				Road-650 Red, 48                   1            531
+2014	765				Road-650 Black, 58                 1            531
+2014	726				LL Road Frame - Red, 48            1            531
+2014	730				LL Road Frame - Red, 62            1            531
 (610 rows affected)
 ```
 
