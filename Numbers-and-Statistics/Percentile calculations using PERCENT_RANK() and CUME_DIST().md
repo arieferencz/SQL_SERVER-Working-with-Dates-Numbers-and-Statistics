@@ -158,34 +158,28 @@ We add `PARTITION BY DepartmentName` to both window functions so that percentile
 ---
 
 ### T-SQL code
-
 ```sql
 SELECT
     Y.DepartmentName
-  , Y.BusinessEntityID
-  , Y.SalaryRate
-  , ROUND(PERCENT_RANK() OVER (PARTITION BY Y.DepartmentName ORDER BY Y.SalaryRate), 2)
-        AS SalaryRatePercentRank
-  , ROUND(CUME_DIST()    OVER (PARTITION BY Y.DepartmentName ORDER BY Y.SalaryRate), 2)
-        AS SalaryRateCummulativeDistribution
+	, Y.BusinessEntityID
+	, Y.SalaryRate
+	, ROUND(PERCENT_RANK() OVER (PARTITION BY Y.DepartmentName ORDER BY Y.SalaryRate), 2) AS SalaryRatePercentRank
+	, ROUND(CUME_DIST()    OVER (PARTITION BY Y.DepartmentName ORDER BY Y.SalaryRate), 2) AS SalaryRateCummulativeDistribution
 FROM (
-    SELECT
-        X.DepartmentName
-      , X.BusinessEntityID
-      , X.Rate AS SalaryRate
+	SELECT
+		X.DepartmentName
+		, X.BusinessEntityID
+		, X.Rate AS SalaryRate
     FROM (
         SELECT
-            EmployeeDepartmentHistory.BusinessEntityID
-          , EmployeeDepartmentHistory.DepartmentID
-          , EmployeeDepartmentHistory.ModifiedDate AS EDH_ModifiedDate
-          , Department.[Name]                      AS DepartmentName
-          , EmployeePayHistory.Rate
-          , EmployeePayHistory.ModifiedDate        AS EPH_ModifiedDate
-          , ROW_NUMBER() OVER (
-                PARTITION BY EmployeeDepartmentHistory.BusinessEntityID
-                ORDER BY EmployeeDepartmentHistory.BusinessEntityID ASC,
-                         EmployeeDepartmentHistory.ModifiedDate DESC,
-                         EmployeePayHistory.ModifiedDate DESC)  AS RowNumber
+			EmployeeDepartmentHistory.BusinessEntityID
+			, EmployeeDepartmentHistory.DepartmentID
+			, EmployeeDepartmentHistory.ModifiedDate AS EDH_ModifiedDate
+			, Department.[Name] AS DepartmentName
+			, EmployeePayHistory.Rate
+			, EmployeePayHistory.ModifiedDate AS EPH_ModifiedDate
+			, ROW_NUMBER() OVER (PARTITION BY EmployeeDepartmentHistory.BusinessEntityID
+                ORDER BY EmployeeDepartmentHistory.BusinessEntityID ASC, EmployeeDepartmentHistory.ModifiedDate DESC, EmployeePayHistory.ModifiedDate DESC) AS RowNumber
         FROM [AdventureWorks2022].[HumanResources].[EmployeeDepartmentHistory] AS EmployeeDepartmentHistory
         LEFT JOIN [AdventureWorks2022].[HumanResources].[Department] AS Department
             ON EmployeeDepartmentHistory.DepartmentID = Department.DepartmentID
@@ -203,7 +197,6 @@ ORDER BY Y.DepartmentName, Y.SalaryRate DESC
 ---
 
 ### Output (truncated)
-
 ```
 DepartmentName  BusinessEntityID  SalaryRate  SalaryRatePercentRank  SalaryRateCummulativeDistribution
 Sales           263               50.4808     1                      1
