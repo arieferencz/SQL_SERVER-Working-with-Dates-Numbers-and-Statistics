@@ -93,7 +93,6 @@ GROUP BY X.Gender, X.DepartmentName
 ```
 
 ---
-
 ### Output
 ```
 DepartmentName				Gender  EmployeeCountHistogram
