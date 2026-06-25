@@ -30,7 +30,7 @@ We join four tables to retrieve each employee's most recent salary rate in their
 
 ---
 
-### T-SQL code — Final query
+### T-SQL code
 
 ```sql
 SELECT DISTINCT
@@ -52,11 +52,9 @@ FROM (
           , Department.[Name]                      AS DepartmentName
           , EmployeePayHistory.Rate
           , EmployeePayHistory.ModifiedDate        AS EPH_ModifiedDate
-          , ROW_NUMBER() OVER (
-                PARTITION BY EmployeeDepartmentHistory.BusinessEntityID
-                ORDER BY EmployeeDepartmentHistory.BusinessEntityID ASC,
-                         EmployeeDepartmentHistory.ModifiedDate DESC,
-                         EmployeePayHistory.ModifiedDate DESC)  AS RowNumber
+          , ROW_NUMBER()
+                OVER (PARTITION BY EmployeeDepartmentHistory.BusinessEntityID
+                ORDER BY EmployeeDepartmentHistory.BusinessEntityID ASC, EmployeeDepartmentHistory.ModifiedDate DESC, EmployeePayHistory.ModifiedDate DESC)  AS RowNumber
         FROM [AdventureWorks2022].[HumanResources].[EmployeeDepartmentHistory] AS EmployeeDepartmentHistory
         LEFT JOIN [AdventureWorks2022].[HumanResources].[Department] AS Department
             ON EmployeeDepartmentHistory.DepartmentID = Department.DepartmentID
@@ -72,25 +70,24 @@ FROM (
 ---
 
 ### Output
-
 ```
-DepartmentName             MedianPercentileDisc  MedianPercentileCont
-Document Control           16.8269               16.8269
-Engineering                32.6923               34.375
-Executive                  60.0962               92.7981
-Facilities and Maintenance 9.25                  9.25
-Finance                    19                    19
-Human Resources            16.5865               17.42785
-Information Services       32.4519               32.4519
-Marketing                  14.4231               14.4231
-Production                 12.45                 12.45
-Production Control         16                    16
-Purchasing                 18.2692               18.2692
-Quality Assurance          10.5769               10.5769
-Research and Development   40.8654               41.6731
-Sales                      23.0769               23.0769
-Shipping and Receiving     9                     9.25
-Tool Design                25                    26.9231
+DepartmentName					MedianPercentileDisc		MedianPercentileCont
+Document Control				16.8269						16.8269
+Engineering						32.6923						34.375
+Executive						60.0962						92.7981
+Facilities and Maintenance		9.25						9.25
+Finance							19							19
+Human Resources					16.5865						17.42785
+Information Services			32.4519						32.4519
+Marketing						14.4231						14.4231
+Production						12.45						12.45
+Production Control				16							16
+Purchasing						18.2692						18.2692
+Quality Assurance				10.5769						10.5769
+Research and Development		40.8654						41.6731
+Sales							23.0769						23.0769
+Shipping and Receiving			9							9.25
+Tool Design						25							26.9231
 (16 rows affected)
 ```
 
