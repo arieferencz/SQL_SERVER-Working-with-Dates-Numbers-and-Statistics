@@ -25,8 +25,9 @@ We use `COUNT(*)` to count employees per gender and `REPLICATE('*', COUNT(*))` t
 
 ---
 
-### T-SQL code
+### Solution 1 — Histogram by gender
 
+**T-SQL code**
 ```sql
 SELECT
     GENDER
