@@ -36,19 +36,19 @@ We join `SalesOrderHeader` to `SalesTerritory` to get each order's geographical 
 ```sql
 SELECT
     Y.CountryGroup
-  , FORMAT(ROUND(Y.Amount, 2, 2), '#,#.##')                                     AS TotalSalesAmount
-  , FORMAT(ROUND(SUM(Y.Amount) OVER (ORDER BY Y.CountryGroup), 2, 2), '#,#.##') AS RunningTotalSalesAmount
+	, FORMAT(ROUND(Y.Amount, 2, 2), '#,#.##') AS TotalSalesAmount
+	, FORMAT(ROUND(SUM(Y.Amount) OVER (ORDER BY Y.CountryGroup), 2, 2), '#,#.##') AS RunningTotalSalesAmount
 FROM (
     SELECT
-        X.CountryGroupRegion AS CountryGroup
-      , SUM(X.TotalDue)      AS Amount
+		X.CountryGroupRegion AS CountryGroup
+		, SUM(X.TotalDue) AS Amount
     FROM (
         SELECT
-            SalesOrderHeader.SalesOrderID
-          , SalesOrderHeader.BillToAddressID
-          , SalesOrderHeader.TerritoryID
-          , SalesOrderHeader.TotalDue
-          , SalesTerritory.[Group] AS CountryGroupRegion
+			SalesOrderHeader.SalesOrderID
+			, SalesOrderHeader.BillToAddressID
+			, SalesOrderHeader.TerritoryID
+			, SalesOrderHeader.TotalDue
+			, SalesTerritory.[Group] AS CountryGroupRegion
         FROM [AdventureWorks2022].[Sales].[SalesOrderHeader] AS SalesOrderHeader
         LEFT JOIN [AdventureWorks2022].[Sales].[SalesTerritory] AS SalesTerritory
             ON SalesOrderHeader.TerritoryID = SalesTerritory.TerritoryID
