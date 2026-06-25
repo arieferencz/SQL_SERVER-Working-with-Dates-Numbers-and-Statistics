@@ -1,4 +1,4 @@
-# Rank salesperson by sales within their territory name, and calculate percent rank
+# Rank salesperson by sales within their territory name, and calculate PERCENT_RANK
 
 ## 🎯 Exercise
 Rank each salesperson by their total historical sales within their assigned territory — and calculate their percentile rank within that territory using `PERCENT_RANK()`.
