@@ -138,14 +138,14 @@ Both window functions use `PARTITION BY TerritoryName` — creating one independ
 **How the ranking resets for each territory:**
 
 ```
-TerritoryName  Sales           RANK  PERCENT_RANK
-Australia      195,528.78      1     0.00   ← rank resets for Australia
-Australia      1,606,441.44    2     1.00
-Canada         204,459.60      1     0.00   ← rank resets for Canada
-Canada         2,354,403.76    2     0.33
-Canada         4,069,422.21    3     0.66
-Canada         9,585,124.94    4     1.00
-Central        39,933.18       1     0.00   ← rank resets for Central
+TerritoryName  Sales           RANK  	PERCENT_RANK
+Australia      195,528.78      1     	0.00	   ← rank resets for Australia
+Australia      1,606,441.44    2     	1.00
+Canada         204,459.60      1     	0.00	   ← rank resets for Canada
+Canada         2,354,403.76    2     	0.33
+Canada         4,069,422.21    3     	0.66
+Canada         9,585,124.94    4     	1.00
+Central        39,933.18       1     	0.00	   ← rank resets for Central
 ...
 ```
 
