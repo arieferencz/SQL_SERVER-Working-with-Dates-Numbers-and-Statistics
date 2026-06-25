@@ -46,9 +46,9 @@ SELECT
 	, RANK() OVER (ORDER BY X.SalesByProductName DESC) AS SalesByProductNameRANK
 FROM (
     SELECT
-        Product.[Name] AS ProductName
-      , Product.[ProductID] AS ProductID
-      , SUM(SalesOrderDetail.[LineTotal]) AS SalesByProductName
+		Product.[Name] AS ProductName
+		, Product.[ProductID] AS ProductID
+		, SUM(SalesOrderDetail.[LineTotal]) AS SalesByProductName
     FROM [AdventureWorks2022].[Sales].[SalesOrderHeader] AS SalesOrderHeader
     INNER JOIN [AdventureWorks2022].[Sales].[SalesOrderDetail] AS SalesOrderDetail
         ON SalesOrderHeader.[SalesOrderID] = SalesOrderDetail.[SalesOrderID]
