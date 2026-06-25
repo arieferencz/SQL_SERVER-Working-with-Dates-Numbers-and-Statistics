@@ -49,6 +49,7 @@ HighestDollarValueSales  LowestDollarValueSales
 ```
 
 ---
+<br>
 
 ## 💡 Exercise 2 — Highest and lowest sales by geographical group
 
@@ -62,12 +63,11 @@ HighestDollarValueSales  LowestDollarValueSales
 ---
 
 ### T-SQL code
-
 ```sql
 SELECT
     SalesTerritory.[Group]
-  , FORMAT(ROUND(MAX(SalesOrderHeader.[TotalDue]), 2, 2), '#,#.##') AS HighestDollarValueSales
-  , FORMAT(ROUND(MIN(SalesOrderHeader.[TotalDue]), 2, 2), '#,#.##') AS LowestDollarValueSales
+    , FORMAT(ROUND(MAX(SalesOrderHeader.[TotalDue]), 2, 2), '#,#.##') AS HighestDollarValueSales
+    , FORMAT(ROUND(MIN(SalesOrderHeader.[TotalDue]), 2, 2), '#,#.##') AS LowestDollarValueSales
 FROM [AdventureWorks2022].[Sales].[SalesOrderHeader] AS SalesOrderHeader
 LEFT JOIN [AdventureWorks2022].[Sales].[SalesTerritory] AS SalesTerritory
     ON SalesOrderHeader.TerritoryID = SalesTerritory.TerritoryID
@@ -75,7 +75,6 @@ GROUP BY SalesTerritory.[Group]
 ```
 
 ### Output
-
 ```
 Group          HighestDollarValueSales  LowestDollarValueSales
 North America  187,487.82               1.51
@@ -85,6 +84,7 @@ Europe         166,537.08               3.03
 ```
 
 ---
+<br>
 
 ## 💡 Exercise 3 — Highest and lowest sales by country
 
@@ -100,13 +100,12 @@ Europe         166,537.08               3.03
 ---
 
 ### T-SQL code
-
 ```sql
 SELECT
     SalesTerritory.[Group]
-  , CountryRegion.[Name]                                            AS CountryName
-  , FORMAT(ROUND(MAX(SalesOrderHeader.[TotalDue]), 2, 2), '#,#.##') AS HighestDollarValueSales
-  , FORMAT(ROUND(MIN(SalesOrderHeader.[TotalDue]), 2, 2), '#,#.##') AS LowestDollarValueSales
+    , CountryRegion.[Name] AS CountryName
+    , FORMAT(ROUND(MAX(SalesOrderHeader.[TotalDue]), 2, 2), '#,#.##') AS HighestDollarValueSales
+    , FORMAT(ROUND(MIN(SalesOrderHeader.[TotalDue]), 2, 2), '#,#.##') AS LowestDollarValueSales
 FROM [AdventureWorks2022].[Sales].[SalesOrderHeader] AS SalesOrderHeader
 LEFT JOIN [AdventureWorks2022].[Sales].[SalesTerritory] AS SalesTerritory
     ON SalesOrderHeader.TerritoryID = SalesTerritory.TerritoryID
@@ -119,7 +118,6 @@ ORDER BY SalesTerritory.[Group], CountryRegion.[Name]
 ```
 
 ### Output
-
 ```
 Group          CountryName     HighestDollarValueSales  LowestDollarValueSales
 Europe         France          166,537.08               4.4
@@ -132,6 +130,7 @@ Pacific        Australia       71,729.85                2.53
 ```
 
 ---
+<br>
 
 ## 💡 Exercise 4 — Highest and lowest sales by state or province
 
@@ -149,27 +148,26 @@ We use a subquery to join `SalesOrderHeader` to `Address` via `BillToAddressID`,
 ---
 
 ### T-SQL code
-
 ```sql
 SELECT
     X.StateProvinceName
-  , FORMAT(ROUND(MAX(X.[TotalDue]), 2, 2), '#,#.##') AS HighestDollarValueSales
-  , FORMAT(ROUND(MIN(X.[TotalDue]), 2, 2), '#,#.##') AS LowestDollarValueSales
+    , FORMAT(ROUND(MAX(X.[TotalDue]), 2, 2), '#,#.##') AS HighestDollarValueSales
+    , FORMAT(ROUND(MIN(X.[TotalDue]), 2, 2), '#,#.##') AS LowestDollarValueSales
 FROM (
     SELECT
-        SalesOrderHeader.[SalesOrderID]
-      , SalesOrderHeader.[BillToAddressID]
-      , SalesOrderHeader.[TerritoryID]
-      , SalesOrderHeader.[TotalDue]
-      , [Address].[AddressID]
-      , [Address].[StateProvinceID]
-      , [StateProvince].[Name] AS StateProvinceName
+		SalesOrderHeader.[SalesOrderID]
+		, SalesOrderHeader.[BillToAddressID]
+		, SalesOrderHeader.[TerritoryID]
+		, SalesOrderHeader.[TotalDue]
+		, [Address].[AddressID]
+		, [Address].[StateProvinceID]
+		, [StateProvince].[Name] AS StateProvinceName
     FROM [AdventureWorks2022].[Sales].[SalesOrderHeader] AS SalesOrderHeader
     LEFT JOIN [AdventureWorks2022].[Person].[Address] AS [Address]
         ON SalesOrderHeader.BillToAddressID = [Address].AddressID
     LEFT JOIN [AdventureWorks2022].[Person].[StateProvince] AS [StateProvince]
         ON [Address].StateProvinceID = [StateProvince].StateProvinceID
-) AS X
+    ) AS X
 GROUP BY StateProvinceName
 ```
 
