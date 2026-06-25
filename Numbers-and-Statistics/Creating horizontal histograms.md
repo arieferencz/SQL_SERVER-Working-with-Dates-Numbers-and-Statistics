@@ -66,6 +66,7 @@ We join three tables to get each employee's current department and gender, using
 
 ### Solution 2.1 — Histogram by department and gender
 
+**T-SQL code**
 ```sql
 SELECT
     X.DepartmentName
