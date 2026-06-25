@@ -69,7 +69,7 @@ FROM (
 
 ```
 ProductID  ProductName                      SUMOrderQty  DenseRank
-712        AWC Logo Cap                     8311         1   ← MODE (most sold product)
+712        AWC Logo Cap                     8311         1   		← MODE (most sold product)
 870        Water Bottle - 30 oz.            6815         2
 711        Sport-100 Helmet, Blue           6743         3
 715        Long-Sleeve Logo Jersey, L       6592         4
@@ -127,6 +127,7 @@ ProductID  ProductName                SUMOrderQty
 **The mode is `ProductID = 712` (AWC Logo Cap) with 8,311 total units sold.**
 
 ---
+<BR>
 
 ## 💡 Exercise 2 — Mode: most sold product per year
 
@@ -173,23 +174,23 @@ FROM (
 
 ```
 Year  ProductID  ProductName                       SUMOrderQty  DenseRank
-2011  709        Mountain Bike Socks, M             608          1   ← 2011 MODE
+2011  709        Mountain Bike Socks, M             608          1   	← 2011 MODE
 2011  712        AWC Logo Cap                       545          2
 2011  715        Long-Sleeve Logo Jersey, L         544          3
 2011  770        Road-650 Black, 52                 415          4
 ...
 2011  723        LL Road Frame - Black, 60          1            52
-2012  863        Full-Finger Gloves, L              2380         53  ← 2012 MODE
+2012  863        Full-Finger Gloves, L              2380         53  	← 2012 MODE
 2012  715        Long-Sleeve Logo Jersey, L         2113         54
 2012  712        AWC Logo Cap                       2048         55
 ...
 2012  744        HL Mountain Frame - Black, 44      8            177
-2013  870        Water Bottle - 30 oz.              3913         178 ← 2013 MODE
+2013  870        Water Bottle - 30 oz.              3913         178 	← 2013 MODE
 2013  712        AWC Logo Cap                       3768         179
 2013  708        Sport-100 Helmet, Black            3088         180
 ...
 2013  828        HL Road Rear Wheel                 2            385
-2014  870        Water Bottle - 30 oz.              2902         386 ← 2014 MODE
+2014  870        Water Bottle - 30 oz.              2902         386 	← 2014 MODE
 2014  712        AWC Logo Cap                       1950         387
 2014  711        Sport-100 Helmet, Blue             1776         388
 ...
