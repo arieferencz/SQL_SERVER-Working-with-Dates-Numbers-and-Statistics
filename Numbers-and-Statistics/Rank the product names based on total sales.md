@@ -40,13 +40,13 @@ USE AdventureWorks2022;
 GO
 
 SELECT
-    X.ProductID
-  , X.ProductName
-  , FORMAT(ROUND(X.SalesByProductName, 2, 2), '#,#.##') AS SalesByProductName
-  , RANK() OVER (ORDER BY X.SalesByProductName DESC)    AS SalesByProductNameRANK
+	X.ProductID
+	, X.ProductName
+	, FORMAT(ROUND(X.SalesByProductName, 2, 2), '#,#.##') AS SalesByProductName
+	, RANK() OVER (ORDER BY X.SalesByProductName DESC) AS SalesByProductNameRANK
 FROM (
     SELECT
-        Product.[Name]      AS ProductName
+        Product.[Name] AS ProductName
       , Product.[ProductID] AS ProductID
       , SUM(SalesOrderDetail.[LineTotal]) AS SalesByProductName
     FROM [AdventureWorks2022].[Sales].[SalesOrderHeader] AS SalesOrderHeader
@@ -94,13 +94,13 @@ We join three tables to connect each order line to its product name. `GROUP BY P
 **Output (truncated):** 266 rows — one per product with total sales amount.
 
 ```
-ProductName             ProductID  SalesByProductName
-Road-150 Red, 44        782        4400592.799...
-Road-150 Red, 48        783        4009494.762...
-Mountain-100 Silver, 38 753        1847818.621...
-AWC Logo Cap            712        51229.44...
+ProductName             	ProductID	SalesByProductName
+Road-150 Red, 44        	782			4400592.799...
+Road-150 Red, 48        	783			4009494.762...
+Mountain-100 Silver, 38 	753			1847818.621...
+AWC Logo Cap            	712			51229.44...
 ...
-LL Road Seat/Saddle     911        162.72
+LL Road Seat/Saddle     	911			162.72
 (266 rows affected)
 ```
 
