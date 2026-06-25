@@ -38,21 +38,21 @@ We join three tables to retrieve each product's total units sold across all orde
 
 ```sql
 SELECT
-    Y.ProductID
-  , Y.ProductName
-  , Y.SUMOrderQty
-  , DENSE_RANK() OVER (ORDER BY Y.SUMOrderQty DESC) AS DenseRank
+	Y.ProductID
+	, Y.ProductName
+	, Y.SUMOrderQty
+	, DENSE_RANK() OVER (ORDER BY Y.SUMOrderQty DESC) AS DenseRank
 FROM (
     SELECT
-        X.ProductID
-      , X.ProductName   AS ProductName
-      , SUM(X.OrderQty) AS SUMOrderQty
+		X.ProductID
+		, X.ProductName   AS ProductName
+		, SUM(X.OrderQty) AS SUMOrderQty
     FROM (
         SELECT
-            SalesOrderHeader.SalesOrderID
-          , [Product].[Name] AS ProductName
-          , SalesOrderDetail.ProductID
-          , SalesOrderDetail.OrderQty
+			SalesOrderHeader.SalesOrderID
+			, [Product].[Name] AS ProductName
+			, SalesOrderDetail.ProductID
+			, SalesOrderDetail.OrderQty
         FROM [AdventureWorks2022].[Sales].[SalesOrderHeader] AS SalesOrderHeader
         LEFT JOIN [AdventureWorks2022].[Sales].[SalesOrderDetail] AS SalesOrderDetail
             ON SalesOrderHeader.SalesOrderID = SalesOrderDetail.SalesOrderID
