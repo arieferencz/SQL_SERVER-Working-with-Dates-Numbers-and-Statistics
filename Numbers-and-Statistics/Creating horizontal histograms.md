@@ -48,6 +48,7 @@ M       206            *********************************************************
 ```
 
 ---
+<br>
 
 ## 💡 Exercise 2 — Horizontal histogram by department and gender
 
