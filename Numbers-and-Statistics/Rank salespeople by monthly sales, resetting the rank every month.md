@@ -42,18 +42,16 @@ GO
 
 SELECT
     X.[SalesPersonID]
-  , X.YearSale
-  , X.MonthSale
-  , RANK() OVER (
-        PARTITION BY X.YearSale, X.MonthSale
-        ORDER BY X.MonthlySales)                  AS SalesPersonByMonthlySalesRank
-  , FORMAT(ROUND(X.MonthlySales, 2, 2), '#,#.##') AS MonthlySales
+	, X.YearSale
+	, X.MonthSale
+	, RANK() OVER (PARTITION BY X.YearSale, X.MonthSale ORDER BY X.MonthlySales) AS SalesPersonByMonthlySalesRank
+	, FORMAT(ROUND(X.MonthlySales, 2, 2), '#,#.##') AS MonthlySales
 FROM (
     SELECT
-        [SalesPersonID]
-      , YEAR([OrderDate])  AS YearSale
-      , MONTH([OrderDate]) AS MonthSale
-      , SUM([TotalDue])    AS MonthlySales
+		[SalesPersonID]
+		, YEAR([OrderDate]) AS YearSale
+		, MONTH([OrderDate]) AS MonthSale
+		, SUM([TotalDue]) AS MonthlySales
     FROM [AdventureWorks2022].[Sales].[SalesOrderHeader]
     WHERE [SalesPersonID] IS NOT NULL
     GROUP BY [SalesPersonID], YEAR([OrderDate]), MONTH([OrderDate])
