@@ -68,19 +68,19 @@ FROM (
 ### Output (truncated)
 
 ```
-ProductID  ProductName                      SUMOrderQty  DenseRank
-712        AWC Logo Cap                     8311         1   		← MODE (most sold product)
-870        Water Bottle - 30 oz.            6815         2
-711        Sport-100 Helmet, Blue           6743         3
-715        Long-Sleeve Logo Jersey, L       6592         4
-708        Sport-100 Helmet, Black          6532         5
+ProductID  ProductName                      	SUMOrderQty  DenseRank
+712        AWC Logo Cap                     	8311         1   		← MODE (most sold product)
+870        Water Bottle - 30 oz.            	6815         2
+711        Sport-100 Helmet, Blue           	6743         3
+715        Long-Sleeve Logo Jersey, L       	6592         4
+708        Sport-100 Helmet, Black          	6532         5
 ...
-927        LL Mountain Frame - Black, 52    15           241
-898        LL Touring Frame - Blue, 62      15           241
-911        LL Road Seat/Saddle              10           242
-943        LL Mountain Frame - Black, 40    8            243
-942        ML Mountain Frame-W - Silver, 38 7            244
-897        LL Touring Frame - Blue, 58      4            245
+927        LL Mountain Frame - Black, 52    	15           241
+898        LL Touring Frame - Blue, 62      	15           241
+911        LL Road Seat/Saddle              	10           242
+943        LL Mountain Frame - Black, 40    	8            243
+942        ML Mountain Frame-W - Silver, 38 	7            244
+897        LL Touring Frame - Blue, 58      	4            245
 (266 rows affected)
 ```
 
