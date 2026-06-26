@@ -52,7 +52,7 @@ FROM (
         FROM [AdventureWorks2022].[Sales].[SalesOrderHeader] AS SalesOrderHeader
         LEFT JOIN [AdventureWorks2022].[Sales].[SalesTerritory] AS SalesTerritory
             ON SalesOrderHeader.TerritoryID = SalesTerritory.TerritoryID
-    ) AS X
+   	) AS X
     GROUP BY X.CountryGroupRegion
 ) AS Y
 GROUP BY Y.CountryGroup, Y.Amount
@@ -61,7 +61,6 @@ GROUP BY Y.CountryGroup, Y.Amount
 ---
 
 ### Output
-
 ```
 CountryGroup   TotalSalesAmount  RunningTotalSalesAmount
 Europe         22,173,617.62     22,173,617.62
@@ -71,6 +70,7 @@ Pacific        11,814,376.09     123,216,786.11
 ```
 
 ---
+<br>
 
 ## 💡 Exercise 2 — Running total by country
 
@@ -91,22 +91,22 @@ We join `SalesOrderHeader` to `Address` and `StateProvince` to retrieve each ord
 
 ```sql
 SELECT
-    Y.Country
-  , FORMAT(ROUND(Y.Amount, 2, 2), '#,#.##')                                AS TotalSalesAmount
-  , FORMAT(ROUND(SUM(Y.Amount) OVER (ORDER BY Y.Country), 2, 2), '#,#.##') AS RunningTotalSalesAmount
+	Y.Country
+	, FORMAT(ROUND(Y.Amount, 2, 2), '#,#.##') AS TotalSalesAmount
+	, FORMAT(ROUND(SUM(Y.Amount) OVER (ORDER BY Y.Country), 2, 2), '#,#.##') AS RunningTotalSalesAmount
 FROM (
     SELECT
-        X.CountryRegionCode AS Country
-      , SUM(X.TotalDue)     AS Amount
+		X.CountryRegionCode AS Country
+		, SUM(X.TotalDue) AS Amount
     FROM (
-        SELECT
-            SalesOrderHeader.SalesOrderID
-          , SalesOrderHeader.BillToAddressID
-          , SalesOrderHeader.TerritoryID
-          , SalesOrderHeader.TotalDue
-          , [Address].AddressID
-          , [Address].StateProvinceID
-          , [StateProvince].CountryRegionCode
+		SELECT
+			SalesOrderHeader.SalesOrderID
+			, SalesOrderHeader.BillToAddressID
+			, SalesOrderHeader.TerritoryID
+			, SalesOrderHeader.TotalDue
+			, [Address].AddressID
+			, [Address].StateProvinceID
+			, [StateProvince].CountryRegionCode
         FROM [AdventureWorks2022].[Sales].[SalesOrderHeader] AS SalesOrderHeader
         LEFT JOIN [AdventureWorks2022].[Person].[Address] AS [Address]
             ON SalesOrderHeader.ShipToAddressID = [Address].AddressID
@@ -121,7 +121,6 @@ GROUP BY Y.Country, Y.Amount
 ---
 
 ### Output
-
 ```
 Country  TotalSalesAmount  RunningTotalSalesAmount
 AU       11,814,376.09     11,814,376.09
@@ -134,6 +133,7 @@ US       70,829,863.2      123,216,786.11
 ```
 
 ---
+<br>
 
 ## 💡 Exercise 3 — Running total by state or province (one total per state)
 
@@ -155,21 +155,21 @@ We join `SalesOrderHeader` to `Address` and `StateProvince` using `BillToAddress
 ```sql
 SELECT
     Y.StateProvince
-  , FORMAT(ROUND(Y.Amount, 2, 2), '#,#.##')                                      AS TotalSalesAmount
-  , FORMAT(ROUND(SUM(Y.Amount) OVER (ORDER BY Y.StateProvince), 2, 2), '#,#.##') AS RunningTotalSalesAmount
+	, FORMAT(ROUND(Y.Amount, 2, 2), '#,#.##') AS TotalSalesAmount
+	, FORMAT(ROUND(SUM(Y.Amount) OVER (ORDER BY Y.StateProvince), 2, 2), '#,#.##') AS RunningTotalSalesAmount
 FROM (
     SELECT
-        X.StateProvinceName AS StateProvince
-      , SUM(X.TotalDue)     AS Amount
+		X.StateProvinceName AS StateProvince
+		, SUM(X.TotalDue) AS Amount
     FROM (
         SELECT
-            SalesOrderHeader.SalesOrderID
-          , SalesOrderHeader.BillToAddressID
-          , SalesOrderHeader.TerritoryID
-          , SalesOrderHeader.TotalDue
-          , [Address].AddressID
-          , [Address].StateProvinceID
-          , [StateProvince].[Name] AS StateProvinceName
+			SalesOrderHeader.SalesOrderID
+			, SalesOrderHeader.BillToAddressID
+			, SalesOrderHeader.TerritoryID
+			, SalesOrderHeader.TotalDue
+			, [Address].AddressID
+			, [Address].StateProvinceID
+			, [StateProvince].[Name] AS StateProvinceName
         FROM [AdventureWorks2022].[Sales].[SalesOrderHeader] AS SalesOrderHeader
         LEFT JOIN [AdventureWorks2022].[Person].[Address] AS [Address]
             ON SalesOrderHeader.BillToAddressID = [Address].AddressID
@@ -184,7 +184,6 @@ GROUP BY Y.StateProvince, Y.Amount
 ---
 
 ### Output (truncated)
-
 ```
 Row  StateProvince    TotalSalesAmount  RunningTotalSalesAmount
 1    Alabama          51,198.85         51,198.85
@@ -207,6 +206,7 @@ Row  StateProvince    TotalSalesAmount  RunningTotalSalesAmount
 ```
 
 ---
+<br>
 
 ## 💡 Exercise 4 — Running total by state or province at individual order level
 
@@ -219,19 +219,19 @@ Instead of summing to one total per state, we keep each individual order amount 
 
 ```sql
 SELECT
-    X.StateProvinceName
-  , FORMAT(ROUND(X.TotalDue, 2, 2), '#,#.##')                       AS SalesOrderAmount
-  , FORMAT(ROUND(SUM(X.TotalDue) OVER (PARTITION BY X.StateProvinceName
+	X.StateProvinceName
+	, FORMAT(ROUND(X.TotalDue, 2, 2), '#,#.##') AS SalesOrderAmount
+	, FORMAT(ROUND(SUM(X.TotalDue) OVER (PARTITION BY X.StateProvinceName
         ORDER BY X.StateProvinceName, X.TotalDue), 2, 2), '#,#.##') AS RunningTotalSalesAmount
 FROM (
     SELECT
-        SalesOrderHeader.SalesOrderID
-      , SalesOrderHeader.BillToAddressID
-      , SalesOrderHeader.TerritoryID
-      , SalesOrderHeader.TotalDue
-      , [Address].AddressID
-      , [Address].StateProvinceID
-      , [StateProvince].[Name] AS StateProvinceName
+		SalesOrderHeader.SalesOrderID
+		, SalesOrderHeader.BillToAddressID
+		, SalesOrderHeader.TerritoryID
+		, SalesOrderHeader.TotalDue
+		, [Address].AddressID
+		, [Address].StateProvinceID
+		, [StateProvince].[Name] AS StateProvinceName
     FROM [AdventureWorks2022].[Sales].[SalesOrderHeader] AS SalesOrderHeader
     LEFT JOIN [AdventureWorks2022].[Person].[Address] AS [Address]
         ON SalesOrderHeader.BillToAddressID = [Address].AddressID
@@ -245,7 +245,6 @@ ORDER BY X.StateProvinceName
 ---
 
 ### Output (truncated)
-
 ```
 Row    StateProvince  SalesOrderAmount  RunningTotalSalesAmount
 1      Alabama        2.53              2.53
