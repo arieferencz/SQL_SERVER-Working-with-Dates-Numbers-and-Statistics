@@ -48,10 +48,7 @@ GO
 SELECT
     Departments.[Name]
   , YEAR(Employees.[HireDate]) AS YearHired
-  , SUM(1) OVER (
-        PARTITION BY Departments.[Name], YEAR(Employees.[HireDate])
-        ORDER BY YEAR(Employees.[HireDate])
-        ROWS UNBOUNDED PRECEDING) AS RunningTotalHired
+  , SUM(1) OVER (PARTITION BY Departments.[Name], YEAR(Employees.[HireDate]) ORDER BY YEAR(Employees.[HireDate]) ROWS UNBOUNDED PRECEDING) AS RunningTotalHired
 FROM [AdventureWorks2022].[HumanResources].[Department] AS Departments
 INNER JOIN [AdventureWorks2022].[HumanResources].[EmployeeDepartmentHistory] AS EmployeesHistorical
     ON Departments.[DepartmentID] = EmployeesHistorical.[DepartmentID]
